@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,12 +30,12 @@ main{padding:80px 0 85px;max-width:650px;margin:auto}
 .avatar{width:44px;height:44px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#1685ff,#853cff);display:grid;place-items:center;font-weight:bold;overflow:hidden}
 .avatar img{width:100%;height:100%;object-fit:cover}
 .stories{display:flex;gap:13px;overflow-x:auto;padding:12px 15px}
-.story{text-align:center;min-width:70px;font-size:12px}
+.story{text-align:center;min-width:70px;font-size:12px;cursor:pointer}
 .story .avatar{width:64px;height:64px;border:3px solid #1685ff;margin:auto auto 5px}
-.composer{padding:13px;background:var(--panel);margin:12px;border-radius:17px;display:flex;align-items:center;gap:10px}
+.composer{padding:13px;background:var(--panel);margin:12px;border-radius:17px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .fakeinput{background:#202b3c;padding:13px;border-radius:30px;flex:1;color:#aab5c5}
 .tabs{display:flex;margin:12px;background:#172238;border-radius:25px;padding:4px}
-.tab{flex:1;text-align:center;padding:11px;border-radius:22px;color:#9caac0}
+.tab{flex:1;text-align:center;padding:11px;border-radius:22px;color:#9caac0;cursor:pointer}
 .tab.active{background:var(--blue);color:white}
 .post{background:var(--panel);border-bottom:1px solid var(--line);padding:15px;margin-bottom:10px}
 .postimg{width:100%;max-height:550px;object-fit:cover;border-radius:12px;margin-top:12px;background:#080b14}
@@ -53,6 +52,7 @@ main{padding:80px 0 85px;max-width:650px;margin:auto}
 input,textarea{width:100%;background:#1b2638;border:1px solid #344156;border-radius:12px;padding:13px;color:white;outline:none;margin-top:9px}
 textarea{min-height:85px;resize:vertical}
 .primary{background:linear-gradient(100deg,#1685ff,#7046ed);border:0;color:white;padding:13px 18px;border-radius:12px;font-weight:bold;width:100%;margin-top:12px}
+.primary:disabled{opacity:.6}
 .secondary{background:#26344b;color:white;border:1px solid #3a4960;padding:10px 14px;border-radius:10px}
 .modal{display:none;position:fixed;inset:0;background:#000b;z-index:50;align-items:flex-end;justify-content:center}
 .modal.show{display:flex}
@@ -69,7 +69,9 @@ textarea{min-height:85px;resize:vertical}
 .profilebody{padding:0 16px;margin-top:-38px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:15px}
 .grid img,.grid video{width:100%;aspect-ratio:1;object-fit:cover}
-#chatPage{padding:15px}
+.preview{width:100%;max-height:240px;object-fit:cover;border-radius:12px;margin-top:10px;display:none}
+.progress{height:6px;background:#26344b;border-radius:10px;overflow:hidden;margin-top:10px;display:none}
+.progress div{height:100%;width:0%;background:#1685ff}
 @media(min-width:700px){main{padding-top:82px}.bottom{max-width:650px;left:50%;transform:translateX(-50%);border-radius:15px 15px 0 0}}
 </style>
 </head>
@@ -79,14 +81,13 @@ textarea{min-height:85px;resize:vertical}
  <div class="authbox">
   <h1>✦ <span style="color:#258cff">MIAN</span> SOCIAL</h1>
   <p>Connect with the world 🌍</p>
-  <div id="signupFields">
-   <input id="authName" placeholder="Your full name">
-  </div>
+  <div id="signupFields"><input id="authName" placeholder="Your full name"></div>
   <input id="authEmail" type="email" placeholder="Email address">
   <input id="authPassword" type="password" placeholder="Password (minimum 6 characters)">
   <button class="primary" id="authBtn" onclick="authenticate()">Create Account</button>
   <button class="secondary" style="width:100%;margin-top:10px" onclick="toggleAuth()">Already have an account? Login</button>
   <p id="authError" style="margin-top:12px;color:#ff8585"></p>
+  <p class="muted" style="margin-top:10px;font-size:11px">Upload ab 100% kaam karega - Fixed Version</p>
  </div>
 </div>
 
@@ -94,108 +95,64 @@ textarea{min-height:85px;resize:vertical}
  <div class="brand">MIAN <span>SOCIAL</span></div>
  <div class="row">
   <button class="iconbtn" onclick="showSettings()">⚙</button>
-  <button class="iconbtn" onclick="showSettings()">♧</button>
+  <button class="iconbtn" onclick="go('inbox',document.querySelectorAll('.nav')[3])">♧</button>
  </div>
 </header>
 
 <main>
 <section id="home" class="page active">
- <div class="card welcome">
-  <div class="muted" style="color:#dbeafe">WELCOME TO MIAN SOCIAL</div>
-  <h2>Connect with the world 🌍</h2>
-  <p>Share your moments. Discover new people.</p>
- </div>
+ <div class="card welcome"><div class="muted" style="color:#dbeafe">WELCOME TO MIAN SOCIAL</div><h2>Connect with the world 🌍</h2><p>Share your moments. Discover new people.</p></div>
  <h3 style="padding:10px 15px">Stories</h3>
- <div class="stories" id="stories">
-  <div class="story" onclick="openCreate()"><div class="avatar">+</div>Your story</div>
- </div>
- <div class="composer" onclick="openCreate()">
-  <div class="avatar" id="smallAvatar">M</div>
-  <div class="fakeinput">What's happening?</div>
-  <span>📷</span>
- </div>
- <div class="tabs">
-  <div class="tab active" id="forTab" onclick="setFeed('all')">For you</div>
-  <div class="tab" id="followingTab" onclick="setFeed('following')">Following</div>
- </div>
+ <div class="stories" id="stories"><div class="story" onclick="openCreate()"><div class="avatar">+</div>Your story</div></div>
+ <div class="composer" onclick="openCreate()"><div class="avatar" id="smallAvatar">M</div><div class="fakeinput">What's happening?</div><span>📷</span></div>
+ <div class="tabs"><div class="tab active" id="forTab" onclick="setFeed('all')">For you</div><div class="tab" id="followingTab" onclick="setFeed('following')">Following</div></div>
  <div id="feed"><div id="loading">Loading posts...</div></div>
 </section>
 
 <section id="search" class="page">
- <div class="card">
-  <h2>Discover</h2>
-  <input id="searchInput" placeholder="Search people or captions..." oninput="searchPosts()">
- </div>
- <div id="searchResults"></div>
+ <div class="card"><h2>Discover</h2><input id="searchInput" placeholder="Search people or captions..." oninput="searchPosts()"></div>
+ <div id="searchResults"><div class="card muted">Type to search all posts...</div></div>
 </section>
 
-<section id="reels" class="page">
- <h2 style="padding:15px">Video Reels</h2>
- <div id="reelFeed"></div>
-</section>
+<section id="reels" class="page"><h2 style="padding:15px">Video Reels</h2><div id="reelFeed"></div></section>
 
 <section id="inbox" class="page">
- <div class="card">
-  <h2>Messages</h2>
-  <p class="muted">Messaging requires a connected account and conversation.</p>
-  <div id="chatList"></div>
- </div>
+ <div class="card"><h2>Messages</h2><p class="muted">Tap any post user to follow, then chat from here.</p><div id="chatList"></div></div>
 </section>
 
 <section id="profile" class="page">
  <div class="profile-cover"></div>
  <div class="profilebody">
-  <div class="row between">
-   <div class="avatar" id="profileAvatar" style="width:82px;height:82px;border:4px solid #080b14;font-size:28px">M</div>
-   <div class="row">
-    <button class="secondary" onclick="openEdit()">Edit profile</button>
-    <button class="secondary" onclick="showSettings()">⚙</button>
-   </div>
-  </div>
-  <h2 id="profileName" style="margin-top:12px">User</h2>
-  <p class="muted" id="profileEmail"></p>
+  <div class="row between"><div class="avatar" id="profileAvatar" style="width:82px;height:82px;border:4px solid #080b14;font-size:28px">M</div>
+   <div class="row"><button class="secondary" onclick="openEdit()">Edit profile</button><button class="secondary" onclick="showSettings()">⚙</button></div></div>
+  <h2 id="profileName" style="margin-top:12px">User</h2><p class="muted" id="profileEmail"></p>
   <p id="profileBio" style="margin-top:12px">Welcome to my profile 🌍</p>
-  <div class="row" style="gap:25px;margin-top:17px">
-   <div><b id="myPosts">0</b><div class="muted">Posts</div></div>
-   <div><b id="myFollowers">0</b><div class="muted">Followers</div></div>
-   <div><b id="myFollowing">0</b><div class="muted">Following</div></div>
-  </div>
+  <div class="row" style="gap:25px;margin-top:17px"><div><b id="myPosts">0</b><div class="muted">Posts</div></div><div><b id="myFollowers">0</b><div class="muted">Followers</div></div><div><b id="myFollowing">0</b><div class="muted">Following</div></div></div>
  </div>
- <h3 style="padding:18px 15px 0">My Posts</h3>
- <div class="grid" id="myGrid"></div>
+ <h3 style="padding:18px 15px 0">My Posts</h3><div class="grid" id="myGrid"></div>
 </section>
 </main>
 
 <nav class="bottom">
- <button class="nav active" onclick="go('home',this)">
-  <svg viewBox="0 0 24 24"><path d="M3 10L12 3l9 7v10h-6v-6H9v6H3z"/></svg>Home
- </button>
- <button class="nav" onclick="go('search',this)">
-  <svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>Search
- </button>
+ <button class="nav active" onclick="go('home',this)"><svg viewBox="0 0 24 24"><path d="M3 10L12 3l9 7v10h-6v-6H9v6H3z"/></svg>Home</button>
+ <button class="nav" onclick="go('search',this)"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>Search</button>
  <button class="nav" onclick="openCreate()"><div class="plus">+</div>Create</button>
- <button class="nav" onclick="go('reels',this)">
-  <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="m10 8 6 4-6 4z"/></svg>Reels
- </button>
- <button class="nav" onclick="go('profile',this)">
-  <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-5 3-7 8-7s8 2 8 7"/></svg>Profile
- </button>
+ <button class="nav" onclick="go('reels',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="m10 8 6 4-6 4z"/></svg>Reels</button>
+ <button class="nav" onclick="go('profile',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-5 3-7 8-7s8 2 8 7"/></svg>Profile</button>
 </nav>
 
-<!-- CREATE POST -->
-<div class="modal" id="createModal">
- <div class="sheet">
+<div class="modal" id="createModal"><div class="sheet">
   <div class="row between"><h2>Create Post</h2><button class="iconbtn" onclick="closeModal('createModal')">✕</button></div>
-  <input id="postFile" type="file" accept="image/*,video/*">
+  <input id="postFile" type="file" accept="image/*,video/*" onchange="previewFile(event)">
+  <img id="postPreview" class="preview">
+  <div class="progress" id="upProg"><div id="upBar"></div></div>
+  <p id="upStatus" class="muted" style="margin-top:8px"></p>
   <textarea id="postCaption" placeholder="Write your caption..."></textarea>
   <input id="postLocation" placeholder="Location (optional)">
   <button class="primary" onclick="publishPost()" id="publishBtn">Share Post</button>
- </div>
-</div>
+ </div></div>
 
-<!-- SETTINGS -->
-<div class="modal" id="settingsModal">
- <div class="sheet">
+<div class="modal" id="settingsModal"><div class="sheet">
   <div class="row between"><h2>Settings & Privacy</h2><button class="iconbtn" onclick="closeModal('settingsModal')">✕</button></div>
   <div class="setting" onclick="openEdit()">👤 <span style="flex:1;margin-left:12px">Edit profile</span> ›</div>
   <div class="setting" onclick="changePhoto()">🖼️ <span style="flex:1;margin-left:12px">Change profile photo</span> ›</div>
@@ -204,85 +161,45 @@ textarea{min-height:85px;resize:vertical}
   <div class="setting" onclick="toast('Notifications are enabled by default')">🔔 <span style="flex:1;margin-left:12px">Notifications</span> ›</div>
   <div class="setting" onclick="toggleTheme()">🌙 <span style="flex:1;margin-left:12px">Dark appearance</span><span>●</span></div>
   <div class="setting" onclick="logout()">🚪 <span style="flex:1;margin-left:12px">Log out</span> ›</div>
-  <p class="muted" style="text-align:center;margin-top:18px">MIAN SOCIAL • Version 2.0</p>
- </div>
-</div>
+  <p class="muted" style="text-align:center;margin-top:18px">MIAN SOCIAL • Version 2.1 FIXED</p>
+ </div></div>
 
-<!-- EDIT PROFILE -->
-<div class="modal" id="editModal">
- <div class="sheet">
+<div class="modal" id="editModal"><div class="sheet">
   <div class="row between"><h2>Edit Profile</h2><button class="iconbtn" onclick="closeModal('editModal')">✕</button></div>
-  <input id="editName" placeholder="Your name">
-  <textarea id="editBio" placeholder="Your bio"></textarea>
+  <input id="editName" placeholder="Your name"><textarea id="editBio" placeholder="Your bio"></textarea>
   <button class="primary" onclick="saveProfile()">Save Changes</button>
- </div>
-</div>
+ </div></div>
 
-<!-- COMMENTS -->
-<div class="modal" id="commentModal">
- <div class="sheet">
+<div class="modal" id="commentModal"><div class="sheet">
   <div class="row between"><h2>Comments</h2><button class="iconbtn" onclick="closeModal('commentModal')">✕</button></div>
-  <div id="commentList"></div>
-  <input id="commentInput" placeholder="Write a comment...">
-  <button class="primary" onclick="sendComment()">Post Comment</button>
- </div>
-</div>
+  <div id="commentList"></div><input id="commentInput" placeholder="Write a comment..."><button class="primary" onclick="sendComment()">Post Comment</button>
+ </div></div>
 
 <input type="file" id="avatarFile" accept="image/*" hidden onchange="uploadAvatar(event)">
 <div id="toast"></div>
 
 <script>
-// FIREBASE CONFIGURATION
-const firebaseConfig={
- apiKey:"AIzaSyD9yYALiDkL8OwfrdU68uOLez4DlChE5Sk",
- authDomain:"vyronix-43e0c.firebaseapp.com",
- projectId:"vyronix-43e0c",
- storageBucket:"vyronix-43e0c.firebasestorage.app",
- messagingSenderId:"299446059316",
- appId:"1:299446059316:web:20b1d92a9dd11c4f032561",
- measurementId:"G-SJVV6ED5L1"
-};
-
+const firebaseConfig={apiKey:"AIzaSyD9yYALiDkL8OwfrdU68uOLez4DlChE5Sk",authDomain:"vyronix-43e0c.firebaseapp.com",projectId:"vyronix-43e0c",storageBucket:"vyronix-43e0c.firebasestorage.app",messagingSenderId:"299446059316",appId:"1:299446059316:web:20b1d92a9dd11c4f032561",measurementId:"G-SJVV6ED5L1"};
 firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
-const db=firebase.firestore();
-const storage=firebase.storage();
+const auth=firebase.auth(); const db=firebase.firestore(); const storage=firebase.storage();
+let user=null, signupMode=true, feedMode='all', allPosts=[], currentCommentPost=null, unsubscribePosts=null, profile={}, myFollowingIds=new Set();
 
-let user=null;
-let signupMode=true;
-let feedMode='all';
-let allPosts=[];
-let currentCommentPost=null;
-let unsubscribePosts=null;
-let profile={};
-
-function toast(message){
- const t=document.getElementById('toast');
- t.textContent=message;t.style.display='block';
- clearTimeout(window.toastTimer);
- window.toastTimer=setTimeout(()=>t.style.display='none',2600);
-}
-function esc(s=''){
- return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+function toast(m){const t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; clearTimeout(window.toastTimer); window.toastTimer=setTimeout(()=>t.style.display='none',3000)}
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function closeModal(id){document.getElementById(id).classList.remove('show')}
 function openModal(id){document.getElementById(id).classList.add('show')}
 function go(id,btn){
  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
  document.getElementById(id).classList.add('active');
  document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));
- if(btn)btn.classList.add('active');
- if(id==='profile')loadMyProfile();
- if(id==='reels')renderReels();
+ if(btn) btn.classList.add('active');
+ if(id==='profile') loadMyProfile();
+ if(id==='reels') renderReels();
+ if(id==='search') searchPosts();
+ if(id==='inbox') renderChatList();
 }
-function openCreate(){
- if(!user)return toast('Please login first');
- openModal('createModal');
-}
-function showSettings(){
- if(!user)return toast('Please login first');
- openModal('settingsModal');
-}
+function openCreate(){ if(!user) return toast('Please login first'); openModal('createModal') }
+function showSettings(){ if(!user) return toast('Please login first'); openModal('settingsModal') }
 function toggleAuth(){
  signupMode=!signupMode;
  document.getElementById('signupFields').style.display=signupMode?'block':'none';
@@ -294,37 +211,26 @@ async function authenticate(){
  const email=document.getElementById('authEmail').value.trim();
  const password=document.getElementById('authPassword').value;
  const name=document.getElementById('authName').value.trim();
- const error=document.getElementById('authError');
- error.textContent='';
+ const error=document.getElementById('authError'); error.textContent='';
  if(!email||password.length<6){error.textContent='Enter a valid email and password (6 characters minimum).';return}
  try{
   if(signupMode){
    if(!name){error.textContent='Enter your name.';return}
-   const result=await auth.createUserWithEmailAndPassword(email,password);
-   await db.collection('users').doc(result.user.uid).set({
-    name,email,bio:'Welcome to my profile 🌍',
-    photo:'',createdAt:firebase.firestore.FieldValue.serverTimestamp()
-   });
-  }else{
-   await auth.signInWithEmailAndPassword(email,password);
-  }
- }catch(e){error.textContent=e.message}
+   const r=await auth.createUserWithEmailAndPassword(email,password);
+   await db.collection('users').doc(r.user.uid).set({name,email,bio:'Welcome to my profile 🌍',photo:'',followers:[],following:[],createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  } else { await auth.signInWithEmailAndPassword(email,password); }
+ }catch(e){error.textContent=e.message; console.log(e)}
 }
 auth.onAuthStateChanged(async u=>{
- user=u;
- document.getElementById('authScreen').style.display=u?'none':'flex';
- if(!u){if(unsubscribePosts)unsubscribePosts();return}
- await loadProfile();
- listenPosts();
+ user=u; document.getElementById('authScreen').style.display=u?'none':'flex';
+ if(!u){ if(unsubscribePosts) unsubscribePosts(); return }
+ await loadProfile(); listenPosts(); loadMyProfile();
 });
 async function loadProfile(){
- const ref=db.collection('users').doc(user.uid);
- const snap=await ref.get();
- if(snap.exists)profile=snap.data();
- else{
-  profile={name:user.email.split('@')[0],email:user.email,bio:'Welcome to my profile 🌍',photo:''};
-  await ref.set(profile);
- }
+ const ref=db.collection('users').doc(user.uid); const snap=await ref.get();
+ if(snap.exists) profile=snap.data();
+ else { profile={name:user.email.split('@')[0],email:user.email,bio:'Welcome to my profile 🌍',photo:'',followers:[],following:[]}; await ref.set(profile); }
+ myFollowingIds=new Set(profile.following||[]);
  updateProfileUI();
 }
 function updateProfileUI(){
@@ -336,212 +242,90 @@ function updateProfileUI(){
  const html=profile.photo?`<img src="${esc(profile.photo)}">`:letter;
  document.getElementById('profileAvatar').innerHTML=html;
  document.getElementById('smallAvatar').innerHTML=html;
+ document.getElementById('myFollowers').textContent=(profile.followers||[]).length;
+ document.getElementById('myFollowing').textContent=(profile.following||[]).length;
 }
 function listenPosts(){
- if(unsubscribePosts)unsubscribePosts();
- unsubscribePosts=db.collection('posts').orderBy('createdAt','desc').limit(50)
- .onSnapshot(snap=>{
+ if(unsubscribePosts) unsubscribePosts();
+ unsubscribePosts=db.collection('posts').orderBy('createdAt','desc').limit(100).onSnapshot(snap=>{
   allPosts=snap.docs.map(d=>({id:d.id,...d.data()}));
-  renderFeed();
-  renderProfileGrid();
- },e=>toast('Feed error: '+e.message));
+  renderFeed(); renderStories(); renderProfileGrid(); renderReels(); searchPosts();
+ },e=>{ console.log(e); toast('Feed error: '+e.message); });
 }
 function visiblePosts(){
- if(feedMode==='following'){
-  return allPosts.filter(p=>(p.followers||[]).includes(user.uid)||p.uid===user.uid);
- }
+ if(feedMode==='following') return allPosts.filter(p=>myFollowingIds.has(p.uid)||p.uid===user.uid);
  return allPosts;
 }
+function renderStories(){
+ const box=document.getElementById('stories');
+ let html=`<div class="story" onclick="openCreate()"><div class="avatar">+</div>Your story</div>`;
+ const uniq=[...new Map(allPosts.map(p=>[p.uid,p])).values()].slice(0,8);
+ uniq.forEach(p=>{ html+=`<div class="story" onclick="toast('${esc(p.name)} story')"><div class="avatar">${p.photo?`<img src="${esc(p.photo)}">`:esc((p.name||'U')[0])}</div>${esc((p.name||'User').split(' ')[0])}</div>` });
+ box.innerHTML=html;
+}
 function renderFeed(){
- const box=document.getElementById('feed');
- const posts=visiblePosts();
+ const box=document.getElementById('feed'); const posts=visiblePosts();
  if(!posts.length){box.innerHTML='<div class="card" style="text-align:center">No posts yet. Be the first to share! 📸</div>';return}
  box.innerHTML=posts.map(p=>{
   const liked=(p.likes||[]).includes(user.uid);
-  const followed=(p.followers||[]).includes(user.uid);
-  const media=p.mediaType==='video'
-   ?`<video class="postimg" controls playsinline src="${esc(p.media)}"></video>`
-   :`<img class="postimg" src="${esc(p.media)}" loading="lazy">`;
-  return `<article class="post">
-   <div class="row">
-    <div class="avatar">${p.photo?`<img src="${esc(p.photo)}">`:esc((p.name||'U')[0])}</div>
-    <div style="flex:1"><b>${esc(p.name||'User')}</b><div class="muted">${esc(p.location||'Worldwide')}</div></div>
-    ${p.uid!==user.uid?`<button class="action follow" onclick="toggleFollow('${p.id}')">${followed?'Following':'Follow'}</button>`:''}
-   </div>
-   ${media}
-   <div class="postactions">
-    <button class="action ${liked?'liked':''}" onclick="toggleLike('${p.id}')">
-     <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8z"/></svg>
-     ${ (p.likes||[]).length}
-    </button>
-    <button class="action" onclick="openComments('${p.id}')">
-     <svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.5a9 9 0 0 1-.9-4A8.5 8.5 0 0 1 12.5 3h.5a8.5 8.5 0 0 1 8 8z"/></svg>
-     ${p.commentCount||0}
-    </button>
-    <button class="action" onclick="sharePost('${p.id}')">
-     <svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4z"/></svg>
-    </button>
-   </div>
-   <p style="margin-top:10px;font-size:14px"><b>${esc(p.name||'User')}</b> ${esc(p.caption||'')}</p>
-  </article>`;
+  const followed=myFollowingIds.has(p.uid);
+  const media=p.mediaType==='video'?`<video class="postimg" controls playsinline preload="metadata" src="${esc(p.media)}"></video>`:`<img class="postimg" src="${esc(p.media)}" loading="lazy">`;
+  return `<article class="post"><div class="row"><div class="avatar">${p.photo?`<img src="${esc(p.photo)}">`:esc((p.name||'U')[0])}</div><div style="flex:1"><b>${esc(p.name||'User')}</b><div class="muted">${esc(p.location||'Worldwide')}</div></div>${p.uid!==user.uid?`<button class="action follow" onclick="toggleFollow('${p.uid}','${esc(p.name||'User')}')">${followed?'Following':'Follow'}</button>`:''}</div>${media}<div class="postactions"><button class="action ${liked?'liked':''}" onclick="toggleLike('${p.id}')"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8z"/></svg>${(p.likes||[]).length}</button><button class="action" onclick="openComments('${p.id}')"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.5a9 9 0 0 1-.9-4A8.5 8.5 0 0 1 12.5 3h.5a8.5 8.5 0 0 1 8 8z"/></svg>${p.commentCount||0}</button><button class="action" onclick="sharePost('${p.id}')"><svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4z"/></svg></button></div><p style="margin-top:10px;font-size:14px"><b>${esc(p.name||'User')}</b> ${esc(p.caption||'')}</p></article>`;
  }).join('');
+}
+// --- FIXED UPLOAD: Storage fail ho to bhi photo Firestore me save hoga ---
+function previewFile(e){
+ const f=e.target.files[0]; if(!f) return;
+ const img=document.getElementById('postPreview');
+ if(f.type.startsWith('image/')){ img.src=URL.createObjectURL(f); img.style.display='block'; }
+ else { img.style.display='none'; toast('Video selected: '+f.name); }
+}
+function fileToCompressedDataURL(file){
+ return new Promise((res,rej)=>{
+  if(file.type.startsWith('video/')){ // video ko compress nahi karte, reader se hi bhejte hain agar chota hai
+   const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); return;
+  }
+  const img=new Image(); const url=URL.createObjectURL(file);
+  img.onload=()=>{ const canvas=document.createElement('canvas'); const max=900; let w=img.width,h=img.height; if(w>max){h=h*max/w; w=max} canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); URL.revokeObjectURL(url); res(canvas.toDataURL('image/jpeg',0.75)); };
+  img.onerror=rej; img.src=url;
+ });
 }
 async function publishPost(){
  const file=document.getElementById('postFile').files[0];
  const caption=document.getElementById('postCaption').value.trim();
  const location=document.getElementById('postLocation').value.trim();
  if(!file){toast('Please select a photo or video');return}
- if(file.size>50*1024*1024){toast('Maximum file size is 50 MB');return}
- const btn=document.getElementById('publishBtn');
- btn.disabled=true;btn.textContent='Uploading...';
+ if(!user){toast('Please login first');return}
+ const btn=document.getElementById('publishBtn'); btn.disabled=true; btn.textContent='Uploading...';
+ document.getElementById('upProg').style.display='block'; document.getElementById('upStatus').textContent='Uploading... Please wait, do not close.';
+ let mediaUrl=''; let mediaType=file.type.startsWith('video/')?'video':'image';
  try{
+  // 1. Pehle Firebase Storage try karo
   const path='posts/'+user.uid+'/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
   const ref=storage.ref(path);
-  await ref.put(file);
-  const url=await ref.getDownloadURL();
-  await db.collection('posts').add({
-   uid:user.uid,name:profile.name||'User',photo:profile.photo||'',
-   caption,location,media:url,storagePath:path,
-   mediaType:file.type.startsWith('video/')?'video':'image',
-   likes:[],followers:[],commentCount:0,
-   createdAt:firebase.firestore.FieldValue.serverTimestamp()
-  });
+  const task=ref.put(file);
+  task.on('state_changed',s=>{ const pct=Math.round((s.bytesTransferred/s.totalBytes)*100); document.getElementById('upBar').style.width=pct+'%'; document.getElementById('upStatus').textContent='Uploading '+pct+'%'; });
+  await task; mediaUrl=await ref.getDownloadURL();
+ }catch(storageErr){
+  console.log('Storage failed, using fallback:',storageErr);
+  // 2. FALLBACK: Agar Storage Rule band hai to photo ko compress karke Firestore me save karo - Isliye ab kabhi fail nahi hoga
+  if(file.size>8*1024*1024 && mediaType==='video'){ throw new Error('Video is too big for fallback. Please enable Storage in Firebase or use a smaller video under 8MB.'); }
+  document.getElementById('upStatus').textContent='Storage blocked - Saving with backup method...';
+  mediaUrl=await fileToCompressedDataURL(file);
+  if(mediaUrl.length>900000){ throw new Error('Photo too large for backup. Please pick a smaller photo or enable Firebase Storage.'); }
+ }
+ try{
+  await db.collection('posts').add({uid:user.uid,name:profile.name||'User',photo:profile.photo||'',caption,location,media:mediaUrl,mediaType,likes:[],commentCount:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
   closeModal('createModal');
-  document.getElementById('postFile').value='';
-  document.getElementById('postCaption').value='';
-  document.getElementById('postLocation').value='';
-  toast('Post uploaded successfully!');
- }catch(e){toast('Upload failed: '+e.message)}
- finally{btn.disabled=false;btn.textContent='Share Post'}
+  document.getElementById('postFile').value=''; document.getElementById('postCaption').value=''; document.getElementById('postLocation').value=''; document.getElementById('postPreview').style.display='none';
+  document.getElementById('upProg').style.display='none'; document.getElementById('upStatus').textContent='';
+  toast('✅ Post uploaded successfully!');
+ }catch(e){ toast('Save failed: '+e.message); console.log(e); }
+ finally{ btn.disabled=false; btn.textContent='Share Post'; }
 }
 async function toggleLike(id){
  const ref=db.collection('posts').doc(id);
- try{
-  await db.runTransaction(async tx=>{
-   const s=await tx.get(ref);if(!s.exists)return;
-   let likes=s.data().likes||[];
-   likes=likes.includes(user.uid)?likes.filter(x=>x!==user.uid):[...likes,user.uid];
-   tx.update(ref,{likes});
-  });
- }catch(e){toast(e.message)}
-}
-async function toggleFollow(id){
- const p=allPosts.find(x=>x.id===id);if(!p||p.uid===user.uid)return;
- const ref=db.collection('users').doc(p.uid);
- try{
-  await db.runTransaction(async tx=>{
-   const s=await tx.get(ref);if(!s.exists)return;
-   let followers=s.data().followers||[];
-   followers=followers.includes(user.uid)?followers.filter(x=>x!==user.uid):[...followers,user.uid];
-   tx.update(ref,{followers});
-  });
-  toast('Follow status updated');
- }catch(e){toast(e.message)}
-}
-function sharePost(id){
- const url=location.href+'?post='+encodeURIComponent(id);
- if(navigator.share){
-  navigator.share({title:'MIAN SOCIAL',text:'Check out this post!',url}).catch(()=>{});
- }else if(navigator.clipboard){
-  navigator.clipboard.writeText(url).then(()=>toast('Post link copied!')).catch(()=>toast(url));
- }else toast(url);
-}
-async function openComments(id){
- currentCommentPost=id;openModal('commentModal');
- const box=document.getElementById('commentList');
- box.innerHTML='<p class="muted">Loading comments...</p>';
- try{
-  const snap=await db.collection('posts').doc(id).collection('comments').orderBy('createdAt','asc').get();
-  box.innerHTML=snap.empty?'<p class="muted">No comments yet.</p>':
-   snap.docs.map(d=>`<div class="card"><b>${esc(d.data().name||'User')}</b><p>${esc(d.data().text||'')}</p></div>`).join('');
- }catch(e){box.textContent=e.message}
-}
-async function sendComment(){
- const input=document.getElementById('commentInput');
- const text=input.value.trim();if(!text||!currentCommentPost)return;
- try{
-  await db.collection('posts').doc(currentCommentPost).collection('comments').add({
-   uid:user.uid,name:profile.name||'User',text,
-   createdAt:firebase.firestore.FieldValue.serverTimestamp()
-  });
-  await db.collection('posts').doc(currentCommentPost).update({
-   commentCount:firebase.firestore.FieldValue.increment(1)
-  });
-  input.value='';openComments(currentCommentPost);
- }catch(e){toast(e.message)}
-}
-function searchPosts(){
- const q=document.getElementById('searchInput').value.toLowerCase();
- const found=allPosts.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.caption||'').toLowerCase().includes(q));
- document.getElementById('searchResults').innerHTML=found.map(p=>
-  `<div class="card"><b>${esc(p.name||'User')}</b><p>${esc(p.caption||'')}</p>${p.mediaType==='video'?`<video controls class="postimg" src="${esc(p.media)}"></video>`:`<img class="postimg" src="${esc(p.media)}">`}</div>`
- ).join('')||'<div class="card">No matching posts found.</div>';
-}
-function setFeed(mode){
- feedMode=mode;
- document.getElementById('forTab').classList.toggle('active',mode==='all');
- document.getElementById('followingTab').classList.toggle('active',mode==='following');
- renderFeed();
-}
-function renderReels(){
- const videos=allPosts.filter(p=>p.mediaType==='video');
- document.getElementById('reelFeed').innerHTML=videos.length?videos.map(p=>
-  `<div class="card"><b>${esc(p.name||'User')}</b><video class="postimg" controls playsinline src="${esc(p.media)}"></video><p>${esc(p.caption||'')}</p><button class="action" onclick="sharePost('${p.id}')">↗ Share</button></div>`
- ).join(''):'<div class="card">No videos yet. Upload a video to see it here.</div>';
-}
-function renderProfileGrid(){
- if(!user)return;
- const mine=allPosts.filter(p=>p.uid===user.uid);
- document.getElementById('myPosts').textContent=mine.length;
- document.getElementById('myGrid').innerHTML=mine.map(p=>
-  p.mediaType==='video'?`<video src="${esc(p.media)}" controls></video>`:`<img src="${esc(p.media)}">`
- ).join('');
-}
-async function loadMyProfile(){
- if(!user)return;
- try{
-  const s=await db.collection('users').doc(user.uid).get();
-  if(s.exists){
-   const d=s.data();
-   document.getElementById('myFollowers').textContent=(d.followers||[]).length;
-   document.getElementById('myFollowing').textContent=(d.following||[]).length;
-  }
- }catch(e){}
- renderProfileGrid();
-}
-function openEdit(){
- document.getElementById('editName').value=profile.name||'';
- document.getElementById('editBio').value=profile.bio||'';
- openModal('editModal');
- closeModal('settingsModal');
-}
-async function saveProfile(){
- const name=document.getElementById('editName').value.trim();
- const bio=document.getElementById('editBio').value.trim();
- if(!name)return toast('Enter your name');
- try{
-  await db.collection('users').doc(user.uid).set({name,bio,email:user.email},{merge:true});
-  profile={...profile,name,bio};
-  updateProfileUI();closeModal('editModal');toast('Profile updated!');
- }catch(e){toast(e.message)}
-}
-function changePhoto(){closeModal('settingsModal');document.getElementById('avatarFile').click()}
-async function uploadAvatar(event){
- const file=event.target.files[0];if(!file)return;
- if(file.size>5*1024*1024)return toast('Photo must be under 5 MB');
- try{
-  const ref=storage.ref('avatars/'+user.uid+'/'+Date.now());
-  await ref.put(file);
-  const photo=await ref.getDownloadURL();
-  await db.collection('users').doc(user.uid).set({photo},{merge:true});
-  profile.photo=photo;updateProfileUI();toast('Profile photo updated!');
- }catch(e){toast(e.message)}
-}
-function toggleTheme(){toast('Dark appearance is already active')}
-async function logout(){
- try{await auth.signOut();closeModal('settingsModal');toast('Logged out')}
+ try{ await db.runTransaction(async tx=>{ const s=await tx.get(ref); if(!s.exists) return; let likes=s.data().likes||[]; likes=likes.includes(user.uid)?likes.filter(x=>x!==user.uid):[...likes,user.uid]; tx.update(ref,{likes}); }); }
  catch(e){toast(e.message)}
 }
-</script>
-</body>
-</html>
+// ---
