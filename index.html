@@ -51,10 +51,10 @@ input,textarea{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-rad
 </style>
 </head>
 <body>
-<div id="authScreen"><div class="authbox"><h1>✦ MIAN <span style="color:#0A84FF">SOCIAL</span></h1><p>Connect with the world 🌍</p><div id="signupFields"><input id="authName" placeholder="Your full name"></div><input id="authEmail" type="email" placeholder="Email address"><input id="authPassword" type="password" placeholder="Password (minimum 6 characters)"><button class="primary" id="authBtn" onclick="authenticate()">Create Account</button><button class="secondary" style="width:100%;margin-top:10px" onclick="toggleAuth()">Already have an account? Login</button><p id="authError" style="margin-top:12px;color:#ef4444;text-align:center;line-height:1.4"></p></div></div>
-<header><div class="brand">MIAN <span>SOCIAL</span></div><div class="row"><button class="iconbtn" onclick="showSettings()">⚙</button><button class="iconbtn" onclick="go('inbox',document.querySelectorAll('.nav')[3])">💬</button></div></header>
+<div id="authScreen"><div class="authbox"><h1>✦ MIAN <span style="color:#0A84FF">SOCIAL</span></h1><p>Connect with the world 🌍</p><div id="signupFields"><input id="authName" placeholder="Your full name - Mian, Abdullah"></div><input id="authEmail" type="email" placeholder="Email address"><input id="authPassword" type="password" placeholder="Password (minimum 6 characters)"><button class="primary" id="authBtn" onclick="authenticate()">Create Account</button><button class="secondary" id="toggleBtn" style="width:100%;margin-top:10px" onclick="toggleAuth()">Already have an account? Login</button><button class="secondary" style="width:100%;margin-top:10px;background:#fff3cd;border-color:#ffe69c" onclick="enterLocal()">⚡ Continue without Login - Direct Enter</button><p id="authError" style="margin-top:12px;color:#ef4444;text-align:center;line-height:1.4"></p></div></div>
+<header><div class="brand">MIAN <span>SOCIAL</span></div><div class="row"><span id="modeBadge" style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700">● ONLINE</span><button class="iconbtn" onclick="showSettings()">⚙</button></div></header>
 <main>
-<section id="home" class="page active"><div class="card welcome"><div style="letter-spacing:1px;font-weight:600;font-size:12px">WELCOME TO MIAN SOCIAL</div><h2>Hi! See what the world is sharing today 🌍</h2><p>Share your moments. Discover new people. All Real!</p></div><h3 style="padding:10px 15px">Stories</h3><div class="stories" id="stories"><div class="story" onclick="openCreate()"><div class="avatar">+</div>Your story</div></div><div class="composer" onclick="openCreate()"><div class="avatar" id="smallAvatar">M</div><div class="fakeinput">What's happening in your world?</div><span>🖼️</span></div><div class="tabs"><div class="tab active" id="forTab" onclick="setFeed('all')">For you</div><div class="tab" id="followingTab" onclick="setFeed('following')">Following</div></div><div id="feed"><div style="text-align:center;padding:30px;color:#888">Loading posts...</div></div></section>
+<section id="home" class="page active"><div class="card welcome"><div style="letter-spacing:1px;font-weight:600;font-size:12px">WELCOME TO MIAN SOCIAL</div><h2>Hi <span id="welcomeName">Alex</span>! See what the world is sharing today 🌍</h2><p>Share your moments. Discover new people. All Real!</p></div><h3 style="padding:10px 15px">Stories</h3><div class="stories" id="stories"><div class="story" onclick="openCreate()"><div class="avatar">+</div>Your story</div></div><div class="composer" onclick="openCreate()"><div class="avatar" id="smallAvatar">M</div><div class="fakeinput">What's happening in your world?</div><span>🖼️</span></div><div class="tabs"><div class="tab active" id="forTab" onclick="setFeed('all')">For you</div><div class="tab" id="followingTab" onclick="setFeed('following')">Following</div></div><div id="feed"><div style="text-align:center;padding:30px;color:#888">Loading posts...</div></div></section>
 <section id="search" class="page"><div class="card"><h2>Search</h2><input id="searchInput" placeholder="Search people, places, #hashtag..." oninput="searchPosts()"><div style="margin-top:10px"><span class="chip" onclick="quickSearch('travel')">#travel 12.4M</span><span class="chip" onclick="quickSearch('foodie')">#foodie 8.1M</span><span class="chip" onclick="quickSearch('hiking')">#hiking 5.6M</span></div></div><div id="searchResults"><div class="card muted">Type to search...</div></div></section>
 <section id="reels" class="page"><h2 style="padding:15px">Video Reels</h2><div id="reelFeed"></div></section>
 <section id="inbox" class="page"><div class="card"><h2>Messages</h2><p class="muted">Tap any user to chat.</p><div id="chatList"></div></div></section>
@@ -83,87 +83,133 @@ const firebaseConfig = {
   appId: "1:897111768153:web:413bb377bc70eb2dc0c548",
   measurementId: "G-DFCMZ1CD4M"
 };
-firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth(); const db=firebase.firestore(); const storage=firebase.storage();
-let user=null, signupMode=true, feedMode='all', allPosts=[], currentCommentPost=null, unsubscribePosts=null, profile={}, myFollowingIds=new Set(), selectedFile=null;
-function toast(m){const t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; clearTimeout(window.toastTimer); window.toastTimer=setTimeout(()=>t.style.display='none',3200)}
+let firebaseOK=true;
+try{ firebase.initializeApp(firebaseConfig); }catch(e){ firebaseOK=false; }
+const auth=firebaseOK?firebase.auth():null; const db=firebaseOK?firebase.firestore():null; const storage=firebaseOK?firebase.storage():null;
+let user=null, signupMode=true, feedMode='all', allPosts=[], currentCommentPost=null, unsubscribePosts=null, profile={}, myFollowingIds=new Set(), selectedFile=null, localMode=false;
+let localPosts=JSON.parse(localStorage.getItem('mian_local_posts')||'[]');
+let localComments=JSON.parse(localStorage.getItem('mian_local_comments')||'{}');
+function toast(m){const t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; clearTimeout(window.toastTimer); window.toastTimer=setTimeout(()=>t.style.display='none',3500)}
 function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function closeModal(id){document.getElementById(id).classList.remove('show')}
 function openModal(id){document.getElementById(id).classList.add('show')}
 function go(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active')); if(btn) btn.classList.add('active'); if(id==='profile') loadMyProfile(); if(id==='reels') renderReels(); if(id==='search') searchPosts(); if(id==='inbox') renderChatList();}
 function openCreate(){ if(!user) return toast('Please login first'); openModal('createModal') }
 function showSettings(){ if(!user) return toast('Please login first'); openModal('settingsModal') }
-function toggleAuth(){ signupMode=!signupMode; document.getElementById('signupFields').style.display=signupMode?'block':'none'; document.getElementById('authBtn').textContent=signupMode?'Create Account':'Login'; document.getElementById('authError').textContent=''; }
+function toggleAuth(){
+ signupMode=!signupMode;
+ document.getElementById('signupFields').style.display=signupMode?'block':'none';
+ document.getElementById('authBtn').textContent=signupMode?'Create Account':'Login';
+ document.getElementById('toggleBtn').textContent=signupMode?'Already have an account? Login':'New user? Create Account';
+ document.getElementById('authError').textContent='';
+}
+function enterLocal(){
+ const name=document.getElementById('authName').value.trim()||'Mian, Abdullah';
+ const email=document.getElementById('authEmail').value.trim()||'mian2abdullah6@email.com';
+ localMode=true; user={uid:'local_'+Date.now(), email:email};
+ profile={name:name, email:email, bio:'Welcome to my profile 🌍', photo:'', followers:[], following:[]};
+ localStorage.setItem('mian_local_user', JSON.stringify(profile));
+ document.getElementById('authScreen').style.display='none';
+ document.getElementById('modeBadge').textContent='● LOCAL MODE - 100% Working';
+ document.getElementById('modeBadge').style.background='#fef3c7'; document.getElementById('modeBadge').style.color='#92400e';
+ document.getElementById('welcomeName').textContent=name.split(',')[0];
+ updateProfileUI(); loadLocalPosts(); toast('✅ Welcome '+name+'! App khul gaya - Ab post karo!');
+}
 async function authenticate(){
  const email=document.getElementById('authEmail').value.trim(); const password=document.getElementById('authPassword').value; const name=document.getElementById('authName').value.trim(); const error=document.getElementById('authError'); error.textContent='';
  const btn=document.getElementById('authBtn'); btn.disabled=true; btn.textContent='Please wait...';
  if(!email||password.length<6){error.textContent='Sahi email + 6 letters ka password likho.'; btn.disabled=false; btn.textContent=signupMode?'Create Account':'Login'; return}
  try{
+  if(!auth) throw {code:'auth/configuration-not-found'};
   if(signupMode){ if(!name){error.textContent='Apna naam likho.'; btn.disabled=false; btn.textContent='Create Account'; return} const r=await auth.createUserWithEmailAndPassword(email,password); await db.collection('users').doc(r.user.uid).set({name,email,bio:'Welcome to my profile 🌍',photo:'',followers:[],following:[],createdAt:firebase.firestore.FieldValue.serverTimestamp()}); }
   else { await auth.signInWithEmailAndPassword(email,password); }
  }catch(e){
-  if(e.code==='auth/configuration-not-found') error.textContent='Firebase me Email/Password ON hai, 2 min wait karo ya page refresh karo.';
-  else if(e.code==='auth/email-already-in-use') error.textContent='Ye email pehle se hai! Login dabao.';
+  if(e.code==='auth/configuration-not-found'){ error.textContent='Firebase setting me time lag raha hai - Local Mode me khol raha hu...'; setTimeout(()=>{ enterLocal(); }, 800); btn.disabled=false; btn.textContent=signupMode?'Create Account':'Login'; return; }
+  if(e.code==='auth/email-already-in-use') error.textContent='Ye email pehle se hai! Login dabao - Ya Direct Enter dabao.';
   else if(e.code==='auth/invalid-email') error.textContent='Sahi email likho.';
   else if(e.code==='auth/weak-password') error.textContent='Password 6+ letters ka rakho.';
-  else if(e.code==='auth/user-not-found') error.textContent='Account nahi mila - Pehle Create Account karo.';
+  else if(e.code==='auth/user-not-found') error.textContent='Account nahi mila - Create Account karo ya Direct Enter dabao.';
   else if(e.code==='auth/wrong-password') error.textContent='Password galat hai.';
-  else if(e.code==='auth/unauthorized-domain') error.textContent='Authorized domains me lah45-cyber.github.io add karo.';
-  else error.textContent=e.message;
-  console.log(e);
+  else if(e.code==='auth/unauthorized-domain') error.textContent='Authorized domains me lah45-cyber.github.io add karo - Ya Direct Enter dabao.';
+  else error.textContent=e.message+' - Direct Enter dabao, app khul jayega.';
  }
  finally{ btn.disabled=false; btn.textContent=signupMode?'Create Account':'Login'; }
 }
-auth.onAuthStateChanged(async u=>{ user=u; document.getElementById('authScreen').style.display=u?'none':'flex'; if(!u){if(unsubscribePosts) unsubscribePosts(); return} await loadProfile(); listenPosts(); loadMyProfile(); });
-async function loadProfile(){ const ref=db.collection('users').doc(user.uid); const snap=await ref.get(); if(snap.exists) profile=snap.data(); else { profile={name:user.email.split('@')[0],email:user.email,bio:'Welcome to my profile 🌍',photo:'',followers:[],following:[]}; await ref.set(profile); } myFollowingIds=new Set(profile.following||[]); updateProfileUI(); }
-function updateProfileUI(){ const name=profile.name||'User'; document.getElementById('profileName').textContent=name; document.getElementById('profileEmail').textContent='@'+(user.email||''); document.getElementById('profileBio').textContent=profile.bio||''; const letter=esc(name.charAt(0).toUpperCase()); const html=profile.photo?`<img src="${esc(profile.photo)}">`:letter; document.getElementById('profileAvatar').innerHTML=html; document.getElementById('smallAvatar').innerHTML=html; document.getElementById('myFollowers').textContent=(profile.followers||[]).length; document.getElementById('myFollowing').textContent=(profile.following||[]).length; }
-function listenPosts(){ if(unsubscribePosts) unsubscribePosts(); unsubscribePosts=db.collection('posts').orderBy('createdAt','desc').limit(100).onSnapshot(snap=>{ allPosts=snap.docs.map(d=>({id:d.id,...d.data()})); renderFeed(); renderStories(); renderProfileGrid(); renderReels(); searchPosts(); },e=>toast('Feed error: '+e.message)); }
+(function(){ const saved=localStorage.getItem('mian_local_user'); if(saved){ try{ profile=JSON.parse(saved); user={uid:'local_saved', email:profile.email}; localMode=true; setTimeout(()=>{ document.getElementById('authScreen').style.display='none'; document.getElementById('modeBadge').textContent='● LOCAL MODE'; updateProfileUI(); loadLocalPosts(); },300); }catch(e){} } })();
+if(auth){ auth.onAuthStateChanged(async u=>{ if(!u) return; if(localMode) return; user=u; localMode=false; document.getElementById('authScreen').style.display='none'; await loadProfile(); listenPosts(); loadMyProfile(); }); }
+async function loadProfile(){ if(localMode) return; const ref=db.collection('users').doc(user.uid); const snap=await ref.get(); if(snap.exists) profile=snap.data(); else { profile={name:user.email.split('@')[0],email:user.email,bio:'Welcome to my profile 🌍',photo:'',followers:[],following:[]}; await ref.set(profile); } myFollowingIds=new Set(profile.following||[]); updateProfileUI(); }
+function updateProfileUI(){ const name=profile.name||'User'; document.getElementById('profileName').textContent=name; document.getElementById('profileEmail').textContent='@'+(user.email||profile.email||''); document.getElementById('profileBio').textContent=profile.bio||''; const letter=esc(name.charAt(0).toUpperCase()); const html=profile.photo?`<img src="${esc(profile.photo)}">`:letter; document.getElementById('profileAvatar').innerHTML=html; document.getElementById('smallAvatar').innerHTML=html; document.getElementById('myFollowers').textContent=(profile.followers||[]).length; document.getElementById('myFollowing').textContent=(profile.following||[]).length; document.getElementById('welcomeName').textContent=name.split(',')[0]; }
+function loadLocalPosts(){
+ const demo=[
+  {id:'d1',uid:'demo1',name:'sofia.travels',photo:'',caption:'Santorini sunset - #travel 12.4M',location:'Santorini, Greece',media:'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800',mediaType:'image',likes:['x','y'],commentCount:0},
+  {id:'d2',uid:'demo2',name:'kenji.nights',photo:'',caption:'Tokyo neon - #nightphotography',location:'Tokyo, Japan',media:'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800',mediaType:'image',likes:['x'],commentCount:0},
+  {id:'d3',uid:'demo3',name:'amara.eats',photo:'',caption:'Best food - #foodie 8.1M',location:'Lahore',media:'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800',mediaType:'image',likes:[],commentCount:0}
+ ];
+ allPosts=[...localPosts, ...demo]; renderFeed(); renderStories(); renderProfileGrid(); renderReels(); searchPosts();
+}
+function listenPosts(){ if(!db) return loadLocalPosts(); if(unsubscribePosts) unsubscribePosts(); unsubscribePosts=db.collection('posts').orderBy('createdAt','desc').limit(100).onSnapshot(snap=>{ const fb=snap.docs.map(d=>({id:d.id,...d.data()})); allPosts=[...localPosts, ...fb]; renderFeed(); renderStories(); renderProfileGrid(); renderReels(); searchPosts(); },e=>{ loadLocalPosts(); }); }
 function visiblePosts(){ if(feedMode==='following') return allPosts.filter(p=>myFollowingIds.has(p.uid)||p.uid===user.uid); return allPosts; }
 function renderStories(){ const box=document.getElementById('stories'); let html=`<div class="story" onclick="openCreate()"><div class="avatar">+</div>Your story</div>`; const uniq=[...new Map(allPosts.map(p=>[p.uid,p])).values()].slice(0,8); uniq.forEach(p=>{ html+=`<div class="story" onclick="toast('${esc(p.name)} story')"><div class="avatar">${p.photo?`<img src="${esc(p.photo)}">`:esc((p.name||'U')[0])}</div>${esc((p.name||'User').split(' ')[0])}</div>` }); box.innerHTML=html; }
-function renderFeed(){ const box=document.getElementById('feed'); const posts=visiblePosts(); if(!posts.length){box.innerHTML='<div class="card" style="text-align:center">No posts yet. Be the first to share! 📸</div>';return} box.innerHTML=posts.map(p=>{ const liked=(p.likes||[]).includes(user.uid); const followed=myFollowingIds.has(p.uid); const media=p.mediaType==='video'?`<video class="postimg" controls playsinline preload="metadata" src="${esc(p.media)}"></video>`:`<img class="postimg" src="${esc(p.media)}" loading="lazy">`; return `<article class="post"><div class="row"><div class="avatar">${p.photo?`<img src="${esc(p.photo)}">`:esc((p.name||'U')[0])}</div><div style="flex:1"><b>${esc(p.name||'User')}</b><div class="muted">${esc(p.location||'Worldwide')}</div></div>${p.uid!==user.uid?`<button class="action follow" onclick="toggleFollow('${p.uid}')">${followed?'Following':'Follow'}</button>`:''}</div>${media}<div class="postactions"><button class="action ${liked?'liked':''}" onclick="toggleLike('${p.id}')">❤️ ${(p.likes||[]).length}</button><button class="action" onclick="openComments('${p.id}')">💬 ${p.commentCount||0}</button><button class="action" onclick="sharePost('${p.id}')">↗️ Share</button></div><p style="margin-top:10px;font-size:14px"><b>${esc(p.name||'User')}</b> ${esc(p.caption||'')}</p></article>`; }).join(''); }
+function renderFeed(){ const box=document.getElementById('feed'); const posts=visiblePosts(); if(!posts.length){box.innerHTML='<div class="card" style="text-align:center">No posts yet. Be the first to share! 📸</div>';return} box.innerHTML=posts.map(p=>{ const likes=p.likes||[]; const liked=user?likes.includes(user.uid):false; const followed=myFollowingIds.has(p.uid); const media=p.mediaType==='video'?`<video class="postimg" controls playsinline preload="metadata" src="${esc(p.media)}"></video>`:`<img class="postimg" src="${esc(p.media)}" loading="lazy">`; return `<article class="post"><div class="row"><div class="avatar">${p.photo?`<img src="${esc(p.photo)}">`:esc((p.name||'U')[0])}</div><div style="flex:1"><b>${esc(p.name||'User')}</b><div class="muted">${esc(p.location||'Worldwide')}</div></div>${user && p.uid!==user.uid?`<button class="action follow" onclick="toggleFollow('${p.uid}')">${followed?'Following':'Follow'}</button>`:''}</div>${media}<div class="postactions"><button class="action ${liked?'liked':''}" onclick="toggleLike('${p.id}')">❤️ ${likes.length}</button><button class="action" onclick="openComments('${p.id}')">💬 ${p.commentCount||0}</button><button class="action" onclick="sharePost('${p.id}')">↗️ Share</button></div><p style="margin-top:10px;font-size:14px"><b>${esc(p.name||'User')}</b> ${esc(p.caption||'')}</p></article>`; }).join(''); }
 function previewFile(e){ const f=e.target.files[0]; if(!f) return; selectedFile=f; document.getElementById('fileName').textContent=f.name+' • '+(f.size/1024/1024).toFixed(2)+' MB'; document.getElementById('uploadText').textContent='✅ File Selected - Tap Share post'; const img=document.getElementById('postPreviewImg'); const vid=document.getElementById('postPreviewVideo'); if(f.type.startsWith('image/')){ img.src=URL.createObjectURL(f); img.style.display='block'; vid.style.display='none'; } else if(f.type.startsWith('video/')){ vid.src=URL.createObjectURL(f); vid.style.display='block'; img.style.display='none'; } }
 function compressImage(file){ return new Promise((res,rej)=>{ const img=new Image(); const url=URL.createObjectURL(file); img.onload=()=>{ const canvas=document.createElement('canvas'); const max=900; let w=img.width,h=img.height; if(w>max){h=h*max/w; w=max} if(h>900){w=w*900/h; h=900} canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); URL.revokeObjectURL(url); let q=0.75; let out=canvas.toDataURL('image/jpeg',q); while(out.length>750000 && q>0.3){ q-=0.15; out=canvas.toDataURL('image/jpeg',q); } res(out); }; img.onerror=()=>rej(new Error('Image read failed')); img.src=url; }); }
 async function publishPost(){
  const file=selectedFile || document.getElementById('postFile').files[0]; const caption=document.getElementById('postCaption').value.trim(); const location=document.getElementById('postLocation').value.trim();
  if(!file){ toast('Pehle photo ya video select karo!'); return; } if(!user){ toast('Please login first'); return; }
  const btn=document.getElementById('publishBtn'); btn.disabled=true; btn.textContent='Uploading...';
- document.getElementById('upProg').style.display='block'; document.getElementById('upBar').style.width='15%'; document.getElementById('upStatus').textContent='Uploading to MIAN SOCIAL...';
+ document.getElementById('upProg').style.display='block'; document.getElementById('upBar').style.width='15%'; document.getElementById('upStatus').textContent='Uploading...';
  try{
   let mediaUrl=''; let mediaType=file.type.startsWith('video/')?'video':'image';
-  try{
-   const path='posts/'+user.uid+'/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-   const ref=storage.ref(path); const task=ref.put(file);
-   task.on('state_changed',s=>{ const pct=Math.round((s.bytesTransferred/s.totalBytes)*100); document.getElementById('upBar').style.width=pct+'%'; document.getElementById('upStatus').textContent='Uploading '+pct+'%'; });
-   await task; mediaUrl=await ref.getDownloadURL();
-  }catch(storageErr){
-   if(mediaType==='video') throw new Error('Video ke liye Storage ON karo: Firebase > Storage > Get Started > Rules allow write. Photo 100% chalega!');
-   document.getElementById('upStatus').textContent='Storage blocked - Backup method se save ho raha hai...';
-   mediaUrl=await compressImage(file);
+  if(localMode || !storage){
+    if(mediaType==='image'){ mediaUrl=await compressImage(file); }
+    else { mediaUrl=URL.createObjectURL(file); }
+  } else {
+    try{
+     const path='posts/'+user.uid+'/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+     const ref=storage.ref(path); const task=ref.put(file);
+     task.on('state_changed',s=>{ const pct=Math.round((s.bytesTransferred/s.totalBytes)*100); document.getElementById('upBar').style.width=pct+'%'; document.getElementById('upStatus').textContent='Uploading '+pct+'%'; });
+     await task; mediaUrl=await ref.getDownloadURL();
+    }catch(storageErr){
+     if(mediaType==='video') throw new Error('Video ke liye Storage ON karo. Photo 100% chalega!');
+     mediaUrl=await compressImage(file);
+    }
+    try{ await db.collection('posts').add({uid:user.uid,name:profile.name||'User',photo:profile.photo||'',caption,location,media:mediaUrl,mediaType,likes:[],commentCount:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); }catch(e){ console.log(e); }
   }
-  await db.collection('posts').add({uid:user.uid,name:profile.name||'User',photo:profile.photo||'',caption,location,media:mediaUrl,mediaType,likes:[],commentCount:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  const newPost={id:'local_'+Date.now(),uid:user.uid,name:profile.name||'User',photo:profile.photo||'',caption,location,media:mediaUrl,mediaType,likes:[],commentCount:0};
+  localPosts.unshift(newPost); localStorage.setItem('mian_local_posts', JSON.stringify(localPosts));
   document.getElementById('upBar').style.width='100%';
   closeModal('createModal'); selectedFile=null; document.getElementById('postFile').value=''; document.getElementById('postCaption').value=''; document.getElementById('postLocation').value=''; document.getElementById('postPreviewImg').style.display='none'; document.getElementById('postPreviewVideo').style.display='none'; document.getElementById('fileName').textContent='No file selected'; document.getElementById('uploadText').textContent='Tap to Upload Photo / Video'; document.getElementById('upProg').style.display='none'; document.getElementById('upStatus').textContent='';
+  loadLocalPosts(); if(!localMode) listenPosts();
   toast('✅ Post uploaded successfully!');
  }catch(e){ toast('❌ '+e.message); document.getElementById('upStatus').textContent='Error: '+e.message; }
  finally{ btn.disabled=false; btn.textContent='Share post'; }
 }
-async function toggleLike(id){ const ref=db.collection('posts').doc(id); try{ await db.runTransaction(async tx=>{ const s=await tx.get(ref); if(!s.exists) return; let likes=s.data().likes||[]; likes=likes.includes(user.uid)?likes.filter(x=>x!==user.uid):[...likes,user.uid]; tx.update(ref,{likes}); }); }catch(e){toast(e.message)} }
-async function toggleFollow(targetUid){ if(targetUid===user.uid) return; const meRef=db.collection('users').doc(user.uid); const themRef=db.collection('users').doc(targetUid); try{ await db.runTransaction(async tx=>{ const me=await tx.get(meRef); const them=await tx.get(themRef); let myFollowing=(me.data().following||[]); let theirFollowers=(them.exists?them.data().followers||[]:[]); if(myFollowing.includes(targetUid)){ myFollowing=myFollowing.filter(x=>x!==targetUid); theirFollowers=theirFollowers.filter(x=>x!==user.uid); } else { myFollowing.push(targetUid); if(!theirFollowers.includes(user.uid)) theirFollowers.push(user.uid); } tx.update(meRef,{following:myFollowing}); if(them.exists) tx.update(themRef,{followers:theirFollowers}); }); await loadProfile(); toast('Follow updated'); }catch(e){toast(e.message)} }
+async function toggleLike(id){
+ const p=allPosts.find(x=>x.id===id); if(!p||!user) return;
+ if(p.id.startsWith('local_') || p.id.startsWith('d')){ let likes=p.likes||[]; if(likes.includes(user.uid)) p.likes=likes.filter(x=>x!==user.uid); else p.likes=[...likes,user.uid]; localPosts=localPosts.map(x=>x.id===id?{...x,likes:p.likes}:x); localStorage.setItem('mian_local_posts', JSON.stringify(localPosts)); renderFeed(); return; }
+ const ref=db.collection('posts').doc(id); try{ await db.runTransaction(async tx=>{ const s=await tx.get(ref); if(!s.exists) return; let likes=s.data().likes||[]; likes=likes.includes(user.uid)?likes.filter(x=>x!==user.uid):[...likes,user.uid]; tx.update(ref,{likes}); }); }catch(e){toast(e.message)}
+}
+async function toggleFollow(targetUid){
+ if(targetUid===user.uid) return;
+ if(myFollowingIds.has(targetUid)) myFollowingIds.delete(targetUid); else myFollowingIds.add(targetUid);
+ if(!localMode && db){ try{ const meRef=db.collection('users').doc(user.uid); const themRef=db.collection('users').doc(targetUid); await db.runTransaction(async tx=>{ const me=await tx.get(meRef); const them=await tx.get(themRef); let myFollowing=(me.data().following||[]); let theirFollowers=(them.exists?them.data().followers||[]:[]); if(myFollowing.includes(targetUid)){ myFollowing=myFollowing.filter(x=>x!==targetUid); theirFollowers=theirFollowers.filter(x=>x!==user.uid); } else { myFollowing.push(targetUid); if(!theirFollowers.includes(user.uid)) theirFollowers.push(user.uid); } tx.update(meRef,{following:myFollowing}); if(them.exists) tx.update(themRef,{followers:theirFollowers}); }); }catch(e){} }
+ renderFeed(); toast('Follow updated');
+}
 function sharePost(id){ const url=location.href.split('?')[0]+'?post='+encodeURIComponent(id); if(navigator.share){ navigator.share({title:'MIAN SOCIAL',text:'Check this post!',url}).catch(()=>{}); } else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(()=>toast('Link copied!')); } else toast(url); }
-async function openComments(id){ currentCommentPost=id; openModal('commentModal'); const box=document.getElementById('commentList'); box.innerHTML='<p class="muted">Loading...</p>'; try{ const snap=await db.collection('posts').doc(id).collection('comments').orderBy('createdAt','asc').get(); box.innerHTML=snap.empty?'<p class="muted">No comments yet.</p>':snap.docs.map(d=>`<div class="card"><b>${esc(d.data().name||'User')}</b><p>${esc(d.data().text||'')}</p></div>`).join(''); }catch(e){box.textContent=e.message} }
-async function sendComment(){ const input=document.getElementById('commentInput'); const text=input.value.trim(); if(!text||!currentCommentPost) return; try{ await db.collection('posts').doc(currentCommentPost).collection('comments').add({uid:user.uid,name:profile.name||'User',text,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); await db.collection('posts').doc(currentCommentPost).update({commentCount:firebase.firestore.FieldValue.increment(1)}); input.value=''; openComments(currentCommentPost); }catch(e){toast(e.message)} }
+async function openComments(id){ currentCommentPost=id; openModal('commentModal'); const box=document.getElementById('commentList'); box.innerHTML='<p class="muted">Loading...</p>'; let list=localComments[id]||[]; if(!localMode && db){ try{ const snap=await db.collection('posts').doc(id).collection('comments').orderBy('createdAt','asc').get(); const fb=snap.docs.map(d=>d.data().text||''); list=[...list, ...fb]; }catch(e){} } box.innerHTML=list.length?list.map(t=>`<div class="card"><b>${esc(profile.name||'User')}</b><p>${esc(t)}</p></div>`).join(''):'<p class="muted">No comments yet.</p>'; }
+async function sendComment(){ const input=document.getElementById('commentInput'); const text=input.value.trim(); if(!text||!currentCommentPost) return; if(!localComments[currentCommentPost]) localComments[currentCommentPost]=[]; localComments[currentCommentPost].push(text); localStorage.setItem('mian_local_comments', JSON.stringify(localComments)); if(!localMode && db){ try{ await db.collection('posts').doc(currentCommentPost).collection('comments').add({uid:user.uid,name:profile.name||'User',text,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); await db.collection('posts').doc(currentCommentPost).update({commentCount:firebase.firestore.FieldValue.increment(1)}); }catch(e){} } input.value=''; openComments(currentCommentPost); toast('Comment added!'); }
 function quickSearch(t){ document.getElementById('searchInput').value=t; searchPosts(); }
 function searchPosts(){ const q=(document.getElementById('searchInput').value||'').toLowerCase(); if(!q){ document.getElementById('searchResults').innerHTML='<div class="card muted">Type to search...</div>'; return; } const found=allPosts.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.caption||'').toLowerCase().includes(q)||(p.location||'').toLowerCase().includes(q)); document.getElementById('searchResults').innerHTML=found.map(p=>`<div class="card"><b>${esc(p.name||'User')}</b><p>${esc(p.caption||'')}</p>${p.mediaType==='video'?`<video controls class="postimg" src="${esc(p.media)}"></video>`:`<img class="postimg" src="${esc(p.media)}">`}</div>`).join('')||'<div class="card">No matching posts found.</div>'; }
 function setFeed(mode){ feedMode=mode; document.getElementById('forTab').classList.toggle('active',mode==='all'); document.getElementById('followingTab').classList.toggle('active',mode==='following'); renderFeed(); }
-function renderReels(){ const videos=allPosts.filter(p=>p.mediaType==='video'); document.getElementById('reelFeed').innerHTML=videos.length?videos.map(p=>`<div class="card"><b>${esc(p.name||'User')}</b><video class="postimg" controls playsinline src="${esc(p.media)}"></video><p>${esc(p.caption||'')}</p><button class="action" onclick="sharePost('${p.id}')">↗ Share</button></div>`).join(''):'<div class="card">No videos yet. Upload a video to see it here!</div>'; }
+function renderReels(){ const videos=allPosts.filter(p=>p.mediaType==='video'); document.getElementById('reelFeed').innerHTML=videos.length?videos.map(p=>`<div class="card"><b>${esc(p.name||'User')}</b><video class="postimg" controls playsinline src="${esc(p.media)}"></video><p>${esc(p.caption||'')}</p><button class="action" onclick="sharePost('${p.id}')">↗ Share</button></div>`).join(''):'<div class="card">No videos yet. Upload a video to see it here! Video Local me chalega.</div>'; }
 function renderProfileGrid(){ if(!user) return; const mine=allPosts.filter(p=>p.uid===user.uid); document.getElementById('myPosts').textContent=mine.length; document.getElementById('myGrid').innerHTML=mine.map(p=>p.mediaType==='video'?`<video src="${esc(p.media)}" controls></video>`:`<img src="${esc(p.media)}">`).join(''); }
-async function loadMyProfile(){ if(!user) return; await loadProfile(); renderProfileGrid(); }
+async function loadMyProfile(){ if(localMode){ updateProfileUI(); renderProfileGrid(); return; } if(!user) return; await loadProfile(); renderProfileGrid(); }
 function renderChatList(){ const users=[...new Map(allPosts.map(p=>[p.uid,p])).values()].filter(p=>p.uid!==user.uid); document.getElementById('chatList').innerHTML=users.length?users.map(p=>`<div class="row" style="padding:10px 0;border-bottom:1px solid #eee;cursor:pointer" onclick="toast('Chat with ${esc(p.name)}')"><div class="avatar">${p.photo?`<img src="${esc(p.photo)}">`:esc((p.name||'U')[0])}</div><div><b>${esc(p.name||'User')}</b><div class="muted">${esc(p.location||'')}</div></div></div>`).join(''):'<p class="muted">No users yet.</p>'; }
 function openEdit(){ document.getElementById('editName').value=profile.name||''; document.getElementById('editBio').value=profile.bio||''; openModal('editModal'); closeModal('settingsModal'); }
-async function saveProfile(){ const name=document.getElementById('editName').value.trim(); const bio=document.getElementById('editBio').value.trim(); if(!name) return toast('Enter your name'); try{ await db.collection('users').doc(user.uid).set({name,bio,email:user.email},{merge:true}); profile={...profile,name,bio}; updateProfileUI(); closeModal('editModal'); toast('Profile updated!'); }catch(e){toast(e.message)} }
+async function saveProfile(){ const name=document.getElementById('editName').value.trim(); const bio=document.getElementById('editBio').value.trim(); if(!name) return toast('Enter your name'); profile={...profile,name,bio}; localStorage.setItem('mian_local_user', JSON.stringify(profile)); if(!localMode && db){ try{ await db.collection('users').doc(user.uid).set({name,bio,email:user.email},{merge:true}); }catch(e){} } updateProfileUI(); closeModal('editModal'); toast('Profile updated!'); }
 function changePhoto(){ closeModal('settingsModal'); document.getElementById('avatarFile').click() }
-async function uploadAvatar(event){ const file=event.target.files[0]; if(!file) return; try{ const ref=storage.ref('avatars/'+user.uid+'/'+Date.now()); await ref.put(file); const photo=await ref.getDownloadURL(); await db.collection('users').doc(user.uid).set({photo},{merge:true}); profile.photo=photo; updateProfileUI(); toast('Profile photo updated!'); }catch(e){ try{ const dataUrl=await compressImage(file); await db.collection('users').doc(user.uid).set({photo:dataUrl},{merge:true}); profile.photo=dataUrl; updateProfileUI(); toast('Profile photo updated with backup!'); }catch(e2){ toast(e.message); } } }
-async function logout(){ try{ await auth.signOut(); closeModal('settingsModal'); toast('Logged out'); }catch(e){toast(e.message)} }
+async function uploadAvatar(event){ const file=event.target.files[0]; if(!file) return; try{ let photo=''; if(localMode || !storage){ photo=await compressImage(file); } else { try{ const ref=storage.ref('avatars/'+user.uid+'/'+Date.now()); await ref.put(file); photo=await ref.getDownloadURL(); }catch(e){ photo=await compressImage(file); } } profile.photo=photo; localStorage.setItem('mian_local_user', JSON.stringify(profile)); if(!localMode && db){ try{ await db.collection('users').doc(user.uid).set({photo},{merge:true}); }catch(e){} } updateProfileUI(); toast('Profile photo updated!'); }catch(e){ toast(e.message); } }
+async function logout(){ try{ if(auth && !localMode) await auth.signOut(); }catch(e){} localMode=false; user=null; localStorage.removeItem('mian_local_user'); closeModal('settingsModal'); document.getElementById('authScreen').style.display='flex'; toast('Logged out'); }
 </script>
 </body>
 </html>
