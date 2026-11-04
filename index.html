@@ -11,14 +11,11 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
 body{background:#fafafa;color:#262626;padding-bottom:70px}
-a{color:#0095f6;text-decoration:none}
 .topbar{position:sticky;top:0;background:#fff;border-bottom:1px solid #dbdbdb;padding:10px 14px;display:flex;align-items:center;gap:10px;z-index:100}
-.logo{font-weight:800;font-size:22px;letter-spacing:-0.5px}
+.logo{font-weight:800;font-size:22px}
 .logo span{color:#0095f6}
 #modeBadge{font-size:11px;padding:4px 8px;border-radius:20px;background:#fef3c7;color:#92400e;font-weight:700}
 #modeBadge.online{background:#dcfce7!important;color:#166534!important}
-.searchTop{flex:1;background:#efefef;border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:6px}
-.searchTop input{border:0;background:transparent;outline:none;width:100%;font-size:14px}
 .iconBtn{width:38px;height:38px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;position:relative;border:0}
 .badge{position:absolute;top:-4px;right:-4px;background:#ff3040;color:#fff;font-size:10px;min-width:18px;height:18px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:700}
 .feed{max-width:500px;margin:0 auto}
@@ -52,8 +49,6 @@ textarea{resize:vertical;min-height:70px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:300}
 .modal.open{display:flex}
 .sheet{background:#fff;width:100%;max-width:500px;max-height:85vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px;padding-bottom:30px}
-.sheetCenter{align-items:center}
-.sheetCenter .sheet{border-radius:20px;margin:20px;max-width:420px}
 .closeBar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .closeBar button{border:0;background:#f1f5f9;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer}
 .instaFollowBtn{background:#0095f6;color:#fff;border:0;padding:7px 14px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px}
@@ -68,10 +63,10 @@ textarea{resize:vertical;min-height:70px}
 .magBox{background:#000;color:#fff;padding:12px;border-radius:12px;margin:10px auto;max-width:320px;text-align:center}
 .magBox b{font-size:19px;letter-spacing:1px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#fff}
-.grid img{width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer}
+.grid img,.grid video{width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer}
 .hidden{display:none!important}
 .postBtn{position:fixed;bottom:76px;right:16px;width:54px;height:54px;border-radius:50%;background:#0095f6;color:#fff;font-size:28px;border:0;box-shadow:0 4px 14px rgba(0,149,246,.4);z-index:150;cursor:pointer}
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#262626;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:500;display:none}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#262626;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:500;display:none;max-width:90%;text-align:center}
 .commentRow{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #f8fafc}
 .commentRow .avatar{width:32px;height:32px;font-size:13px}
 </style>
@@ -82,15 +77,15 @@ textarea{resize:vertical;min-height:70px}
 <div class="authWrap">
 <div class="authCard">
 <h1>MIAN <span>SOCIAL</span></h1>
-<p class="muted">Connect with friends • Share moments</p>
+<p class="muted">Connect with friends - Share moments</p>
 <div class="tabs"><button id="tabLogin" class="active" onclick="switchAuth('login')">Login</button><button id="tabSignup" onclick="switchAuth('signup')">Create Account</button></div>
-<div id="signupNameBox" class="hidden" style="margin-bottom:10px"><input id="authName" placeholder="Full Name - Example: Mian Abdullah"></div>
+<div id="signupNameBox" class="hidden" style="margin-bottom:10px"><input id="authName" placeholder="Full Name"></div>
 <div style="margin-bottom:10px"><input id="authEmail" type="email" placeholder="Email - Example: mian@gmail.com"></div>
 <div style="margin-bottom:14px"><input id="authPassword" type="password" placeholder="Password - Min 6 characters"></div>
 <button class="btn" onclick="handleAuth()" id="authBtn">Log In</button>
 <p class="muted small" style="margin:12px 0">OR</p>
 <button class="btn btn2" onclick="enterLocal()">Continue without Login - Direct Enter</button>
-<p class="muted small" style="margin-top:12px">Direct Enter = Local Mode - Request will NOT go to other phone!<br>For Friend Request, use Gmail + Password Login!</p>
+<p class="muted small" style="margin-top:12px">Direct Enter = Local Mode - Friend Request & Video will NOT go to other phone!<br>For full features, use Gmail + Password Login!</p>
 <p id="authError" class="small" style="color:#ff3040;margin-top:10px"></p>
 </div>
 </div>
@@ -105,21 +100,15 @@ textarea{resize:vertical;min-height:70px}
 <button class="iconBtn" onclick="openNotifications()">🔔<span id="notifBadge" class="badge hidden">0</span></button>
 <button class="iconBtn" onclick="openSettings()">⚙️</button>
 </div>
-
 <div class="feed">
-<div id="storiesBar" style="background:#fff;padding:12px;display:flex;gap:12px;overflow:auto;border-bottom:1px solid #dbdbdb">
-<div style="text-align:center;flex-shrink:0;cursor:pointer" onclick="openCreatePost()"><div class="avatar" id="myStoryAvatar">+</div><div class="small">Your Story</div></div>
-</div>
-
 <div style="background:#fff;padding:12px;border:1px solid #dbdbdb;margin:12px 0;border-radius:4px" class="row">
 <div class="avatar" id="composerAvatar">M</div>
 <input id="quickCaption" placeholder="What's on your mind?" onclick="openCreatePost()" readonly style="cursor:pointer">
 <button class="btn" style="width:auto;padding:8px 14px" onclick="openCreatePost()">Post</button>
 </div>
-
 <div id="feedList"></div>
 <div id="feedEmpty" style="text-align:center;padding:40px 20px;display:none">
-<p style="font-size:40px">📸</p><h3>No posts yet</h3><p class="muted">Be the first to post! Or ask your friend to post 1 photo.</p>
+<p style="font-size:40px">📸</p><h3>No posts yet</h3><p class="muted">Be the first to post!</p>
 <button class="btn" style="max-width:200px;margin-top:14px" onclick="openCreatePost()">Create Post</button>
 </div>
 </div>
@@ -134,16 +123,15 @@ textarea{resize:vertical;min-height:70px}
 <button onclick="showTab('profile',this)">👤</button>
 </div>
 
-<!-- SEARCH TAB -->
 <div id="searchTab" class="hidden" style="max-width:500px;margin:0 auto;padding:14px">
-<h3>Search Friends by MAG ID</h3>
-<p class="muted small">Enter full MAG ID - Example: MAG-123456</p>
-<div class="row" style="margin:12px 0"><input id="friendSearchInput" placeholder="MAG ID or Name - Example: MAG-482913"><button class="btn" style="width:auto" onclick="searchFriendByIdOrName()">Search</button></div>
-<button class="btn btn2" onclick="showAllUsers()">Show All Users</button>
+<p style="background:#dcfce7;padding:10px;border-radius:10px;font-size:13px;text-align:center">✅ <b>Neeche Sab Accounts Hain</b><br>Jo bhi naya account banayega uska ID yahan khud aa jayega - Direct Request karo!</p>
+<h3 style="margin-top:12px">Search Friends by MAG ID</h3>
+<p class="muted small">Ya ID likh ke dhoondo - Example: MAG-123456</p>
+<div class="row" style="margin:12px 0"><input id="friendSearchInput" placeholder="MAG ID or Name"><button class="btn" style="width:auto" onclick="searchFriendByIdOrName()">Search</button></div>
+<button class="btn btn2" onclick="showAllUsersAuto()">🔄 Refresh All Users</button>
 <div id="friendSearchResults" style="margin-top:14px"></div>
 </div>
 
-<!-- PROFILE TAB -->
 <div id="profileTab" class="hidden" style="max-width:500px;margin:0 auto">
 <div class="profileTop">
 <div class="avatar" id="profileAvatar">M</div>
@@ -157,13 +145,11 @@ textarea{resize:vertical;min-height:70px}
 <div class="grid" id="profileGrid"></div>
 </div>
 
-<!-- CREATE POST MODAL -->
 <div id="createModal" class="modal"><div class="sheet"><div class="closeBar"><h3>Create Post</h3><button onclick="closeModal('createModal')">✕</button></div>
 <textarea id="postCaption" placeholder="Write a caption..."></textarea>
-<div style="margin:12px 0"><input type="file" id="postImage" accept="image/*" onchange="previewPostImage(event)"><img id="postPreview" style="width:100%;border-radius:10px;margin-top:10px;display:none"></div>
-<button class="btn" onclick="submitPost()">Share Post</button></div></div>
+<div style="margin:12px 0"><input type="file" id="postImage" accept="image/*,video/*" onchange="previewPostImage(event)"><img id="postPreview" style="width:100%;border-radius:10px;margin-top:10px;display:none"><video id="postVideoPreview" controls style="width:100%;border-radius:10px;margin-top:10px;display:none"></video><p id="uploadStatus" class="small muted" style="text-align:center;margin-top:6px"></p></div>
+<button class="btn" onclick="submitPost()" id="shareBtn">Share Post</button></div></div>
 
-<!-- FRIEND REQUESTS MODAL -->
 <div id="friendReqModal" class="modal"><div class="sheet"><div class="closeBar"><h3>👥 Friend Requests</h3><button onclick="closeModal('friendReqModal')">✕</button></div>
 <div style="background:#000;color:#fff;padding:12px;border-radius:12px;margin-bottom:12px;text-align:center"><div style="font-size:11px;opacity:.7">YOUR MAG ID</div><b id="myMagIdInRequest" style="font-size:18px;letter-spacing:1px">MAG-000000</b><br><button onclick="copyMyMagId()" style="background:#0095f6;color:#fff;border:0;padding:6px 12px;border-radius:8px;margin-top:6px">Copy</button></div>
 <div class="row"><input id="friendSearchInput2" placeholder="Enter Friend MAG ID - MAG-123456"><button class="btn" style="width:auto" onclick="searchFromModal()">Search</button></div>
@@ -172,10 +158,9 @@ textarea{resize:vertical;min-height:70px}
 <div id="friendReqList"></div>
 </div></div>
 
-<!-- OTHER MODALS -->
 <div id="notifModal" class="modal"><div class="sheet"><div class="closeBar"><h3>Notifications</h3><button onclick="closeModal('notifModal')">✕</button></div><div id="notifList"></div></div></div>
 <div id="settingsModal" class="modal"><div class="sheet"><div class="closeBar"><h3>Settings</h3><button onclick="closeModal('settingsModal')">✕</button></div>
-<div style="background:#fff3cd;padding:12px;border-radius:10px;margin-bottom:12px"><b>⚠️ Friend Request Not Working?</b><br><span class="small">1. Both must Login with Gmail + Password - NOT Direct Enter<br>2. Both must be ONLINE MODE - NOT LOCAL MODE<br>3. Friend must make 1 Post - Then Search by MAG ID</span></div>
+<div style="background:#fff3cd;padding:12px;border-radius:10px;margin-bottom:12px"><b>Friend Request / Upload Not Working?</b><br><span class="small">1. Both must Login with Gmail + Password - NOT Direct Enter<br>2. Both must be ONLINE MODE<br>3. Firebase Storage + Firestore Rules must be Published</span></div>
 <button class="btn btn2" onclick="copyMyMagId()">Copy My MAG ID</button><br><br>
 <button class="btn btnDanger" onclick="doLogout()">Log Out</button></div></div>
 <div id="editProfileModal" class="modal"><div class="sheet"><div class="closeBar"><h3>Edit Profile</h3><button onclick="closeModal('editProfileModal')">✕</button></div>
@@ -191,18 +176,11 @@ let auth=null,db=null,storage=null;
 try{auth=firebase.auth();db=firebase.firestore();storage=firebase.storage()}catch(e){}
 let user=null,profile={name:'Mian Abdullah',email:'',bio:'Welcome',photo:'',followers:[],following:[]};
 let localMode=false,currentTab='home',authMode='login';
-let allPosts=[],friends=[],friendRequests=[],notifications=[],currentPostId=null;
-
-// ✅ MAG ID - Har bande ka alag - UID se banta hai
-function magIdFor(uid){
-  if(!uid) return 'MAG-000000';
-  let h=0; for(let i=0;i<uid.length;i++){h=((h<<5)-h)+uid.charCodeAt(i);h=h&h}
-  let n=Math.abs(h)%900000+100000;
-  return 'MAG-'+n;
-}
+let allPosts=[],friends=[],friendRequests=[],notifications=[],currentPostId=null,selectedFile=null;
+function magIdFor(uid){ if(!uid) return 'MAG-000000'; let h=0; for(let i=0;i<uid.length;i++){h=((h<<5)-h)+uid.charCodeAt(i);h=h&h} let n=Math.abs(h)%900000+100000; return 'MAG-'+n; }
 function getMyMagId(){ return profile.magId || magIdFor(user?.uid) || 'MAG-000000'; }
 function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function toast(m){ let t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',3000); }
+function toast(m){ let t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',3500); }
 function copyMyMagId(){ let id=getMyMagId(); if(navigator.clipboard) navigator.clipboard.writeText(id); else{let ta=document.createElement('textarea');ta.value=id;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()} toast('Copied: '+id); }
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
@@ -212,6 +190,7 @@ async function handleAuth(){
   let pass=document.getElementById('authPassword').value;
   let name=document.getElementById('authName').value.trim()||email.split('@')[0];
   if(!email||!pass){ document.getElementById('authError').textContent='Enter Email + Password'; return; }
+  if(pass.length<6){ document.getElementById('authError').textContent='Password must be 6+ characters'; return; }
   if(!auth){ enterLocal(); return; }
   try{
     if(authMode==='signup'){ let c=await auth.createUserWithEmailAndPassword(email,pass); user=c.user; await db.collection('users').doc(user.uid).set({name:name,email:email,photo:'',bio:'Welcome to my profile',magId:magIdFor(user.uid),createdAt:new Date()}); }
@@ -219,7 +198,7 @@ async function handleAuth(){
     localMode=false;
     document.getElementById('modeBadge').textContent='● ONLINE MODE'; document.getElementById('modeBadge').classList.add('online');
     document.getElementById('authScreen').style.display='none'; document.getElementById('mainApp').classList.remove('hidden');
-    await loadProfile(); loadFeed(); renderFriendRequests();
+    await loadProfile(); loadFeed(); listenFriendRequests();
     toast('Welcome! Your MAG ID: '+getMyMagId());
   }catch(e){ document.getElementById('authError').textContent=e.message; }
 }
@@ -234,7 +213,7 @@ function enterLocal(){
   try{localStorage.setItem('mian_local_user',JSON.stringify(profile))}catch(e){}
   document.getElementById('authScreen').style.display='none'; document.getElementById('mainApp').classList.remove('hidden');
   document.getElementById('modeBadge').textContent='● LOCAL MODE'; document.getElementById('modeBadge').classList.remove('online');
-  updateProfileUI(); loadLocalPosts(); renderFriendRequests();
+  updateProfileUI(); loadLocalPosts(); listenFriendRequests();
   toast('LOCAL MODE - Your MAG ID: '+magId);
 }
 function doLogout(){ if(auth) auth.signOut(); localStorage.removeItem('mian_local_user'); localMode=false; location.reload(); }
@@ -261,18 +240,75 @@ function showTab(tab,btn){
   document.getElementById('searchTab').classList.toggle('hidden',tab!=='search');
   document.getElementById('profileTab').classList.toggle('hidden',tab!=='profile');
   if(tab==='profile') renderProfileGrid();
+  if(tab==='search'){ showAllUsersAuto(); }
 }
 function openCreatePost(){ document.getElementById('createModal').classList.add('open'); }
-function previewPostImage(e){ let f=e.target.files[0]; if(!f) return; let r=new FileReader(); r.onload=()=>{ let im=document.getElementById('postPreview'); im.src=r.result; im.style.display='block'; im.dataset.base64=r.result; }; r.readAsDataURL(f); }
+function previewPostImage(e){
+  let f=e.target.files[0]; if(!f) return;
+  selectedFile=f;
+  let img=document.getElementById('postPreview');
+  let vid=document.getElementById('postVideoPreview');
+  let status=document.getElementById('uploadStatus');
+  if(f.type.startsWith('video/')){
+    if(f.size>50*1024*1024){ status.textContent='Video too big! Max 50MB'; selectedFile=null; e.target.value=''; return; }
+    img.style.display='none'; vid.style.display='block'; vid.src=URL.createObjectURL(f);
+    status.textContent='Video selected: '+f.name+' - '+(f.size/1024/1024).toFixed(1)+' MB';
+  } else {
+    if(f.size>10*1024*1024){ status.textContent='Photo too big! Max 10MB'; }
+    vid.style.display='none'; img.style.display='block';
+    let r=new FileReader(); r.onload=()=>{ img.src=r.result; img.dataset.base64=r.result; }; r.readAsDataURL(f);
+    status.textContent='Photo selected: '+f.name+' - '+(f.size/1024/1024).toFixed(1)+' MB';
+  }
+}
 async function submitPost(){
   let cap=document.getElementById('postCaption').value.trim();
-  let img=document.getElementById('postPreview').src;
-  if(!cap && !img){ toast('Write something or add photo'); return; }
-  let post={id:'p_'+Date.now(),uid:user.uid,name:profile.name,photo:profile.photo||'',caption:cap,image:img&&img.startsWith('data:')?img:'',likes:[],comments:[],time:Date.now(),magId:getMyMagId()};
-  if(localMode){ let arr=JSON.parse(localStorage.getItem('mian_local_posts')||'[]'); arr.unshift(post); localStorage.setItem('mian_local_posts',JSON.stringify(arr)); loadLocalPosts(); }
-  else{ try{ await db.collection('posts').add({uid:user.uid,name:profile.name,photo:profile.photo||'',caption:cap,image:post.image,likes:[],time:firebase.firestore.FieldValue.serverTimestamp(),magId:getMyMagId()}); }catch(e){ toast('Post failed: '+e.message); return; } }
-  closeModal('createModal'); document.getElementById('postCaption').value=''; document.getElementById('postPreview').style.display='none'; document.getElementById('postPreview').src='';
-  toast('Post shared!'); loadFeed();
+  let status=document.getElementById('uploadStatus');
+  let btn=document.getElementById('shareBtn');
+  if(!cap && !selectedFile){ toast('Write something or add photo/video'); return; }
+  if(status) status.textContent='Uploading... Please wait...';
+  if(btn) btn.textContent='Uploading...';
+  let imageUrl=''; let isVideo=false;
+  try{
+    if(selectedFile){
+      isVideo=selectedFile.type.startsWith('video/');
+      if(localMode){
+        if(isVideo){ toast('Video needs Gmail Login - Please Login with Gmail'); if(btn) btn.textContent='Share Post'; if(status) status.textContent=''; return; }
+        let r=new FileReader();
+        imageUrl=await new Promise((res,rej)=>{ r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(selectedFile); });
+      } else {
+        if(!storage) throw new Error('Storage not ready');
+        let cleanName=selectedFile.name.replace(/[^a-zA-Z0-9.]/g,'_');
+        let fileName='posts/'+user.uid+'_'+Date.now()+'_'+cleanName;
+        let ref=storage.ref(fileName);
+        let task=await ref.put(selectedFile);
+        imageUrl=await task.ref.getDownloadURL();
+      }
+    } else {
+      let img=document.getElementById('postPreview');
+      if(img && img.src && img.src.startsWith('data:')) imageUrl=img.dataset.base64||'';
+    }
+    let post={id:'p_'+Date.now(),uid:user.uid,name:profile.name,photo:profile.photo||'',caption:cap,image:imageUrl,isVideo:isVideo,likes:[],comments:[],time:Date.now(),magId:getMyMagId()};
+    if(localMode){
+      let arr=JSON.parse(localStorage.getItem('mian_local_posts')||'[]');
+      arr.unshift(post); localStorage.setItem('mian_local_posts',JSON.stringify(arr)); loadLocalPosts();
+    } else {
+      await db.collection('posts').add({uid:user.uid,name:profile.name,photo:profile.photo||'',caption:cap,image:imageUrl,isVideo:isVideo,likes:[],time:firebase.firestore.FieldValue.serverTimestamp(),magId:getMyMagId()});
+    }
+    closeModal('createModal');
+    document.getElementById('postCaption').value='';
+    document.getElementById('postPreview').style.display='none'; document.getElementById('postPreview').src='';
+    document.getElementById('postVideoPreview').style.display='none'; document.getElementById('postVideoPreview').src='';
+    document.getElementById('postImage').value=''; selectedFile=null;
+    if(status) status.textContent=''; if(btn) btn.textContent='Share Post';
+    toast('Post shared! ✅'); loadFeed();
+  }catch(e){
+    console.log(e);
+    if(status) status.textContent='Error: '+e.message;
+    if(btn) btn.textContent='Share Post';
+    if(e.message && e.message.includes('storage')) toast('Storage Permission Error - Firebase Storage Rules Publish karo!');
+    else if(e.message && e.message.includes('permission')) toast('Permission Error - Firebase Rules Publish karo!');
+    else toast('Upload failed - Please try small photo/video!');
+  }
 }
 function loadLocalPosts(){ allPosts=JSON.parse(localStorage.getItem('mian_local_posts')||'[]'); renderFeed(); }
 async function loadFeed(){
@@ -286,11 +322,13 @@ function renderFeed(){
   document.getElementById('statPosts').textContent=allPosts.filter(p=>p.uid===user?.uid).length;
   list.innerHTML=allPosts.map(p=>{
     let liked=(p.likes||[]).includes(user?.uid);
-    return `<div class="post"><div class="postHead"><div class="avatar">${p.photo?`<img src="${p.photo}">`:esc((p.name||'U')[0])}</div><div style="flex:1"><b>${esc(p.name||'User')}</b><div class="muted small">${esc(p.magId||'')}</div></div><span class="muted">...</span></div>${p.image?`<img class="postImg" src="${p.image}">`:''}<div class="postActions"><span onclick="toggleLike('${p.id}')">${liked?'❤️':'🤍'}</span><span onclick="openComments('${p.id}')">💬</span><span>📤</span></div><div class="postLikes">${(p.likes||[]).length} likes</div><div class="postCap"><b>${esc(p.name||'User')}</b> ${esc(p.caption||'')}</div></div>`;
+    let media='';
+    if(p.image){ if(p.isVideo){ media=`<video class="postImg" src="${p.image}" controls playsinline></video>`; } else { media=`<img class="postImg" src="${p.image}">`; } }
+    return `<div class="post"><div class="postHead"><div class="avatar">${p.photo?`<img src="${p.photo}">`:esc((p.name||'U')[0])}</div><div style="flex:1"><b>${esc(p.name||'User')}</b><div class="muted small">${esc(p.magId||'')}</div></div></div>${media}<div class="postActions"><span onclick="toggleLike('${p.id}')">${liked?'❤️':'🤍'}</span><span onclick="openComments('${p.id}')">💬</span><span>📤</span></div><div class="postLikes">${(p.likes||[]).length} likes</div><div class="postCap"><b>${esc(p.name||'User')}</b> ${esc(p.caption||'')}</div></div>`;
   }).join('');
   renderProfileGrid();
 }
-function renderProfileGrid(){ let g=document.getElementById('profileGrid'); if(!g) return; let mine=allPosts.filter(p=>p.uid===user?.uid); g.innerHTML=mine.map(p=>p.image?`<img src="${p.image}">`:'<div style="background:#eee;aspect-ratio:1;display:flex;align-items:center;justify-content:center;padding:10px;font-size:13px">'+esc(p.caption||'')+'</div>').join(''); }
+function renderProfileGrid(){ let g=document.getElementById('profileGrid'); if(!g) return; let mine=allPosts.filter(p=>p.uid===user?.uid); g.innerHTML=mine.map(p=>{ if(p.image){ if(p.isVideo) return `<video src="${p.image}"></video>`; return `<img src="${p.image}">`; } return '<div style="background:#eee;aspect-ratio:1;display:flex;align-items:center;justify-content:center;padding:10px;font-size:13px">'+esc(p.caption||'')+'</div>'; }).join(''); }
 async function toggleLike(pid){
   let p=allPosts.find(x=>x.id===pid); if(!p) return;
   if(localMode){ p.likes=p.likes||[]; let i=p.likes.indexOf(user.uid); if(i>=0) p.likes.splice(i,1); else p.likes.push(user.uid); localStorage.setItem('mian_local_posts',JSON.stringify(allPosts)); renderFeed(); return; }
@@ -307,8 +345,6 @@ async function saveEditProfile(){
   if(localMode) localStorage.setItem('mian_local_user',JSON.stringify(profile)); else try{ await db.collection('users').doc(user.uid).update({name:profile.name,bio:profile.bio,photo:profile.photo}); }catch(e){}
   closeModal('editProfileModal'); updateProfileUI(); toast('Profile saved');
 }
-
-// ---------- FRIENDS - FIXED ----------
 function getFriendStatus(uid){ if(friends.find(f=>f.uid===uid)) return 'friend'; if(friendRequests.find(r=>r.fromUid===user?.uid && r.toUid===uid)) return 'sent'; if(friendRequests.find(r=>r.fromUid===uid && r.toUid===user?.uid)) return 'incoming'; return 'none'; }
 function findUsersByQuery(q){
   let out=[]; let seen=new Set();
@@ -319,16 +355,15 @@ function findUsersByQuery(q){
   return out.filter(u=> (u.name||'').toLowerCase().includes(lq) || (u.magId||'').toLowerCase()===lq || (u.magId||'').toLowerCase().replace('-','')===lq.replace('-',''));
 }
 async function searchFriendByIdOrName(){
-  let input=document.getElementById('friendSearchInput')||document.getElementById('friendSearchInput2');
+  let input=document.getElementById('friendSearchInput');
   let q=input.value.trim();
-  let box=document.getElementById('friendSearchResults')||document.getElementById('friendSearchResultsModal');
+  let box=document.getElementById('friendSearchResults');
   if(!q){ box.innerHTML='<p class="muted">Please enter a MAG ID or Name.</p>'; return; }
   box.innerHTML='<p class="muted">Searching... Please wait...</p>';
   let cleanQ=q.toUpperCase().replace(/[^A-Z0-9]/g,'');
   let results=[];
   let localRes=findUsersByQuery(q);
   localRes.forEach(u=>{ if(!results.find(r=>r.uid===u.uid)) results.push(u); });
-  // ✅ FIREBASE SE DHOONDO - Bina Post Ke Bhi Milega!
   if(!localMode && db){
     try{
       let snap1=await db.collection('users').where('magId','==',q.toUpperCase()).get();
@@ -341,27 +376,35 @@ async function searchFriendByIdOrName(){
       }
     }catch(e){ console.log(e); }
   }
-  if(!results.length){ box.innerHTML='<p class="muted">No user found for "'+esc(q)+'"<br><br><b>Check:</b><br>1. Is your friend ONLINE? (Not LOCAL MODE)<br>2. Did friend Login with Gmail + Password?<br>3. Did friend make 1 Post? (If old code)<br>4. Did you copy FULL ID? Example: MAG-123456</p>'; return; }
+  if(!results.length){ box.innerHTML='<p class="muted">No user found for "'+esc(q)+'"</p>'; return; }
   box.innerHTML=results.map(u=>{
     let st=getFriendStatus(u.uid);
     let btn=u.uid===user?.uid?'<span class="muted">This is you</span>':st==='friend'?'<button class="instaFollowBtn friend">Friend</button>':st==='sent'?'<button class="instaFollowBtn sent">Request Sent</button>':st==='incoming'?'<button class="instaFollowBtn incoming" onclick="openFriendRequests()">Accept Request</button>':`<button class="instaFollowBtn" onclick="sendFriendRequest('${u.uid}','${esc(u.name)}','${esc(u.photo||'')}')">+ Send Request</button>`;
-    return `<div class="row" style="padding:10px 0;border-bottom:1px solid #f1f5f9"><div class="avatar">${u.photo?`<img src="${u.photo}">`:esc((u.name||'U')[0])}</div><div style="flex:1"><b>${esc(u.name)}</b><div class="muted">${u.magId}</div></div>${btn}</div>`;
+    return `<div class="row" style="padding:10px 0;border-bottom:1px solid #f1f5f9"><div class="avatar">${u.photo?`<img src="${u.photo}">`:esc((u.name||'U')[0])}</div><div style="flex:1"><b>${esc(u.name)}</b><div class="muted">ID: ${u.magId}</div></div>${btn}</div>`;
   }).join('');
 }
 function searchFromModal(){ let v=document.getElementById('friendSearchInput2').value; document.getElementById('friendSearchInput').value=v; searchFriendByIdOrName(); let box=document.getElementById('friendSearchResults'); if(box) document.getElementById('friendSearchResultsModal').innerHTML=box.innerHTML; }
-async function showAllUsers(){
-  let box=document.getElementById('friendSearchResults')||document.getElementById('friendSearchResultsModal');
-  box.innerHTML='<p class="muted">Loading all users...</p>';
-  let results=findUsersByQuery('');
-  if(!localMode && db){ try{ let snap=await db.collection('users').limit(30).get(); snap.forEach(d=>{ let u=d.data(); if(d.id!==user?.uid && !results.find(r=>r.uid===d.id)) results.push({uid:d.id,name:u.name||'User',photo:u.photo||'',magId:u.magId||magIdFor(d.id)}); }); }catch(e){} }
-  if(!results.length){ box.innerHTML='<p class="muted">No users found. Ask friend to Login with Gmail + Password and make 1 Post.</p>'; return; }
-  box.innerHTML='<p class="muted">All Users - Tap Send Request</p>'+results.map(u=>{
+async function showAllUsersAuto(){
+  let box=document.getElementById('friendSearchResults'); if(!box) return;
+  box.innerHTML='<p class="muted">Loading all accounts... Please wait...</p>';
+  let results=[]; let seen=new Set();
+  allPosts.forEach(p=>{ if(p.uid!==user?.uid && !seen.has(p.uid)){ seen.add(p.uid); results.push({uid:p.uid,name:p.name,photo:p.photo||'',magId:p.magId||magIdFor(p.uid)}); } });
+  if(!localMode && db){
+    try{
+      let snap=await db.collection('users').limit(100).get();
+      snap.forEach(d=>{ let u=d.data(); if(d.id!==user?.uid && !seen.has(d.id)){ seen.add(d.id); results.push({uid:d.id,name:u.name||'User',photo:u.photo||'',magId:u.magId||magIdFor(d.id)}); } });
+    }catch(e){ console.log(e); }
+  }
+  friends.forEach(f=>{ if(!seen.has(f.uid)){ seen.add(f.uid); results.push(f); } });
+  if(!results.length){ box.innerHTML='<div style="text-align:center;padding:20px"><p style="font-size:30px">👥</p><p><b>Abhi koi user nahi hai</b></p><p class="muted">Jab koi naya banda account banayega to uska ID yahan khud aa jayega!</p></div>'; return; }
+  box.innerHTML='<h4 style="margin-bottom:8px">All Users ('+results.length+') - Direct Request Karo 👇</h4>'+results.map(u=>{
     let st=getFriendStatus(u.uid);
-    let btn=u.uid===user?.uid?'<span class="muted">This is you</span>':st==='friend'?'<button class="instaFollowBtn friend">Friend</button>':st==='sent'?'<button class="instaFollowBtn sent">Request Sent</button>':`<button class="instaFollowBtn" onclick="sendFriendRequest('${u.uid}','${esc(u.name)}','${esc(u.photo||'')}')">+ Send Request</button>`;
-    return `<div class="row" style="padding:10px 0;border-bottom:1px solid #f1f5f9"><div class="avatar">${u.photo?`<img src="${u.photo}">`:esc((u.name||'U')[0])}</div><div style="flex:1"><b>${esc(u.name)}</b><div class="muted">${u.magId}</div></div>${btn}</div>`;
+    let btn=st==='friend'?'<button class="instaFollowBtn friend">✓ Friend</button>':st==='sent'?'<button class="instaFollowBtn sent">Request Sent</button>':st==='incoming'?'<button class="instaFollowBtn incoming" onclick="openFriendRequests()">Accept</button>':`<button class="instaFollowBtn" onclick="sendFriendRequest('${u.uid}','${esc(u.name)}','${esc(u.photo||'')}')">+ Send Request</button>`;
+    return `<div class="row" style="padding:12px 0;border-bottom:1px solid #f1f5f9"><div class="avatar">${u.photo?`<img src="${u.photo}">`:esc((u.name||'U')[0])}</div><div style="flex:1"><b>${esc(u.name)}</b><div class="muted" style="font-size:12px">ID: ${u.magId}</div></div>${btn}</div>`;
   }).join('');
 }
-function showAllUsersModal(){ showAllUsers(); let box=document.getElementById('friendSearchResults'); if(box) document.getElementById('friendSearchResultsModal').innerHTML=box.innerHTML; }
+async function showAllUsers(){ await showAllUsersAuto(); }
+function showAllUsersModal(){ showAllUsersAuto(); let box=document.getElementById('friendSearchResults'); if(box) setTimeout(()=>{ document.getElementById('friendSearchResultsModal').innerHTML=box.innerHTML; },800); }
 async function sendFriendRequest(toUid,toName,toPhoto){
   if(toUid===user?.uid){ toast('This is you!'); return; }
   if(getFriendStatus(toUid)==='friend'){ toast('Already Friend'); return; }
@@ -369,7 +412,7 @@ async function sendFriendRequest(toUid,toName,toPhoto){
   let req={fromUid:user.uid,fromName:profile.name,fromPhoto:profile.photo||'',toUid:toUid,toName:toName,fromMagId:getMyMagId(),toMagId:'',time:Date.now(),status:'pending'};
   if(localMode){ friendRequests.push(req); localStorage.setItem('mian_friend_req',JSON.stringify(friendRequests)); toast('Request Sent (Local Mode - Will NOT reach other phone!)'); }
   else{ try{ await db.collection('friend_requests').add(req); toast('Request Sent to '+toName); }catch(e){ toast('Failed: '+e.message); return; } }
-  renderFriendRequests(); searchFriendByIdOrName();
+  renderFriendRequests(); showAllUsersAuto();
 }
 async function renderFriendRequests(){
   let list=document.getElementById('friendReqList');
@@ -382,13 +425,11 @@ async function renderFriendRequests(){
   if(outgoing.length){ html+='<h4 style="margin-top:14px">Sent Requests</h4>'; html+=outgoing.map(r=>`<div class="row" style="padding:10px 0;border-bottom:1px solid #eee"><div class="avatar">${esc((r.toName||'U')[0])}</div><div style="flex:1"><b>${esc(r.toName)}</b><div class="muted small">Waiting...</div></div><span class="muted small">Pending</span></div>`).join(''); }
   if(!incoming.length && !outgoing.length) html+='<p class="muted">No pending requests. Search by MAG ID above to send request.</p>';
   if(friends.length){ html+='<h4 style="margin-top:14px">My Friends ('+friends.length+')</h4>'; html+=friends.map(f=>`<div class="row" style="padding:8px 0"><div class="avatar">${f.photo?`<img src="${f.photo}">`:esc((f.name||'U')[0])}</div><div style="flex:1"><b>${esc(f.name)}</b><div class="muted small">${esc(f.magId||'')}</div></div><span style="color:#22c55e">● Friend</span></div>`).join(''); }
-  list.innerHTML=html;
-  updateProfileUI();
+  list.innerHTML=html; updateProfileUI();
 }
 function openFriendRequests(){ openModal('friendReqModal'); renderFriendRequests(); let mEl=document.getElementById('myMagIdInRequest'); if(mEl) mEl.textContent=getMyMagId(); }
 async function acceptRequest(id){
-  let r=friendRequests.find(x=>(x.id===id||x.fromUid===id)&&x.toUid===user?.uid);
-  if(!r) return;
+  let r=friendRequests.find(x=>(x.id===id||x.fromUid===id)&&x.toUid===user?.uid); if(!r) return;
   friends.push({uid:r.fromUid,name:r.fromName,photo:r.fromPhoto||'',magId:r.fromMagId||magIdFor(r.fromUid)});
   friendRequests=friendRequests.filter(x=>x!==r);
   if(localMode){ localStorage.setItem('mian_friend_req',JSON.stringify(friendRequests)); localStorage.setItem('mian_friends',JSON.stringify(friends)); }
@@ -396,8 +437,7 @@ async function acceptRequest(id){
   toast('You are now friends with '+r.fromName); renderFriendRequests();
 }
 async function rejectRequest(id){
-  let r=friendRequests.find(x=>(x.id===id||x.fromUid===id)&&x.toUid===user?.uid);
-  if(!r) return;
+  let r=friendRequests.find(x=>(x.id===id||x.fromUid===id)&&x.toUid===user?.uid); if(!r) return;
   friendRequests=friendRequests.filter(x=>x!==r);
   if(localMode) localStorage.setItem('mian_friend_req',JSON.stringify(friendRequests));
   else try{ if(r.id) await db.collection('friend_requests').doc(r.id).delete(); }catch(e){}
