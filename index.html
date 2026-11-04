@@ -2,251 +2,213 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MAG SOCIAL</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MAG SOCIAL - Insta Style</title>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 <style>
-body{font-family:system-ui;background:#fff;padding-bottom:95px}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;padding:8px 0;z-index:50}
-.nav button{display:flex;flex-direction:column;align-items:center;font-size:11px;color:#666}
-.nav button.active{color:#000;font-weight:700}
-.tab{display:none}.tab.active{display:block}
-.grad{background:linear-gradient(90deg,#4c1d95,#2563eb)}
-.centerBtn{background:#000;color:#fff;width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-top:-18px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{background:#fff;color:#000;min-height:100vh;padding-bottom:70px}
+button{cursor:pointer} input,textarea{font:inherit}
+/* INSTA HEADER */
+header{height:60px;position:fixed;top:0;left:0;right:0;z-index:20;background:#fff;border-bottom:1px solid #dbdbdb;display:flex;align-items:center;justify-content:space-between;padding:0 14px}
+.instaLogo{font-family:Georgia,serif;font-size:28px;font-weight:400;letter-spacing:-1px}
+.instaLogo b{font-weight:900}.instaLogo span{color:#d62976}
+.hIcons{display:flex;gap:16px;font-size:24px;align-items:center}
+.hIcons button{border:0;background:none;font-size:24px;position:relative}
+.reqDot{position:absolute;top:-4px;right:-6px;background:#ff3040;color:#fff;font-size:10px;font-weight:800;padding:1px 5px;border-radius:10px}
+main{padding-top:60px;max-width:470px;margin:auto}
+.page{display:none}.page.active{display:block}
+/* STORIES - INSTA STYLE */
+.stories{display:flex;gap:14px;overflow-x:auto;padding:12px 12px 8px;scrollbar-width:none}.stories::-webkit-scrollbar{display:none}
+.story{text-align:center;min-width:74px;font-size:11px;cursor:pointer}
+.storyRing{width:68px;height:68px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);margin:auto}
+.storyRing div{width:100%;height:100%;border-radius:50%;background:#fff;padding:2px}
+.storyRing img,.storyRing span{width:100%;height:100%;border-radius:50%;object-fit:cover;display:grid;place-items:center;background:#eee;font-weight:800}
+/* INSTA POST */
+.post{border-bottom:1px solid #dbdbdb;padding-bottom:12px;margin-bottom:6px}
+.postHead{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.postHead .dp{width:38px;height:38px;border-radius:50%;overflow:hidden;background:linear-gradient(45deg,#feda75,#d62976);padding:2px;flex-shrink:0}
+.postHead .dp div{width:100%;height:100%;border-radius:50%;background:#fff;padding:1px}
+.postHead .dp img,.postHead .dp span{width:100%;height:100%;border-radius:50%;object-fit:cover;display:grid;place-items:center;background:#eee;font-weight:800}
+.postImg{width:100%;max-height:560px;object-fit:cover;background:#f0f0f0}
+.postActions{display:flex;gap:14px;padding:10px 12px 4px;font-size:26px;align-items:center}
+.postActions button{border:0;background:none;font-size:26px;line-height:1}
+.postActions button.liked{color:#ff3040}
+.postActions .save{margin-left:auto}
+.postLikes{padding:2px 12px;font-weight:700;font-size:14px}
+.postCap{padding:2px 12px;font-size:14px}
+.postMeta{padding:2px 12px;color:#737373;font-size:12px}
+.frBtn{margin-left:auto;background:#0095f6;color:#fff;border:0;padding:7px 14px;border-radius:8px;font-weight:600;font-size:13px}
+.frBtn.sent{background:#efefef;color:#000}.frBtn.friend{background:#efefef;color:#000}
+/* INSTA BUTTONS */
+.btnBlue{background:#0095f6;color:#fff;border:0;padding:10px;border-radius:8px;font-weight:600;width:100%}
+.btnGray{background:#efefef;border:0;padding:10px;border-radius:8px;font-weight:600}
+input,textarea{width:100%;background:#fafafa;border:1px solid #dbdbdb;border-radius:8px;padding:12px;outline:none;margin-top:8px}textarea{min-height:80px}
+.card{padding:14px;border-bottom:1px solid #dbdbdb}
+.chip{display:inline-block;background:#efefef;padding:8px 14px;border-radius:20px;font-size:13px;font-weight:600;margin:4px;border:0}
+.chip.active{background:#000;color:#fff}
+/* INSTA BOTTOM NAV */
+.bottom{position:fixed;bottom:0;left:0;right:0;height:62px;background:#fff;border-top:1px solid #dbdbdb;display:flex;justify-content:space-around;align-items:center;z-index:20}
+.nav{border:0;background:none;display:flex;flex-direction:column;align-items:center;font-size:24px;line-height:1;color:#000}
+.nav span{font-size:10px;margin-top:2px}
+.nav .centerPlus{background:#000;color:#fff;width:42px;height:32px;border-radius:10px;display:grid;place-items:center;font-size:20px}
+.nav .miniDp{width:28px;height:28px;border-radius:50%;overflow:hidden;border:1px solid #dbdbdb;display:grid;place-items:center;background:#eee;font-weight:800}
+.nav .miniDp img{width:100%;height:100%;object-fit:cover}
+/* PROFILE - INSTA */
+.pHead{display:flex;gap:20px;padding:16px;align-items:center}
+.pDp{width:86px;height:86px;border-radius:50%;overflow:hidden;background:linear-gradient(45deg,#feda75,#d62976);padding:3px;flex-shrink:0}
+.pDp div{width:100%;height:100%;border-radius:50%;background:#fff;padding:2px}
+.pDp img,.pDp span{width:100%;height:100%;border-radius:50%;object-fit:cover;display:grid;place-items:center;background:#eee;font-size:28px;font-weight:800}
+.pStats{display:flex;gap:18px;text-align:center;flex:1}
+.pStats b{display:block;font-size:16px}.pStats span{font-size:13px;color:#333}
+.pGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.pGrid div{aspect-ratio:1;overflow:hidden;background:#eee;position:relative}
+.pGrid img,.pGrid video{width:100%;height:100%;object-fit:cover}
+.pGrid .vCount{position:absolute;bottom:5px;left:5px;color:#fff;font-size:12px;font-weight:700;text-shadow:0 1px 3px #000}
+/* REELS - INSTA */
+.reelsWrap{height:calc(100vh - 122px);overflow-y:scroll;scroll-snap-type:y mandatory;background:#000}
+.reel{height:calc(100vh - 122px);scroll-snap-align:start;position:relative;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.reel video,.reel img{width:100%;height:100%;object-fit:cover}
+.reelSide{position:absolute;right:10px;bottom:100px;display:flex;flex-direction:column;gap:18px;color:#fff;align-items:center;z-index:3}
+.reelSide button{border:0;background:none;color:#fff;font-size:28px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.reelSide span{font-size:12px;font-weight:700}
+.reelInfo{position:absolute;left:12px;right:60px;bottom:90px;color:#fff;z-index:2}
+.reelInfo b{font-size:15px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;align-items:flex-end;justify-content:center}.modal.show{display:flex}
+.sheet{background:#fff;width:100%;max-width:500px;max-height:92vh;overflow:auto;padding:20px;border-radius:20px 20px 0 0}
+.setting{display:flex;justify-content:space-between;padding:16px 4px;border-bottom:1px solid #f0f0f0;cursor:pointer}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:10px 16px;border-radius:20px;display:none;z-index:200;font-size:13px;font-weight:600}
+#authScreen{position:fixed;inset:0;z-index:100;background:#fff;display:flex;align-items:center;justify-content:center;padding:20px}.authbox{width:100%;max-width:360px;text-align:center}
+.authbox h1{font-family:Georgia,serif;font-size:44px;font-weight:400;margin-bottom:20px}
+.chatBox{height:50vh;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#fafafa}.msg{max-width:75%;padding:10px 14px;border-radius:18px;font-size:14px}.msg.me{align-self:flex-end;background:#3797f0;color:#fff}.msg.them{align-self:flex-start;background:#fff;border:1px solid #eee}
+.newsCard{display:flex;gap:12px;padding:12px;border-bottom:1px solid #eee;cursor:pointer}.newsCard img{width:100px;height:80px;object-fit:cover;border-radius:8px}
 </style>
 </head>
 <body>
+<div id="authScreen"><div class="authbox"><h1>MAG <span style="color:#d62976">SOCIAL</span></h1><p style="color:#737373;margin-bottom:14px">Insta jesa - Mian Abdullah Group</p><input id="authName" placeholder="Full Name"><input id="authEmail" placeholder="Email"><input id="authPassword" type="password" placeholder="Password"><button class="btnBlue" style="margin-top:12px" onclick="authenticate()" id="authBtn">Sign Up</button><button class="btnGray" style="width:100%;margin-top:10px" onclick="toggleAuth()" id="toggleBtn">Have an account? Log in</button><button class="btnGray" style="width:100%;margin-top:10px;background:#fff3cd" onclick="enterLocal()">Continue without Login</button><p id="authError" style="color:#ff3040;margin-top:10px"></p></div></div>
 
-<div class="flex justify-between items-center p-3 sticky top-0 bg-white z-40">
-  <div class="flex items-center gap-2"><div class="w-10 h-10 rounded-xl grad flex items-center justify-center text-white font-black text-xl">M</div><h1 class="font-black text-xl">MAG <span class="text-purple-600">SOCIAL</span></h1></div>
-  <div class="flex gap-2 items-center">
-    <button onclick="toggleSound()" id="soundBtn" class="text-xs bg-purple-100 px-2 py-1 rounded-full font-bold">🔔 Sound ON</button>
-    <button onclick="playMagSound()" class="text-xs bg-yellow-100 px-2 py-1 rounded-full">▶️ Test Sound</button>
-    <button onclick="showTab('profile')">⚙️</button>
-  </div>
-</div>
+<header><div class="instaLogo">MAG <span>SOCIAL</span></div><div class="hIcons"><button onclick="openFriendRequests()">👥<span id="reqBadgeTop" class="reqDot" style="display:none">0</span></button><button onclick="go('inbox',null)">✈️</button><button onclick="showSettings()">☰</button></div></header>
 
-<div id="authBox" class="p-4 max-w-md mx-auto">
-  <h2 class="text-2xl font-black text-center">Welcome to MAG SOCIAL 🌍</h2>
-  <p class="text-center text-gray-500 text-sm mb-4">Login / Signup - Real Views - Apna Sound!</p>
-  <input id="authName" placeholder="Full Name - Mian, Abdullah" class="w-full border p-3 rounded-xl mb-2">
-  <input id="authEmail" placeholder="Email" class="w-full border p-3 rounded-xl mb-2">
-  <input id="authPass" type="password" placeholder="Password" class="w-full border p-3 rounded-xl mb-3">
-  <button onclick="doSignup()" class="w-full grad text-white p-3 rounded-xl font-bold mb-2">Create Account</button>
-  <button onclick="doLogin()" class="w-full bg-black text-white p-3 rounded-xl font-bold">Login</button>
-  <p id="authMsg" class="text-center text-sm mt-2 text-red-500"></p>
-  <p class="text-center text-xs text-gray-400 mt-2">🔔 Friend Request aye gi to MAG wala sound bajega!</p>
-</div>
+<main>
+<section id="home" class="page active">
+<div class="stories" id="stories"></div>
+<div style="padding:0 12px;display:flex;gap:8px"><button class="btnGray" style="flex:1" onclick="openFriendRequests()">👥 Friend Requests <span id="reqBadgeHome" style="background:#ff3040;color:#fff;padding:1px 6px;border-radius:10px;font-size:11px;display:none">0</span></button><button class="btnGray" style="flex:1" onclick="go('news',null)">🌍 News</button></div>
+<div id="feed" style="margin-top:8px"></div>
+</section>
 
-<div id="mainApp" class="hidden">
-  <div id="tab-home" class="tab active p-3">
-    <div class="flex gap-2 mb-3 flex-wrap">
-      <button onclick="showTab('friends')" class="bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full text-sm font-bold">👥 Friend Requests <span id="reqCount" class="bg-red-500 text-white px-1.5 rounded-full text-xs">0</span></button>
-      <button onclick="showTab('news')" class="bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full text-sm font-bold">🌍 News</button>
-      <button onclick="showTab('friends')" class="bg-green-100 text-green-700 px-3 py-1.5 rounded-full text-sm font-bold">My Friends</button>
-    </div>
-    <div id="notifBanner" class="hidden bg-yellow-100 border border-yellow-300 p-3 rounded-xl mb-3 font-bold text-sm">🔔 New Friend Request Aayi Hai!</div>
-    <h3 class="font-bold text-lg">Home Feed - Real Views 👁️</h3>
-    <div id="feed" class="space-y-3 mt-2"></div>
-    <div id="emptyFeed" class="text-center text-gray-400 py-10">No videos yet - Tap + to create!</div>
-  </div>
+<section id="search" class="page"><div class="card"><h2>Search</h2><input id="searchInput" placeholder="Search..." oninput="searchPosts()"><div style="margin-top:8px"><span class="chip" onclick="quickSearch('travel')">#travel</span><span class="chip" onclick="quickSearch('foodie')">#foodie</span><span class="chip" onclick="quickSearch('hiking')">#hiking</span></div></div><div id="searchResults"></div></section>
 
-  <div id="tab-reels" class="tab p-3"><h3 class="font-bold text-lg">Reels 🎬 - Real Views</h3><div id="reelsFeed" class="space-y-3 mt-2"></div></div>
+<section id="reels" class="page" style="max-width:100%"><div class="reelsWrap" id="reelFeed"></div></section>
 
-  <div id="tab-create" class="tab p-4 max-w-md mx-auto">
-    <h3 class="font-bold text-xl mb-3">Create Post / Video</h3>
-    <input id="postTitle" placeholder="Caption likho..." class="w-full border p-3 rounded-xl mb-2">
-    <input id="postVideoUrl" placeholder="Video Link (YouTube / MP4 Link)" class="w-full border p-3 rounded-xl mb-2">
-    <p class="text-xs text-gray-500 mb-2">Views bilkul REAL honge ✅ - Storage ke baghair, kabhi gayab nahi hoga</p>
-    <input type="file" id="postFile" accept="image/*" class="w-full mb-2">
-    <button onclick="createPost()" class="w-full grad text-white p-3 rounded-xl font-bold">Post Karo 🚀</button>
-    <p id="postMsg" class="text-center text-sm mt-2"></p>
-  </div>
+<section id="news" class="page"><div class="card"><h2>🌍 World News - Live</h2><p style="color:#737373;font-size:13px">Pakistan • World • Sports • Tech • Cricket</p><div style="margin-top:10px"><button class="chip active" onclick="setNewsChip(this,'world')">🌍 World</button><button class="chip" onclick="setNewsChip(this,'pakistan')">🇵🇰 Pakistan</button><button class="chip" onclick="setNewsChip(this,'sports')">⚽ Sports</button><button class="chip" onclick="setNewsChip(this,'cricket')">🏏 Cricket</button><button class="chip" onclick="setNewsChip(this,'technology')">📱 Tech</button></div></div><div id="newsList"></div></section>
 
-  <div id="tab-news" class="tab p-3">
-    <h3 class="font-bold text-xl mb-2">🌍 MAG News - Center Wala Button</h3>
-    <p class="text-sm text-gray-500 mb-3">Ab News center me hai - Jaisa tumne bola tha!</p>
-    <div id="newsList" class="space-y-3"></div>
-  </div>
+<section id="inbox" class="page"><div class="card"><h2>Messages</h2><div id="chatList"></div></div><div class="card"><h3>👥 My Friends</h3><div id="friendsListInbox"></div></div></section>
 
-  <div id="tab-messages" class="tab p-3">
-    <h3 class="font-bold text-xl">Messages 💬</h3>
-    <div id="friendsForChat" class="space-y-2 mt-3"></div>
-    <div id="chatBox" class="hidden mt-3 border rounded-xl p-3">
-      <p id="chatWith" class="font-bold mb-2"></p>
-      <div id="chatMsgs" class="space-y-1 max-h-60 overflow-auto mb-2"></div>
-      <div class="flex gap-2"><input id="chatInput" placeholder="Message..." class="flex-1 border p-2 rounded-lg"><button onclick="sendMsg()" class="bg-black text-white px-4 rounded-lg">Send</button></div>
-    </div>
-  </div>
+<section id="profile" class="page">
+<div class="pHead"><div class="pDp" onclick="changePhoto()"><div><span id="profileAvatar">M</span></div></div><div class="pStats"><div><b id="myFollowing">0</b><span>Following</span></div><div><b id="myFollowers">0</b><span>Followers</span></div><div><b id="myLikes">0</b><span>Likes</span></div></div></div>
+<div style="padding:0 14px"><b id="profileName">User</b><p id="profileEmail" style="color:#737373;font-size:13px"></p><p id="profileBio" style="font-size:14px;margin-top:4px">Welcome to my profile</p></div>
+<div style="display:flex;gap:8px;padding:12px 14px"><button class="btnGray" style="flex:1" onclick="openEdit()">Edit profile</button><button class="btnGray" style="flex:1" onclick="openFriendRequests()">👥 Requests</button><button class="btnGray" onclick="showSettings()">⚙️</button></div>
+<div style="display:flex;border-top:1px solid #dbdbdb"><div style="flex:1;text-align:center;padding:12px;font-weight:700;border-top:2px solid #000" id="tabVideos" onclick="setProfileTab('videos')">⊞ Posts</div><div style="flex:1;text-align:center;padding:12px;color:#737373" id="tabLiked" onclick="setProfileTab('liked')">♡ Liked</div><div style="flex:1;text-align:center;padding:12px;color:#737373" id="tabSaved" onclick="setProfileTab('saved')">🔖 Saved</div></div>
+<div class="pGrid" id="myGrid"></div>
+<div class="card"><b>👥 My Friends (<span id="friendsCount">0</span>)</b><div id="friendsListProfile" style="margin-top:10px"></div></div>
+</section>
+</main>
 
-  <div id="tab-search" class="tab p-3">
-    <h3 class="font-bold text-xl">Search Friends 🔍</h3>
-    <input oninput="searchUsers(this.value)" placeholder="Naam ya Email likho..." class="w-full border p-3 rounded-xl mt-2">
-    <div id="searchResults" class="space-y-2 mt-3"></div>
-    <h4 class="font-bold mt-5">All Users - Real Accounts</h4>
-    <div id="allUsers" class="space-y-2 mt-2"></div>
-  </div>
+<nav class="bottom">
+<button class="nav" onclick="go('home',this)">🏠<span>Home</span></button>
+<button class="nav" onclick="go('reels',this)">🎬<span>Reels</span></button>
+<button class="nav" onclick="go('news',this)"><div class="centerPlus">🌍</div><span>News</span></button>
+<button class="nav" onclick="openCamera()">➕<span>Create</span></button>
+<button class="nav" onclick="go('inbox',this)">✈️<span>Messages</span></button>
+<button class="nav" onclick="go('search',this)">🔍<span>Search</span></button>
+<button class="nav" onclick="go('profile',this)"><div class="miniDp" id="bottomDP">M</div><span>Profile</span></button>
+</nav>
 
-  <div id="tab-friends" class="tab p-3">
-    <h3 class="font-bold text-xl">👥 Friend Requests</h3>
-    <div id="requestsList" class="space-y-2 mt-3"></div>
-    <h3 class="font-bold text-xl mt-5">My Friends ✅ - Real Friends</h3>
-    <div id="myFriendsList" class="space-y-2 mt-2"></div>
-  </div>
-
-  <div id="tab-profile" class="tab p-4 text-center">
-    <img id="myDP" src="https://i.pravatar.cc/150" class="w-28 h-28 rounded-full mx-auto object-cover border-4 border-purple-200" onclick="changeDP()">
-    <h2 id="myName" class="font-black text-2xl mt-2">Mian, Abdullah</h2>
-    <p id="myEmail" class="text-gray-500">@mian2abdullah6@email.com</p>
-    <p class="mt-1">Welcome to my profile 🌍</p>
-    <div class="flex justify-center gap-8 my-4"><div><b id="cFollowing">0</b><br><span class="text-gray-500 text-sm">Following</span></div><div><b id="cFollowers">0</b><br><span class="text-gray-500 text-sm">Followers</span></div><div><b id="cLikes">0</b><br><span class="text-gray-500 text-sm">Likes</span></div></div>
-    <div class="flex justify-center gap-2 flex-wrap"><button onclick="editProfile()" class="grad text-white px-6 py-2.5 rounded-full font-bold">Edit profile</button><button onclick="showTab('friends')" class="bg-gray-100 px-4 py-2.5 rounded-full">👥 Requests</button><button onclick="doLogout()" class="bg-gray-100 px-4 py-2.5 rounded-full">Logout</button></div>
-    <div class="flex justify-center gap-2 mt-3"><button onclick="playMagSound()" class="bg-yellow-100 px-4 py-2 rounded-full text-sm font-bold">🔔 Apna Sound Suno</button><button onclick="toggleSound()" class="bg-purple-100 px-4 py-2 rounded-full text-sm font-bold" id="soundBtn2">Sound ON</button></div>
-    <div class="flex justify-around mt-6 border-t pt-3 font-bold"><span>Videos</span><span class="text-gray-400">Liked</span><span class="text-gray-400">Saved</span></div>
-    <div id="myVideos" class="mt-3 text-gray-400">No videos yet - Tap + to create!</div>
-    <p class="text-gray-400 text-sm mt-4">Tap on DP to change profile photo</p>
-  </div>
-</div>
-
-<div class="nav" id="bottomNav" style="display:none">
-  <button onclick="showTab('home')" id="n-home" class="active">🏠<span>Home</span></button>
-  <button onclick="showTab('reels')" id="n-reels">▶️<span>Reels</span></button>
-  <button onclick="showTab('news')" id="n-news"><span class="centerBtn">🌍</span><span>News</span></button>
-  <button onclick="showTab('create')" id="n-create">➕<span>Create</span></button>
-  <button onclick="showTab('messages')" id="n-messages">✈️<span>Messages</span></button>
-  <button onclick="showTab('search')" id="n-search">🔍<span>Search</span></button>
-  <button onclick="showTab('profile')" id="n-profile">👤<span>Profile</span></button>
-</div>
+<!-- Camera / Create / Settings / FriendReq / Comments / Chat Modals - Same Design -->
+<div class="modal" id="createModal"><div class="sheet"><div style="display:flex;justify-content:space-between"><h2>New Post</h2><button onclick="closeModal('createModal')" style="border:0;background:#efefef;width:32px;height:32px;border-radius:50%">✕</button></div><div id="cameraPreviewBox" style="margin-top:12px"></div><div style="border:2px dashed #d62976;padding:20px;text-align:center;border-radius:12px;margin-top:12px;cursor:pointer" onclick="document.getElementById('postFile').click()">🖼️<div style="font-weight:700;color:#d62976" id="uploadText">Tap to Upload Photo / Video</div><div id="fileName" style="color:#737373;font-size:13px">Max 500MB</div><img id="postPreviewImg" style="width:100%;display:none;border-radius:10px;margin-top:10px"><video id="postPreviewVideo" controls style="width:100%;display:none;border-radius:10px;margin-top:10px"></video></div><input id="postFile" type="file" accept="image/*,video/*" hidden onchange="previewFile(event)"><textarea id="postCaption" placeholder="Write a caption..."></textarea><input id="postLocation" placeholder="Add location - Swat, Pakistan"><button class="btnBlue" onclick="publishPost()" id="publishBtn" style="margin-top:12px">Share</button></div></div>
+<div class="modal" id="settingsModal"><div class="sheet"><div style="display:flex;justify-content:space-between"><h2>Settings</h2><button onclick="closeModal('settingsModal')" style="border:0;background:#efefef;width:32px;height:32px;border-radius:50%">✕</button></div><div class="setting" onclick="openEdit()">👤 Edit profile <span>›</span></div><div class="setting" onclick="changePhoto()">🖼️ Change Photo <span>›</span></div><div class="setting" onclick="openFriendRequests();closeModal('settingsModal')">👥 Friend Requests <span>›</span></div><div class="setting" onclick="go('news',null);closeModal('settingsModal')">🌍 World News <span>›</span></div><div class="setting" onclick="toggleMagSound()">🔔 MAG Sound ON / OFF <span>›</span></div><div class="setting" onclick="logout()">🚪 Log out <span>›</span></div></div></div>
+<div class="modal" id="friendReqModal"><div class="sheet"><div style="display:flex;justify-content:space-between"><h2>👥 Friend Requests</h2><button onclick="closeModal('friendReqModal')" style="border:0;background:#efefef;width:32px;height:32px;border-radius:50%">✕</button></div><div id="friendReqList" style="margin-top:12px"></div><h3 style="margin-top:16px">My Friends ✅</h3><div id="friendsListModal" style="margin-top:10px"></div></div></div>
+<div class="modal" id="editModal"><div class="sheet"><h2>Edit Profile</h2><input id="editName" placeholder="Your name"><textarea id="editBio" placeholder="Bio"></textarea><button class="btnBlue" onclick="saveProfile()" style="margin-top:12px">Save</button></div></div>
+<div class="modal" id="commentModal"><div class="sheet" style="background:#111;color:#fff"><h2>Comments <span id="commentCountLabel"></span></h2><div id="commentList" style="max-height:40vh;overflow:auto"></div><div style="display:flex;gap:8px;margin-top:12px"><input id="commentInput" placeholder="Add comment..." style="margin:0;background:#222;color:#fff;border-color:#333"><button onclick="sendComment()" style="background:#fff;color:#000;border:0;width:44px;height:44px;border-radius:50%">➤</button></div></div></div>
+<div class="modal" id="chatModal"><div class="sheet" style="padding:0;overflow:hidden"><div style="display:flex;gap:10px;padding:12px;border-bottom:1px solid #eee;align-items:center"><button onclick="closeModal('chatModal')" style="border:0;background:#efefef;width:32px;height:32px;border-radius:50%">←</button><b id="chatName">User</b><span style="color:#22c55e;font-size:12px">● Active now</span></div><div class="chatBox" id="chatBox"></div><div style="display:flex;gap:8px;padding:10px"><input id="chatInput" placeholder="Message..." style="margin:0" onkeydown="if(event.key==='Enter') sendChat()"><button onclick="sendChat()" style="background:#000;color:#fff;border:0;width:44px;height:44px;border-radius:50%">➤</button></div></div></div>
+<div class="modal" id="viewModal"><div class="sheet"><h2>View</h2><div id="viewContent"></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btnGray" onclick="sharePost(currentCommentPost||'')">Share</button><button class="btnGray" onclick="deletePostItem()">Delete</button></div></div></div>
+<input type="file" id="avatarFile" accept="image/*" hidden onchange="uploadAvatar(event)"><input type="file" id="camGalleryFile" accept="image/*,video/*" hidden onchange="onCamGalleryPick(event)"><div id="toast"></div>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyChcj_mCCgVBs6D8m3E2D8pXT-5yJOfakQ",
-  authDomain: "mian-social.firebaseapp.com",
-  projectId: "mian-social",
-  storageBucket: "mian-social.firebasestorage.app",
-  messagingSenderId: "897111768153",
-  appId: "1:897111768153:web:413bb377bc70eb2dc0c548",
-  measurementId: "G-DFCMZ1CD4M"
-};
-firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth(); const db=firebase.firestore();
-let currentUser=null, currentProfile=null, chatTo=null, viewedIds=new Set();
-let soundOn=true; let lastReqCount=0; let lastMsgCount=0; let firstLoad=true;
-
-// ============ MAG SOCIAL ALG SOUND ============
-function playMagSound(type){
-  if(!soundOn) return;
-  try{
-    let ctx=new (window.AudioContext||window.webkitAudioContext)();
-    let notes = type==='message' ? [880, 1046] : type==='like' ? [660, 880] : [523, 784, 1046, 784];
-    notes.forEach((freq,i)=>{
-      let osc=ctx.createOscillator(); let gain=ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.type='sine'; osc.frequency.value=freq;
-      let t=ctx.currentTime + i*0.18;
-      gain.gain.setValueAtTime(0,t); gain.gain.linearRampToValueAtTime(0.25,t+0.02); gain.gain.exponentialRampToValueAtTime(0.001,t+0.3);
-      osc.start(t); osc.stop(t+0.32);
-    });
-    if(navigator.vibrate) navigator.vibrate(type==='message'?[80,50,80]:[100,50,100,50,150]);
-  }catch(e){}
-}
-function toggleSound(){ soundOn=!soundOn; document.getElementById('soundBtn').innerText=soundOn?'🔔 Sound ON':'🔕 Sound OFF'; let b2=document.getElementById('soundBtn2'); if(b2) b2.innerText=soundOn?'Sound ON':'Sound OFF'; if(soundOn) playMagSound(); }
-
-function showTab(t){document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+t).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));let n=document.getElementById('n-'+t);if(n)n.classList.add('active');window.scrollTo(0,0); if(t==='news')loadNews(); if(t==='friends')loadRequests(); if(t==='search')loadAllUsers();}
-
-async function doSignup(){let n=document.getElementById('authName').value, e=document.getElementById('authEmail').value, p=document.getElementById('authPass').value; if(!e||!p) return document.getElementById('authMsg').innerText='Email + Password likho'; try{let u=await auth.createUserWithEmailAndPassword(e,p); await db.collection('users').doc(u.user.uid).set({name:n||e.split('@')[0],email:e,photo:'https://i.pravatar.cc/150?u='+u.user.uid,createdAt:firebase.firestore.FieldValue.serverTimestamp()});}catch(err){document.getElementById('authMsg').innerText=err.message;}}
-async function doLogin(){let e=document.getElementById('authEmail').value,p=document.getElementById('authPass').value; try{await auth.signInWithEmailAndPassword(e,p);}catch(err){document.getElementById('authMsg').innerText=err.message;}}
-function doLogout(){auth.signOut(); location.reload();}
-function editProfile(){let n=prompt('Naya Naam:',currentProfile?.name||''); if(n){db.collection('users').doc(currentUser.uid).update({name:n}); document.getElementById('myName').innerText=n;}}
-function changeDP(){let u=prompt('Photo Link paste karo:'); if(u){db.collection('users').doc(currentUser.uid).update({photo:u}); document.getElementById('myDP').src=u;}}
-
-auth.onAuthStateChanged(async u=>{
-  if(!u){return;}
-  currentUser=u; document.getElementById('authBox').style.display='none'; document.getElementById('mainApp').classList.remove('hidden'); document.getElementById('bottomNav').style.display='flex';
-  let d=await db.collection('users').doc(u.uid).get(); currentProfile=d.exists?d.data():{name:u.email,email:u.email};
-  document.getElementById('myName').innerText=currentProfile.name||'User'; document.getElementById('myEmail').innerText='@'+(currentProfile.email||u.email); if(currentProfile.photo)document.getElementById('myDP').src=currentProfile.photo;
-  loadFeed(); loadRequests(); loadAllUsers(); loadNews(); startLiveNotifications();
-});
-
-function startLiveNotifications(){
-  db.collection('friend_requests').where('to','==',currentUser.uid).where('status','==','pending').onSnapshot(snap=>{
-    let count=snap.size; document.getElementById('reqCount').innerText=count;
-    if(!firstLoad && count>lastReqCount){
-      playMagSound('request');
-      document.getElementById('notifBanner').classList.remove('hidden');
-      document.getElementById('notifBanner').innerText='🔔 New Friend Request Aayi Hai! '+snap.docs[snap.docs.length-1].data().fromName+' ne bheji hai!';
-      setTimeout(()=>{document.getElementById('notifBanner').classList.add('hidden')},5000);
-      loadRequests();
-    }
-    lastReqCount=count;
-  });
-  db.collection('messages').where('to','==',currentUser.uid).onSnapshot(snap=>{
-    if(!firstLoad && snap.size>lastMsgCount){ playMagSound('message'); }
-    lastMsgCount=snap.size; firstLoad=false;
-  });
-}
-
-async function createPost(){
-  let title=document.getElementById('postTitle').value, url=document.getElementById('postVideoUrl').value;
-  let f=document.getElementById('postFile').files[0]; let img='';
-  if(f){img=await new Promise(r=>{let rd=new FileReader(); rd.onload=e=>r(e.target.result); rd.readAsDataURL(f);});}
-  if(!title && !url && !img) return document.getElementById('postMsg').innerText='Kuch to likho!';
-  await db.collection('posts').add({title,videoUrl:url,image:img,uid:currentUser.uid,author:currentProfile.name,authorPhoto:currentProfile.photo||'',likes:0,views:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-  document.getElementById('postMsg').innerText='✅ Post Ho Gaya!'; document.getElementById('postTitle').value=''; document.getElementById('postVideoUrl').value=''; loadFeed(); showTab('home');
-}
-async function addRealView(postId){ if(viewedIds.has(postId)) return; viewedIds.add(postId); try{await db.collection('posts').doc(postId).update({views: firebase.firestore.FieldValue.increment(1)});}catch(e){} }
-async function loadFeed(){
-  let snap=await db.collection('posts').orderBy('createdAt','desc').limit(30).get();
-  let feed=document.getElementById('feed'); let reels=document.getElementById('reelsFeed'); feed.innerHTML=''; reels.innerHTML='';
-  if(snap.empty){document.getElementById('emptyFeed').style.display='block'; return;} document.getElementById('emptyFeed').style.display='none';
-  let totalLikes=0;
-  snap.forEach(doc=>{let p=doc.data(); totalLikes+=(p.likes||0); let realViews=p.views||0; let html=`<div class="border rounded-2xl p-3"><div class="flex gap-2 items-center"><img src="${p.authorPhoto||'https://i.pravatar.cc/100'}" class="w-9 h-9 rounded-full"><b>${p.author||'User'}</b></div><p class="my-2">${p.title||''}</p>${p.videoUrl?`<video src="${p.videoUrl}" controls class="w-full rounded-xl bg-black" onplay="addRealView('${doc.id}')"></video>`:''}${p.image?`<img src="${p.image}" class="w-full rounded-xl" onclick="addRealView('${doc.id}')">`:''}<div class="flex gap-4 mt-2 text-sm"><button onclick="likePost('${doc.id}',${p.likes||0})">❤️ ${p.likes||0}</button><button>👁️ ${realViews} Views - Real</button><button>💬 Comment</button></div></div>`; feed.innerHTML+=html; reels.innerHTML+=html;});
-  document.getElementById('cLikes').innerText=totalLikes;
-  let mySnap=await db.collection('posts').where('uid','==',currentUser.uid).get(); document.getElementById('myVideos').innerHTML=mySnap.empty?'No videos yet - Tap + to create!':mySnap.size+' Videos';
-}
-async function likePost(id,c){await db.collection('posts').doc(id).update({likes:c+1}); playMagSound('like'); loadFeed();}
-
-async function sendFriendRequest(toUid,toName){
-  await db.collection('friend_requests').add({from:currentUser.uid,fromName:currentProfile.name,fromPhoto:currentProfile.photo||'',to:toUid,toName,status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-  playMagSound('request'); alert('Friend Request Bhej Di ✅ '+toName+' ko!');
-}
-async function loadRequests(){
-  let snap=await db.collection('friend_requests').where('to','==',currentUser.uid).where('status','==','pending').get();
-  document.getElementById('reqCount').innerText=snap.size;
-  let box=document.getElementById('requestsList'); box.innerHTML=snap.empty?'Koi new request nahi hai':'';
-  snap.forEach(d=>{let r=d.data(); box.innerHTML+=`<div class="flex justify-between items-center border p-3 rounded-xl"><div class="flex gap-2 items-center"><img src="${r.fromPhoto}" class="w-10 h-10 rounded-full"><div><b>${r.fromName}</b><p class="text-xs text-gray-500">Friend Request bheji hai</p></div></div><div class="flex gap-1"><button onclick="acceptReq('${d.id}','${r.from}')" class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">Accept</button><button onclick="rejectReq('${d.id}')" class="bg-gray-200 px-3 py-1 rounded-full text-sm">Reject</button></div></div>`;});
-  let fSnap=await db.collection('friends').where('users','array-contains',currentUser.uid).get();
-  let fb=document.getElementById('myFriendsList'); fb.innerHTML=fSnap.empty?'Abhi koi friend nahi - Search se add karo':'';
-  let chatBox=document.getElementById('friendsForChat'); chatBox.innerHTML='';
-  fSnap.forEach(d=>{let f=d.data(); let other=f.users[0]===currentUser.uid?f.users[1]:f.users[0]; fb.innerHTML+=`<div class="border p-3 rounded-xl flex justify-between"><b>Friend</b><button onclick="openChat('${other}','Friend')" class="bg-black text-white px-3 py-1 rounded-full text-sm">Message</button></div>`; chatBox.innerHTML+=`<button onclick="openChat('${other}','Friend')" class="w-full text-left border p-3 rounded-xl">👤 Friend - Chat Karo</button>`;});
-  document.getElementById('cFollowers').innerText=fSnap.size; document.getElementById('cFollowing').innerText=fSnap.size;
-}
-async function acceptReq(reqId,fromUid){await db.collection('friend_requests').doc(reqId).update({status:'accepted'}); await db.collection('friends').add({users:[currentUser.uid,fromUid],names:[currentProfile.name,'Friend'],createdAt:firebase.firestore.FieldValue.serverTimestamp()}); playMagSound('request'); alert('Friend Accept Ho Gaya ✅'); loadRequests();}
-async function rejectReq(id){await db.collection('friend_requests').doc(id).update({status:'rejected'}); loadRequests();}
-
-async function loadAllUsers(){
-  let snap=await db.collection('users').get(); let box=document.getElementById('allUsers'); box.innerHTML='';
-  snap.forEach(d=>{if(d.id===currentUser?.uid) return; let u=d.data(); box.innerHTML+=`<div class="flex justify-between items-center border p-3 rounded-xl"><div class="flex gap-2 items-center"><img src="${u.photo}" class="w-10 h-10 rounded-full"><div><b>${u.name}</b><p class="text-xs text-gray-500">${u.email}</p></div></div><button onclick="sendFriendRequest('${d.id}','${u.name}')" class="grad text-white px-3 py-1.5 rounded-full text-sm font-bold">+ Add Friend</button></div>`;});
-}
-function searchUsers(q){if(!q) return loadAllUsers(); let box=document.getElementById('searchResults'); box.innerHTML='Searching...'; db.collection('users').get().then(s=>{box.innerHTML=''; s.forEach(d=>{if(d.id===currentUser.uid) return; let u=d.data(); if((u.name||'').toLowerCase().includes(q.toLowerCase())||(u.email||'').includes(q.toLowerCase())){box.innerHTML+=`<div class="flex justify-between items-center border p-3 rounded-xl"><div class="flex gap-2 items-center"><img src="${u.photo}" class="w-10 h-10 rounded-full"><b>${u.name}</b></div><button onclick="sendFriendRequest('${d.id}','${u.name}')" class="grad text-white px-3 py-1.5 rounded-full text-sm">+ Add Friend</button></div>`;}}); if(!box.innerHTML) box.innerHTML='Koi nahi mila';});}
-
-function openChat(uid,name){chatTo=uid; document.getElementById('chatBox').classList.remove('hidden'); document.getElementById('chatWith').innerText='Chat with '+name; loadChat();}
-async function loadChat(){if(!chatTo) return; let snap=await db.collection('messages').orderBy('createdAt','asc').limit(50).get(); let box=document.getElementById('chatMsgs'); box.innerHTML=''; snap.forEach(d=>{let m=d.data(); if((m.from===currentUser.uid&&m.to===chatTo)||(m.from===chatTo&&m.to===currentUser.uid)){box.innerHTML+=`<div class="${m.from===currentUser.uid?'text-right':''}"><span class="inline-block bg-gray-100 px-3 py-1 rounded-xl text-sm">${m.text}</span></div>`;}});}
-async function sendMsg(){let t=document.getElementById('chatInput').value; if(!t||!chatTo) return; await db.collection('messages').add({from:currentUser.uid,to:chatTo,text:t,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); playMagSound('message'); document.getElementById('chatInput').value=''; loadChat();}
-
-function loadNews(){
-  let news=[
-    {t:'🔥 MAG SOCIAL - Pakistan me Trending!',d:'Ab News center me hai, Views Real hain aur Friend Request pe apna sound bajta hai!'},
-    {t:'🌍 Duniya Bhar Ki Khabren',d:'Aaj ki top news - Technology, Sports aur Entertainment sab yahan milega.'},
-    {t:'⚽ Cricket - Pakistan Zindabad!',d:'Pakistan team ki tayari zoron par - Fans ko bari jeet ki umeed.'},
-    {t:'📱 New Update - MAG Sound!',d:'Ab koi Friend Request ya Message karega to tumhara apna MAG wala sound bajega!'}
-  ];
-  document.getElementById('newsList').innerHTML=news.map(n=>`<div class="border p-4 rounded-2xl"><b>${n.t}</b><p class="text-sm text-gray-600 mt-1">${n.d}</p></div>`).join('');
-}
-loadNews();
+const firebaseConfig={apiKey:"AIzaSyChcj_mCCgVBs6D8m3E2D8pXT-5yJOfakQ",authDomain:"mian-social.firebaseapp.com",projectId:"mian-social",storageBucket:"mian-social.firebasestorage.app",messagingSenderId:"897111768153",appId:"1:897111768153:web:413bb377bc70eb2dc0c548"};
+let firebaseOK=true;try{firebase.initializeApp(firebaseConfig)}catch(e){firebaseOK=false}
+const auth=firebaseOK?firebase.auth():null,db=firebaseOK?firebase.firestore():null,storage=firebaseOK?firebase.storage():null;
+let magSoundOn=true;
+function playMagSound(type){ if(!magSoundOn) return; try{let ctx=new (window.AudioContext||window.webkitAudioContext)(); let notes=type==='message'?[880,1046]:type==='like'?[660,880]:[523,784,1046,784]; notes.forEach((f,i)=>{let o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.value=f;let t=ctx.currentTime+i*0.18;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.25,t+0.02);g.gain.exponentialRampToValueAtTime(0.001,t+0.3);o.start(t);o.stop(t+0.32)}); if(navigator.vibrate) navigator.vibrate([100,50,100,50,150]);}catch(e){} }
+function toggleMagSound(){magSoundOn=!magSoundOn; toast(magSoundOn?'🔔 MAG Sound ON':'🔕 MAG Sound OFF'); if(magSoundOn) playMagSound();}
+let viewedIds=new Set();
+function addRealView(id){ if(viewedIds.has(id)) return; viewedIds.add(id); let p=allPosts.find(x=>x.id===id); if(!p) return; p.views=(p.views||0)+1; if(!localMode&&db&&!String(id).startsWith('local_')&&!String(id).startsWith('d')) db.collection('posts').doc(id).update({views:firebase.firestore.FieldValue.increment(1)}).catch(()=>{}); else { localPosts=localPosts.map(x=>x.id===id?{...x,views:p.views}:x); safeSave('mian_local_posts',JSON.stringify(localPosts)); } }
+let user=null,signupMode=true,feedMode='all',allPosts=[],currentCommentPost=null,unsubscribePosts=null,profile={},myFollowingIds=new Set(),selectedFile=null,localMode=false,savedPosts=new Set(JSON.parse(localStorage.getItem('mian_saved')||'[]')),profileTab='videos',currentChatUser=null,currentNews='world',camCapturedFile=null,camCapturedUrl=null;
+let localPosts=[];try{localPosts=JSON.parse(localStorage.getItem('mian_local_posts')||'[]')}catch(e){localPosts=[]}
+let localComments={};try{localComments=JSON.parse(localStorage.getItem('mian_local_comments')||'{}')}catch(e){localComments={}}
+let chats={};try{chats=JSON.parse(localStorage.getItem('mian_chats')||'{}')}catch(e){chats={}}
+let friendReqs=[];try{friendReqs=JSON.parse(localStorage.getItem('mian_friend_reqs')||'[]')}catch(e){friendReqs=[]}
+let myFriends=[];try{myFriends=JSON.parse(localStorage.getItem('mian_my_friends')||'[]')}catch(e){myFriends=[]}
+let sentReqs=new Set(JSON.parse(localStorage.getItem('mian_sent_reqs')||'[]'));
+function getFriendStatus(uid){ if(myFriends.find(f=>f.uid===uid)) return 'friend'; if(sentReqs.has(uid)) return 'sent'; if(friendReqs.find(r=>r.fromUid===uid)) return 'incoming'; return 'none'; }
+function updateReqBadges(){ let n=friendReqs.length; ['reqBadgeTop','reqBadgeHome'].forEach(id=>{let el=document.getElementById(id); if(el){el.textContent=n; el.style.display=n>0?'inline-block':'none';}}); }
+function sendFriendRequest(toUid,toName,toPhoto){ if(!user) return toast('Please login first'); if(toUid===user.uid) return toast('Ye tum ho!'); if(getFriendStatus(toUid)==='friend') return toast('Already Friend!'); if(getFriendStatus(toUid)==='sent') return toast('Request pehle se bheji hai!'); if(getFriendStatus(toUid)==='incoming') return acceptFriendRequest(toUid); sentReqs.add(toUid); try{localStorage.setItem('mian_sent_reqs',JSON.stringify([...sentReqs]))}catch(e){} if(!localMode&&db) db.collection('friend_requests').add({from:user.uid,fromName:profile.name||'User',fromPhoto:profile.photo||'',to:toUid,status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()}).catch(()=>{}); playMagSound('request'); toast('✅ Friend Request Bhej Di - '+toName); renderFeed(); renderReels(); }
+function openFriendRequests(){ if(!user) return toast('Please login first'); renderFriendRequests(); openModal('friendReqModal'); }
+function renderFriendRequests(){ let box=document.getElementById('friendReqList'); if(box){ if(!friendReqs.length) box.innerHTML='<p style="color:#737373;text-align:center;padding:16px">Koi new request nahi hai</p>'; else box.innerHTML=friendReqs.map(r=>`<div style="display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #eee"><div style="width:44px;height:44px;border-radius:50%;background:#eee;display:grid;place-items:center;font-weight:800;overflow:hidden">${r.fromPhoto?`<img src="${r.fromPhoto}" style="width:100%;height:100%;object-fit:cover">`:esc((r.fromName||'U')[0])}</div><div style="flex:1"><b>${esc(r.fromName)}</b><div style="color:#737373;font-size:13px">Friend Request bheji hai</div></div><button onclick="acceptFriendRequest('${r.fromUid}')" style="background:#0095f6;color:#fff;border:0;padding:8px 14px;border-radius:8px;font-weight:600">Accept</button><button onclick="rejectFriendRequest('${r.fromUid}')" style="background:#efefef;border:0;padding:8px 14px;border-radius:8px">Reject</button></div>`).join(''); } let fh=myFriends.length?myFriends.map(f=>`<div style="display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #eee"><div style="width:40px;height:40px;border-radius:50%;background:#eee;display:grid;place-items:center;overflow:hidden">${f.photo?`<img src="${f.photo}" style="width:100%;height:100%;object-fit:cover">`:esc((f.name||'U')[0])}</div><div style="flex:1"><b>${esc(f.name)}</b><div style="color:#737373;font-size:12px">✅ Friend</div></div><button class="btnGray" onclick="openChat('${f.uid}','${esc(f.name)}','${esc(f.photo||'')}')">Message</button></div>`).join(''):'<p style="color:#737373">Abhi koi friend nahi</p>'; ['friendsListModal','friendsListProfile','friendsListInbox'].forEach(id=>{let el=document.getElementById(id); if(el) el.innerHTML=fh;}); let fc=document.getElementById('friendsCount'); if(fc) fc.textContent=myFriends.length; updateReqBadges(); }
+function acceptFriendRequest(fromUid){ let r=friendReqs.find(x=>x.fromUid===fromUid); if(r){ friendReqs=friendReqs.filter(x=>x.fromUid!==fromUid); if(!myFriends.find(f=>f.uid===fromUid)) myFriends.push({uid:r.fromUid,name:r.fromName,photo:r.fromPhoto}); } else { let p=allPosts.find(x=>x.uid===fromUid); if(p&&!myFriends.find(f=>f.uid===fromUid)) myFriends.push({uid:fromUid,name:p.name,photo:p.photo||''}); } sentReqs.delete(fromUid); try{localStorage.setItem('mian_friend_reqs',JSON.stringify(friendReqs)); localStorage.setItem('mian_my_friends',JSON.stringify(myFriends)); localStorage.setItem('mian_sent_reqs',JSON.stringify([...sentReqs]))}catch(e){} playMagSound('request'); toast('✅ Friend Accept Ho Gaya!'); renderFriendRequests(); renderFeed(); updateProfileUI(); }
+function rejectFriendRequest(fromUid){ friendReqs=friendReqs.filter(x=>x.fromUid!==fromUid); try{localStorage.setItem('mian_friend_reqs',JSON.stringify(friendReqs))}catch(e){} toast('Request Reject Kar Di'); renderFriendRequests(); }
+function listenFriendRequests(){ if(localMode||!db||!user) return; db.collection('friend_requests').where('to','==',user.uid).where('status','==','pending').onSnapshot(snap=>{ let ch=false; snap.forEach(d=>{let data=d.data(); if(!friendReqs.find(r=>r.fromUid===data.from)&&!myFriends.find(f=>f.uid===data.from)){ friendReqs.push({fromUid:data.from,fromName:data.fromName,fromPhoto:data.fromPhoto||''}); ch=true; }}); if(ch){ try{localStorage.setItem('mian_friend_reqs',JSON.stringify(friendReqs))}catch(e){} playMagSound('request'); toast('🔔 New Friend Request Aayi Hai!'); renderFriendRequests(); } updateReqBadges(); }); }
+function safeSave(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}
+function fmt(n){ if(!n) return '0'; if(n>=1000) return (n/1000).toFixed(1).replace('.0','')+'K'; return n }
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display='none',3500)}
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function closeModal(id){document.getElementById(id).classList.remove('show')}function openModal(id){document.getElementById(id).classList.add('show')}
+function go(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='profile')loadMyProfile();if(id==='reels')renderReels();if(id==='search')searchPosts();if(id==='inbox')renderChatList();if(id==='news')loadNews(currentNews)}
+function showSettings(){if(!user)return toast('Please login first');openModal('settingsModal')}
+function setNewsChip(el,cat){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');loadNews(cat)}
+function toggleAuth(){signupMode=!signupMode;document.getElementById('authBtn').textContent=signupMode?'Sign Up':'Log In';document.getElementById('toggleBtn').textContent=signupMode?'Have an account? Log in':'New? Sign Up';}
+function enterLocal(){const name=document.getElementById('authName').value.trim()||'Mian Abdullah';const email=document.getElementById('authEmail').value.trim()||'mian2abdullah6@email.com';localMode=true;user={uid:'local_'+Date.now(),email};profile={name,email,bio:'Welcome to my profile',photo:'',followers:[],following:[]};try{localStorage.setItem('mian_local_user',JSON.stringify(profile))}catch(e){}document.getElementById('authScreen').style.display='none';updateProfileUI();loadLocalPosts();renderFriendRequests();}
+async function authenticate(){const email=document.getElementById('authEmail').value.trim();const pass=document.getElementById('authPassword').value;const name=document.getElementById('authName').value.trim();const err=document.getElementById('authError');err.textContent='';if(!email||pass.length<6){err.textContent='Email + 6+ password likho';return}try{if(signupMode){if(!name){err.textContent='Naam likho';return}const r=await auth.createUserWithEmailAndPassword(email,pass);await db.collection('users').doc(r.user.uid).set({name,email,bio:'Welcome to my profile',photo:'',followers:[],following:[],createdAt:firebase.firestore.FieldValue.serverTimestamp()})}else{await auth.signInWithEmailAndPassword(email,pass)}}catch(e){err.textContent=e.message}}
+(function(){const s=localStorage.getItem('mian_local_user');if(s){try{profile=JSON.parse(s);user={uid:'local_saved',email:profile.email};localMode=true;setTimeout(()=>{document.getElementById('authScreen').style.display='none';updateProfileUI();loadLocalPosts();renderFriendRequests();},300)}catch(e){}}})();
+if(auth){auth.onAuthStateChanged(async u=>{if(!u||localMode)return;user=u;localMode=false;document.getElementById('authScreen').style.display='none';await loadProfile();listenPosts();loadMyProfile();listenFriendRequests();})}
+async function loadProfile(){const ref=db.collection('users').doc(user.uid);const snap=await ref.get();if(snap.exists)profile=snap.data();else{profile={name:user.email.split('@')[0],email:user.email,bio:'Welcome to my profile',photo:'',followers:[],following:[]};await ref.set(profile)}myFollowingIds=new Set(profile.following||[]);updateProfileUI()}
+function updateProfileUI(){const name=profile.name||'User';document.getElementById('profileName').textContent=name;document.getElementById('profileEmail').textContent='@'+(user.email||profile.email||'');document.getElementById('profileBio').textContent=profile.bio||'';let letter=esc(name.charAt(0).toUpperCase());let html=profile.photo?`<img src="${esc(profile.photo)}" style="width:100%;height:100%;object-fit:cover">`:letter;document.getElementById('profileAvatar').innerHTML=html;document.getElementById('bottomDP').innerHTML=profile.photo?`<img src="${esc(profile.photo)}">`:letter;document.getElementById('myFollowers').textContent=(profile.followers||[]).length+myFriends.length;document.getElementById('myFollowing').textContent=(profile.following||[]).length+myFriends.length;document.getElementById('myLikes').textContent=fmt(allPosts.filter(p=>p.uid===user?.uid).reduce((s,p)=>s+(p.likes||[]).length,0));renderFriendRequests();}
+function loadLocalPosts(){const demo=[{id:'d1',uid:'demo1',name:'sofia.travels',photo:'',caption:'Santorini sunset - #travel',location:'Santorini, Greece',media:'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800',mediaType:'image',likes:[],commentCount:0,shares:0,saves:0,reposts:0,views:0},{id:'d2',uid:'demo2',name:'kenji.nights',photo:'',caption:'Tokyo neon',location:'Tokyo, Japan',media:'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800',mediaType:'image',likes:[],commentCount:0,shares:0,saves:0,reposts:0,views:0},{id:'d3',uid:'demo3',name:'amara.eats',photo:'',caption:'Best food - #foodie',location:'Lahore',media:'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800',mediaType:'image',likes:[],commentCount:0,shares:0,saves:0,reposts:0,views:0},{id:'d4',uid:'demo4',name:'lahhamjoud',photo:'',caption:'Beautiful place in the world',location:'Worldwide',media:'https://cdn.coverr.co/videos/coverr-beautiful-mountain-landscape-1690/1080p.mp4',mediaType:'video',likes:[],commentCount:0,shares:0,saves:0,reposts:0,views:0},{id:'d5',uid:'demo5',name:'cricket.pak',photo:'',caption:'Pakistan Zindabad!',location:'Lahore',media:'https://cdn.coverr.co/videos/coverr-cricket-player-hitting-a-ball-1584/1080p.mp4',mediaType:'video',likes:[],commentCount:0,shares:0,saves:0,reposts:0,views:0}];allPosts=[...localPosts,...demo];renderFeed();renderStories();renderProfileGrid();renderReels();searchPosts();renderChatList();}
+function listenPosts(){if(!db)return loadLocalPosts();if(unsubscribePosts)unsubscribePosts();unsubscribePosts=db.collection('posts').orderBy('createdAt','desc').limit(100).onSnapshot(snap=>{allPosts=[...localPosts,...snap.docs.map(d=>({id:d.id,...d.data()}))];renderFeed();renderStories();renderProfileGrid();renderReels();},()=>loadLocalPosts())}
+function renderStories(){const box=document.getElementById('stories');let h=`<div class="story" onclick="openCamera()"><div class="storyRing"><div><span>+</span></div></div>Your story</div>`;[...new Map(allPosts.map(p=>[p.uid,p])).values()].slice(0,8).forEach(p=>{h+=`<div class="story" onclick="toast('${esc(p.name)} story')"><div class="storyRing"><div>${p.photo?`<img src="${esc(p.photo)}">`:`<span>${esc((p.name||'U')[0])}</span>`}</div></div>${esc((p.name||'User').split(' ')[0])}</div>`});box.innerHTML=h;}
+function renderFeed(){const box=document.getElementById('feed');if(!allPosts.length){box.innerHTML='<div class="card" style="text-align:center;color:#737373">No posts yet. Be the first!</div>';return}box.innerHTML=allPosts.map(p=>{const likes=p.likes||[];const liked=user&&likes.includes(user.uid);const st=getFriendStatus(p.uid);let fr='';if(user&&p.uid!==user.uid){ if(st==='friend') fr=`<button class="frBtn friend">✅ Friend</button>`; else if(st==='sent') fr=`<button class="frBtn sent">Request Sent ✓</button>`; else if(st==='incoming') fr=`<button class="frBtn" onclick="openFriendRequests()">Accept Request</button>`; else fr=`<button class="frBtn" onclick="sendFriendRequest('${p.uid}','${esc(p.name)}','${esc(p.photo||'')}')">+ Friend Request</button>`; } const media=p.mediaType==='video'?`<video class="postImg" controls playsinline src="${esc(p.media)}" muted onplay="addRealView('${p.id}')" onclick="this.muted=!this.muted"></video>`:`<img class="postImg" src="${esc(p.media)}" onclick="addRealView('${p.id}')">`; return `<article class="post"><div class="postHead"><div class="dp"><div>${p.photo?`<img src="${esc(p.photo)}">`:`<span>${esc((p.name||'U')[0])}</span>`}</div></div><div style="flex:1"><b>${esc(p.name||'User')}</b><div style="font-size:12px;color:#737373">${esc(p.location||'Worldwide')} • 👁️ ${fmt(p.views||0)} Views - Real</div></div>${fr}</div>${media}<div class="postActions"><button class="${liked?'liked':''}" onclick="toggleLike('${p.id}')"> ${liked?'❤️':'♡'} </button><button onclick="openComments('${p.id}')">💬</button><button onclick="sharePost('${p.id}')">↗️</button><button class="save" onclick="toggleSave('${p.id}')">🔖</button></div><div class="postLikes">${fmt(likes.length)} likes</div><div class="postCap"><b>${esc(p.name||'User')}</b> ${esc(p.caption||'')}</div><div class="postMeta" onclick="openComments('${p.id}')">View all ${p.commentCount||0} comments</div></article>`}).join('')}
+function toggleSave(id){if(savedPosts.has(id))savedPosts.delete(id);else savedPosts.add(id);try{localStorage.setItem('mian_saved',JSON.stringify([...savedPosts]))}catch(e){}renderFeed();toast(savedPosts.has(id)?'Saved!':'Removed');}
+function openCamera(){ if(!user) return toast('Please login first'); openModal('createModal'); }
+function onCamGalleryPick(e){ const f=e.target.files[0]; if(!f) return; camCapturedFile=f; camCapturedUrl=URL.createObjectURL(f); document.getElementById('fileName').textContent=f.name+' • Ready!'; selectedFile=f; previewFile({target:{files:[f]}}); openModal('createModal'); }
+function previewFile(e){const f=e.target.files[0];if(!f)return;selectedFile=f;document.getElementById('fileName').textContent=f.name+' • '+(f.size/1024/1024).toFixed(2)+' MB';const img=document.getElementById('postPreviewImg');const vid=document.getElementById('postPreviewVideo');if(f.type.startsWith('image/')){img.src=URL.createObjectURL(f);img.style.display='block';vid.style.display='none'}else{vid.src=URL.createObjectURL(f);vid.style.display='block';img.style.display='none'}}
+function compressImage(file){return new Promise((res,rej)=>{const img=new Image();const url=URL.createObjectURL(file);img.onload=()=>{const c=document.createElement('canvas');const max=800;let w=img.width,h=img.height;if(w>max){h=h*max/w;w=max}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);res(c.toDataURL('image/jpeg',0.65))};img.onerror=()=>rej(new Error('Image error'));img.src=url})}
+async function publishPost(){const file=selectedFile||document.getElementById('postFile').files[0];const caption=document.getElementById('postCaption').value.trim();const location=document.getElementById('postLocation').value.trim();if(!file){toast('Photo / Video select karo!');return}if(!user){toast('Login karo');return}const btn=document.getElementById('publishBtn');btn.disabled=true;btn.textContent='Uploading...';try{let mediaUrl='';let mediaType=file.type.startsWith('video/')?'video':'image';if(mediaType==='video'){ if(storage&&!localMode){ try{const ref=storage.ref('posts/'+user.uid+'/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_')); await ref.put(file); mediaUrl=await ref.getDownloadURL(); await db.collection('posts').add({uid:user.uid,name:profile.name,caption,location,media:mediaUrl,mediaType,likes:[],commentCount:0,shares:0,saves:0,reposts:0,views:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()});}catch(e){ mediaUrl=URL.createObjectURL(file); } } else mediaUrl=URL.createObjectURL(file); } else { try{ if(localMode||!storage) mediaUrl=await compressImage(file); else { const ref=storage.ref('posts/'+user.uid+'/'+Date.now()+'.jpg'); await ref.put(file); mediaUrl=await ref.getDownloadURL(); await db.collection('posts').add({uid:user.uid,name:profile.name,caption,location,media:mediaUrl,mediaType,likes:[],commentCount:0,shares:0,saves:0,reposts:0,views:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); } }catch(e){ mediaUrl=await compressImage(file); } } const np={id:'local_'+Date.now(),uid:user.uid,name:profile.name,photo:profile.photo||'',caption,location,media:mediaUrl,mediaType,likes:[],commentCount:0,shares:0,saves:0,reposts:0,views:0}; if(!mediaUrl.startsWith('https://')){ localPosts.unshift(np); safeSave('mian_local_posts',JSON.stringify(localPosts)); } allPosts.unshift(np); closeModal('createModal'); selectedFile=null; document.getElementById('postFile').value=''; document.getElementById('postCaption').value=''; document.getElementById('postPreviewImg').style.display='none'; document.getElementById('postPreviewVideo').style.display='none'; go('home',null); renderFeed(); renderReels(); renderProfileGrid(); if(!localMode) listenPosts(); toast('Post Ho Gaya! ✅'); }catch(e){ toast('Error: '+e.message)} finally{btn.disabled=false;btn.textContent='Share'} }
+async function toggleLike(id){const p=allPosts.find(x=>x.id===id);if(!p||!user)return;playMagSound('like');let likes=p.likes||[];if(likes.includes(user.uid))p.likes=likes.filter(x=>x!==user.uid);else p.likes=[...likes,user.uid];if(!localMode&&db&&!String(id).startsWith('local_')&&!String(id).startsWith('d')){ try{await db.runTransaction(async tx=>{const s=await tx.get(db.collection('posts').doc(id)); if(!s.exists) return; let l=s.data().likes||[]; l=l.includes(user.uid)?l.filter(x=>x!==user.uid):[...l,user.uid]; tx.update(db.collection('posts').doc(id),{likes:l})})}catch(e){} } else { localPosts=localPosts.map(x=>x.id===id?{...x,likes:p.likes}:x); safeSave('mian_local_posts',JSON.stringify(localPosts)); } renderFeed(); renderReels();}
+async function openComments(id){currentCommentPost=id;openModal('commentModal');let list=localComments[id]||[];document.getElementById('commentCountLabel').textContent=list.length+' comments';document.getElementById('commentList').innerHTML=list.length?list.map(c=>`<div style="display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #222"><div style="width:32px;height:32px;border-radius:50%;background:#333;display:grid;place-items:center">${esc((c.name||'U')[0])}</div><div><b>${esc(c.name)}</b><p style="color:#ddd">${esc(c.text)}</p></div></div>`).join(''):'<p style="color:#888;text-align:center;padding:16px">No comments yet</p>';}
+async function sendComment(){const inp=document.getElementById('commentInput');const text=inp.value.trim();if(!text||!currentCommentPost)return;playMagSound('message');if(!localComments[currentCommentPost])localComments[currentCommentPost]=[];localComments[currentCommentPost].push({text,name:profile.name||'User'});safeSave('mian_local_comments',JSON.stringify(localComments));let p=allPosts.find(x=>x.id===currentCommentPost);if(p)p.commentCount=(p.commentCount||0)+1;inp.value='';openComments(currentCommentPost);renderFeed();}
+function quickSearch(t){document.getElementById('searchInput').value=t;searchPosts()}
+function searchPosts(){const q=(document.getElementById('searchInput').value||'').toLowerCase();if(!q){document.getElementById('searchResults').innerHTML='<div class="card" style="color:#737373">Type to search...</div>';return}const f=allPosts.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.caption||'').toLowerCase().includes(q));document.getElementById('searchResults').innerHTML=f.map(p=>{let st=getFriendStatus(p.uid);let btn=p.uid===user?.uid?'':st==='friend'?'<button class="btnGray">✅ Friend</button>':st==='sent'?'<button class="btnGray">Request Sent</button>':`<button class="btnBlue" style="width:auto;padding:8px 14px" onclick="sendFriendRequest('${p.uid}','${esc(p.name)}','')">+ Friend Request</button>`;return `<div class="card"><div style="display:flex;gap:10px;align-items:center"><b>${esc(p.name)}</b><span style="margin-left:auto">${btn}</span></div><p>${esc(p.caption||'')}</p>${p.mediaType==='video'?`<video controls src="${esc(p.media)}" style="width:100%;border-radius:10px;margin-top:8px"></video>`:`<img src="${esc(p.media)}" style="width:100%;border-radius:10px;margin-top:8px">`}</div>`}).join('')||'<div class="card">No results</div>';}
+function renderReels(){let videos=allPosts.filter(p=>p.mediaType==='video');if(!videos.length)videos=allPosts.filter(p=>p.mediaType==='image');const box=document.getElementById('reelFeed');if(!videos.length){box.innerHTML='<div style="color:#fff;padding:20px">No videos yet</div>';return}box.innerHTML=videos.map(p=>{const likes=p.likes||[];const liked=user&&likes.includes(user.uid);const media=p.mediaType==='video'?`<video src="${esc(p.media)}" loop muted autoplay playsinline onplay="addRealView('${p.id}')" onclick="this.muted=!this.muted"></video>`:`<img src="${esc(p.media)}">`;return `<div class="reel">${media}<div class="reelSide"><button onclick="toggleLike('${p.id}')" style="color:${liked?'#ff3040':'#fff'}">${liked?'❤️':'♡'}<span>${fmt(likes.length)}</span></button><button onclick="openComments('${p.id}')">💬<span>${fmt(p.commentCount||0)}</span></button><button onclick="sharePost('${p.id}')">↗️<span>${fmt(p.shares||0)}</span></button><button onclick="toggleSave('${p.id}')">🔖<span>${fmt(p.saves||0)}</span></button></div><div class="reelInfo"><b>@${esc(p.name||'User')}</b> <button onclick="sendFriendRequest('${p.uid}','${esc(p.name)}','')" style="background:transparent;color:#fff;border:1px solid #fff;padding:5px 12px;border-radius:20px;margin-left:8px;font-weight:700">+ Friend Request</button><p style="margin-top:8px;font-size:14px">${esc(p.caption||'')}</p><p style="font-size:12px;opacity:.8">👁️ ${fmt(p.views||0)} Views - Real • ♫ Original Audio</p></div></div>`}).join('')}
+function loadMyProfile(){renderProfileGrid();renderFriendRequests();}
+function setProfileTab(t){profileTab=t;['tabVideos','tabLiked','tabSaved'].forEach(id=>{let el=document.getElementById(id); if(el){el.style.color='#737373'; el.style.borderTop='none';}});let cur=document.getElementById(t==='videos'?'tabVideos':t==='liked'?'tabLiked':'tabSaved'); if(cur){cur.style.color='#000'; cur.style.borderTop='2px solid #000';} renderProfileGrid();}
+function renderProfileGrid(){const box=document.getElementById('myGrid');if(!user) return;let list=profileTab==='videos'?allPosts.filter(p=>p.uid===user.uid):profileTab==='liked'?allPosts.filter(p=>(p.likes||[]).includes(user.uid)):allPosts.filter(p=>savedPosts.has(p.id));if(!list.length){box.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#737373;padding:20px">No posts yet</p>';return}box.innerHTML=list.map(p=>`<div onclick="openView('${p.id}')">${p.mediaType==='video'?`<video src="${esc(p.media)}" muted></video><div class="vCount">▶ ${fmt(p.views||0)}</div>`:`<img src="${esc(p.media)}"><div class="vCount">👁️ ${fmt(p.views||0)}</div>`}</div>`).join('')}
+function openView(id){const p=allPosts.find(x=>x.id===id);if(!p)return;currentCommentPost=id;addRealView(id);document.getElementById('viewContent').innerHTML=`<b>${esc(p.name)}</b><p>${esc(p.caption||'')}</p>${p.mediaType==='video'?`<video src="${esc(p.media)}" controls autoplay style="width:100%;border-radius:10px;margin-top:10px"></video>`:`<img src="${esc(p.media)}" style="width:100%;border-radius:10px;margin-top:10px">`}<p style="color:#737373;margin-top:8px">👁️ ${fmt(p.views||0)} Views - Real • ❤️ ${fmt((p.likes||[]).length)}</p><button class="btnBlue" style="margin-top:10px" onclick="sendFriendRequest('${p.uid}','${esc(p.name)}','')">+ Friend Request</button>`;openModal('viewModal')}
+function deletePostItem(){if(!currentCommentPost)return;const p=allPosts.find(x=>x.id===currentCommentPost);if(!p||p.uid!==user.uid)return toast('Apni post hi delete kar sakte ho');allPosts=allPosts.filter(x=>x.id!==currentCommentPost);localPosts=localPosts.filter(x=>x.id!==currentCommentPost);safeSave('mian_local_posts',JSON.stringify(localPosts));if(!localMode&&db)db.collection('posts').doc(currentCommentPost).delete().catch(()=>{});closeModal('viewModal');renderFeed();renderReels();renderProfileGrid();toast('Deleted')}
+function sharePost(id){const url=location.href.split('?')[0]+'?post='+id;if(navigator.share)navigator.share({title:'MAG SOCIAL',url}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>toast('Link copied!'))}
+function openChat(uid,name,photo){if(!user)return toast('Login karo');currentChatUser={uid,name:name||'User',photo:photo||''};document.getElementById('chatName').textContent=name||'User';openModal('chatModal');renderChat()}
+function renderChat(){const box=document.getElementById('chatBox');if(!currentChatUser)return;const key=[user.uid,currentChatUser.uid].sort().join('_');const list=chats[key]||[];box.innerHTML=list.length?list.map(m=>`<div class="msg ${m.from===user.uid?'me':'them'}">${esc(m.text)}</div>`).join(''):'<p style="color:#737373;text-align:center">Say Hi! 👋</p>';box.scrollTop=box.scrollHeight}
+function sendChat(){const inp=document.getElementById('chatInput');const text=inp.value.trim();if(!text||!currentChatUser)return;playMagSound('message');const key=[user.uid,currentChatUser.uid].sort().join('_');if(!chats[key])chats[key]=[];chats[key].push({from:user.uid,text});safeSave('mian_chats',JSON.stringify(chats));inp.value='';renderChat();renderChatList();}
+function renderChatList(){const box=document.getElementById('chatList');if(!box)return;const uniq=[...new Map(allPosts.map(p=>[p.uid,p])).values()].slice(0,10);if(!uniq.length){box.innerHTML='<p style="color:#737373">No chats yet</p>';return}box.innerHTML=uniq.map(p=>`<div style="display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #eee;cursor:pointer" onclick="openChat('${p.uid}','${esc(p.name)}','')"><div style="width:40px;height:40px;border-radius:50%;background:#eee;display:grid;place-items:center;overflow:hidden">${p.photo?`<img src="${esc(p.photo)}" style="width:100%;height:100%;object-fit:cover">`:esc((p.name||'U')[0])}</div><div style="flex:1"><b>${esc(p.name)}</b><div style="color:#737373;font-size:13px">Tap to chat</div></div><button class="btnBlue" style="width:auto;padding:6px 12px" onclick="event.stopPropagation();sendFriendRequest('${p.uid}','${esc(p.name)}','')">+ Friend</button></div>`).join('');renderFriendRequests();}
+function openEdit(){if(!user)return;document.getElementById('editName').value=profile.name||'';document.getElementById('editBio').value=profile.bio||'';closeModal('settingsModal');openModal('editModal')}
+async function saveProfile(){const name=document.getElementById('editName').value.trim();const bio=document.getElementById('editBio').value.trim();if(!name)return toast('Naam likho');profile.name=name;profile.bio=bio;if(localMode){try{localStorage.setItem('mian_local_user',JSON.stringify(profile))}catch(e){}}else if(db){try{await db.collection('users').doc(user.uid).update({name,bio})}catch(e){}}closeModal('editModal');updateProfileUI();toast('Profile updated!')}
+function changePhoto(){document.getElementById('avatarFile').click()}
+async function uploadAvatar(e){const f=e.target.files[0];if(!f)return;try{const url=await compressImage(f);profile.photo=url;if(localMode){try{localStorage.setItem('mian_local_user',JSON.stringify(profile))}catch(e){}}else if(db){await db.collection('users').doc(user.uid).update({photo:url})}updateProfileUI();toast('Photo updated!')}catch(err){toast(err.message)}}
+async function logout(){if(confirm('Log out?')){try{if(auth)await auth.signOut()}catch(e){}localStorage.removeItem('mian_local_user');location.reload()}}
+async function loadNews(cat){currentNews=cat||currentNews;const box=document.getElementById('newsList');box.innerHTML='<div class="card">Loading news...</div>';const q=encodeURIComponent(cat==='pakistan'?'Pakistan news':cat==='cricket'?'cricket Pakistan':cat==='sports'?'sports news':cat==='technology'?'technology news':'world news');try{const r=await fetch(`https://api.duckduckgo.com/?q=${q}&format=json&no_html=1&skip_disambig=1`);const j=await r.json();const items=(j.RelatedTopics||[]).slice(0,8);if(items.length){box.innerHTML=items.map(it=>`<div class="newsCard"><img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400"><div><b>${esc((it.Text||'News').slice(0,120))}</b><p style="color:#737373;font-size:13px;margin-top:4px">MAG News • Live</p></div></div>`).join('');return}}catch(e){}const fb=[{t:'Pakistan Zindabad - Cricket Update!',d:'Pakistan team ki tayari zoron par!',img:'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=400'},{t:'World News - Technology Aage Barh Rahi Hai',d:'AI aur nayi technology tezi se aage!',img:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400'}];box.innerHTML=fb.map(n=>`<div class="newsCard"><img src="${n.img}"><div><b>${n.t}</b><p style="color:#737373;font-size:13px;margin-top:4px">${n.d}</p></div></div>`).join('')}
+loadNews('world'); renderFriendRequests(); updateReqBadges();
 </script>
 </body>
 </html>
