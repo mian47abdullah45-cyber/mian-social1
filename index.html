@@ -87,45 +87,56 @@ input,textarea{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-rad
 .commentLike.liked{color:#ff3040}
 .darkInput{background:#222 !important;border:1px solid #333 !important;color:#fff !important}
 .darkInput::placeholder{color:#888}
-/* ✅ TIKTOK CAMERA */
+/* ✅ TIKTOK CAMERA - PIC JAISA */
 #cameraModal{position:fixed;inset:0;z-index:100;background:#000;display:none;flex-direction:column;color:#fff}
 #cameraModal.show{display:flex}
 #camVideo{width:100%;flex:1;object-fit:cover;background:#000}
 .camTop{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;position:absolute;top:0;left:0;right:0;z-index:2;background:linear-gradient(180deg,rgba(0,0,0,.7),transparent)}
 .camTop button{background:rgba(0,0,0,.5);border:0;color:#fff;width:42px;height:42px;border-radius:50%;font-size:20px}
-.filterRow{display:flex;gap:10px;overflow-x:auto;padding:10px 14px;scrollbar-width:none} .filterRow::-webkit-scrollbar{display:none}
-.filterBtn{flex-shrink:0;width:52px;height:52px;border-radius:50%;border:2px solid #fff;background:#333;display:grid;place-items:center;font-size:11px;font-weight:700;text-align:center;color:#fff;overflow:hidden} .filterBtn.active{border-color:#FE2C55;box-shadow:0 0 0 2px #FE2C55}
-.camGallery{display:flex;gap:8px;overflow-x:auto;padding:8px 14px;scrollbar-width:none} .camGallery::-webkit-scrollbar{display:none}
-.camGallery img,.camGallery video{width:52px;height:52px;object-fit:cover;border-radius:10px;border:2px solid #444;flex-shrink:0;cursor:pointer}
-.camGallery img.selected,.camGallery video.selected{border-color:#FE2C55}
-.camControls{display:flex;align-items:center;justify-content:center;gap:28px;padding:14px 14px 22px}
-.camCapture{width:72px;height:72px;border-radius:50%;border:4px solid #fff;background:#FE2C55;display:grid;place-items:center;font-size:24px}
-.camCapture.recording{background:#fff;color:#FE2C55;animation:pulse 1s infinite}
+.camSideTools{position:absolute;right:12px;top:70px;display:flex;flex-direction:column;gap:12px;z-index:2}
+.camSideTools button{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.5);border:0;color:#fff;font-size:18px}
+/* Duration - 10m 60s 15s PHOTO TEXT - PIC JAISA */
+.durationRow{display:flex;justify-content:center;gap:18px;align-items:center;padding:8px 0;background:#000}
+.durationBtn{background:none;border:0;color:#888;font-size:18px;font-weight:700;white-space:nowrap} .durationBtn.active{color:#000;background:#fff;padding:5px 16px;border-radius:20px}
+.durationBtn.activePhoto{color:#000;background:#fff;padding:5px 16px;border-radius:20px}
+/* Filter Circles - PIC JAISA */
+.filterCircles{display:flex;gap:14px;overflow-x:auto;padding:10px 14px;scrollbar-width:none;background:#000;justify-content:flex-start} .filterCircles::-webkit-scrollbar{display:none}
+.filterCircle{flex-shrink:0;width:72px;height:72px;border-radius:50%;border:3px solid transparent;overflow:hidden;cursor:pointer;position:relative;background:#333;display:grid;place-items:center}
+.filterCircle img{width:100%;height:100%;object-fit:cover}
+.filterCircle.active{border-color:#fff;box-shadow:0 0 0 2px #fff}
+.filterCircle .flabel{position:absolute;bottom:2px;left:0;right:0;text-align:center;font-size:9px;color:#fff;text-shadow:0 1px 3px #000;font-weight:700}
+/* Bottom Bar - PIC JAISA */
+.camBottom{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 18px;background:#000}
+.camGalleryThumb{width:52px;height:62px;border-radius:10px;overflow:hidden;border:2px solid #fff;flex-shrink:0;cursor:pointer;background:#222;display:grid;place-items:center}
+.camGalleryThumb img{width:100%;height:100%;object-fit:cover}
+.camBottomCenter{display:flex;gap:22px;align-items:center}
+.camBottomCenter b{font-size:18px;letter-spacing:1px;cursor:pointer} .camBottomCenter b.active{color:#fff} .camBottomCenter b.inactive{color:#666}
+.camCaptureBig{width:78px;height:78px;border-radius:50%;border:4px solid #fff;background:#FE2C55;display:grid;place-items:center;font-size:26px;flex-shrink:0}
+.camCaptureBig.recording{background:#fff;color:#FE2C55;animation:pulse 1s infinite}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(.92)}100%{transform:scale(1)}}
-.camSideBtn{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.15);border:0;color:#fff;font-size:18px}
-/* ✅ TIKTOK PROFILE */
+/* TIKTOK PROFILE */
 .ttProfile{text-align:center;padding:16px 12px 0;background:#fff}
 .ttProfile .ttAvatar{width:100px;height:100px;border-radius:50%;margin:auto;overflow:hidden;border:3px solid #fff;box-shadow:0 4px 16px rgba(0,0,0,.15);display:grid;place-items:center;background:linear-gradient(135deg,#000,#7c3aed,#0A84FF);color:#fff;font-size:36px;font-weight:800;cursor:pointer}
 .ttProfile .ttAvatar img{width:100%;height:100%;object-fit:cover}
 .ttTabs{display:flex;border-bottom:1px solid #eee;margin-top:16px} .ttTabs div{flex:1;text-align:center;padding:12px;font-weight:700;color:#888;cursor:pointer} .ttTabs div.active{color:#000;border-bottom:3px solid #000}
 .ttGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#fff} .ttGrid .ttItem{position:relative;aspect-ratio:3/4;overflow:hidden;background:#eee;cursor:pointer} .ttGrid .ttItem img,.ttGrid .ttItem video{width:100%;height:100%;object-fit:cover} .ttGrid .ttViews{position:absolute;bottom:6px;left:6px;color:#fff;font-size:12px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.8)}
-/* ✅ REAL CHAT */
 .chatHeader{display:flex;align-items:center;gap:10px;padding:12px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:2}
 .chatBox{height:55vh;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f8f9ff}
 .msg{max-width:75%;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.4} .msg.me{align-self:flex-end;background:#000;color:#fff;border-bottom-right-radius:6px} .msg.them{align-self:flex-start;background:#fff;border:1px solid #eee;border-bottom-left-radius:6px} .msgTime{font-size:10px;opacity:.6;margin-top:4px;text-align:right}
 .chatInputRow{display:flex;gap:8px;padding:10px;background:#fff;border-top:1px solid #eee}
+.textOverlay{position:absolute;inset:0;display:none;place-items:center;z-index:1;pointer-events:none}
+.textOverlay span{font-size:42px;font-weight:900;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.8);text-align:center;padding:20px}
 </style>
 </head>
 <body>
 <div id="authScreen"><div class="authbox"><div class="authLogo"><span class="mylogo">M</span><span>MAG</span><span style="color:#7c3aed">SOCIAL</span></div><p>Connect with the world 🌍 • Mian Abdullah Group</p><div id="signupFields"><input id="authName" placeholder="Your full name - Mian, Abdullah"></div><input id="authEmail" type="email" placeholder="Email address"><input id="authPassword" type="password" placeholder="Password (minimum 6 characters)"><button class="primary" id="authBtn" onclick="authenticate()">Create Account</button><button class="secondary" id="toggleBtn" style="width:100%;margin-top:10px" onclick="toggleAuth()">Already have an account? Login</button><button class="secondary" style="width:100%;margin-top:10px;background:#fff3cd;border-color:#ffe69c" onclick="enterLocal()">⚡ Continue without Login - Direct Enter</button><p id="authError" style="margin-top:12px;color:#ef4444;text-align:center;line-height:1.4"></p></div></div>
 <header><div class="brand"><span class="mylogo">M</span><span class="mag">MAG</span><span class="social">SOCIAL</span></div><div class="row"><span id="modeBadge" style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700">● ONLINE</span><button class="iconbtn" onclick="showSettings()">⚙</button></div></header>
 <main>
-<section id="home" class="page active"><div class="card welcome"><div style="letter-spacing:1px;font-weight:600;font-size:12px">WELCOME TO MAG SOCIAL • MIAN ABDULLAH GROUP</div><h2>Hi <span id="welcomeName">Alex</span>! See what the world is sharing today 🌍</h2><p>Share your moments. Discover new people. All Real! Up to 500MB Video!</p></div><h3 style="padding:10px 15px">Stories</h3><div class="stories" id="stories"><div class="story" onclick="openCamera()"><div class="avatar">+</div>Your story</div></div><div class="composer" onclick="openCamera()"><div class="avatar" id="smallAvatar" onclick="event.stopPropagation();changePhoto()">M</div><div class="fakeinput">What's happening in your world? Tap + for Camera 📸</div><span>📷</span></div><div class="tabs"><div class="tab active" id="forTab" onclick="setFeed('all')">For you</div><div class="tab" id="followingTab" onclick="setFeed('following')">Following</div></div><div id="feed"><div style="text-align:center;padding:30px;color:#888">Loading posts...</div></div></section>
+<section id="home" class="page active"><div class="card welcome"><div style="letter-spacing:1px;font-weight:600;font-size:12px">WELCOME TO MAG SOCIAL • MIAN ABDULLAH GROUP</div><h2>Hi <span id="welcomeName">Alex</span>! See what the world is sharing today 🌍</h2><p>Share your moments. Discover new people. All Real! Up to 500MB Video!</p></div><h3 style="padding:10px 15px">Stories</h3><div class="stories" id="stories"><div class="story" onclick="openCamera()"><div class="avatar">+</div>Your story</div></div><div class="composer" onclick="openCamera()"><div class="avatar" id="smallAvatar" onclick="event.stopPropagation();changePhoto()">M</div><div class="fakeinput">What's happening? Tap + for TikTok Camera 📸</div><span>📷</span></div><div class="tabs"><div class="tab active" id="forTab" onclick="setFeed('all')">For you</div><div class="tab" id="followingTab" onclick="setFeed('following')">Following</div></div><div id="feed"><div style="text-align:center;padding:30px;color:#888">Loading posts...</div></div></section>
 <section id="search" class="page"><div class="card"><h2>Search</h2><input id="searchInput" placeholder="Search people, places, #hashtag..." oninput="searchPosts()"><div style="margin-top:10px"><span class="chip" onclick="quickSearch('travel')">#travel 12.4M</span><span class="chip" onclick="quickSearch('foodie')">#foodie 8.1M</span><span class="chip" onclick="quickSearch('hiking')">#hiking 5.6M</span></div></div><div id="searchResults"><div class="card muted">Type to search...</div></div></section>
 <section id="reels" class="page" style="max-width:100%"><div class="reelsWrap" id="reelFeed"></div></section>
 <section id="news" class="page"><div class="card"><h2>🌍 World News - Live</h2><p class="muted">Pakistan • World • Sports • Tech • Cricket - Sab kuch!</p><div style="display:flex;overflow-x:auto;margin-top:12px;gap:6px"><button class="chip" onclick="loadNews('world')">🌍 World</button><button class="chip" onclick="loadNews('pakistan')">🇵🇰 Pakistan</button><button class="chip" onclick="loadNews('sports')">⚽ Sports</button><button class="chip" onclick="loadNews('cricket')">🏏 Cricket</button><button class="chip" onclick="loadNews('technology')">📱 Tech</button><button class="chip" onclick="loadNews('business')">💰 Business</button></div></div><div id="newsList"><div class="card">Loading news...</div></div></section>
 <section id="inbox" class="page"><div class="card"><h2>Messages</h2><p class="muted">Tap any user to chat - Real Chat!</p><div id="chatList"></div></div></section>
-<!-- ✅ TIKTOK PROFILE -->
 <section id="profile" class="page"><div class="ttProfile"><div class="ttAvatar" id="profileAvatar" onclick="changePhoto()" title="DP pe click karo - DP change hogi">M</div><h2 id="profileName" style="margin-top:10px;font-size:22px">User</h2><p class="muted" id="profileEmail" style="font-size:14px"></p><p id="profileBio" style="margin-top:8px;font-size:14px">Welcome to my profile 🌍</p><div class="row" style="justify-content:center;gap:28px;margin-top:14px;text-align:center"><div><b id="myFollowing" style="font-size:18px">0</b><div class="muted">Following</div></div><div><b id="myFollowers" style="font-size:18px">0</b><div class="muted">Followers</div></div><div><b id="myLikes" style="font-size:18px">0</b><div class="muted">Likes</div></div></div><div class="row" style="justify-content:center;gap:10px;margin-top:14px"><button class="primary" style="width:140px;margin:0" onclick="openEdit()">Edit profile</button><button class="secondary" onclick="showSettings()">⚙</button><button class="secondary" onclick="sharePost('profile')">↗️ Share</button></div></div><div class="ttTabs"><div class="active" id="tabVideos" onclick="setProfileTab('videos')">📹 Videos</div><div id="tabLiked" onclick="setProfileTab('liked')">❤️ Liked</div><div id="tabSaved" onclick="setProfileTab('saved')">🔖 Saved</div></div><div class="ttGrid" id="myGrid"></div><p class="muted" style="text-align:center;padding:12px">👆 DP pe click karo - DP change hogi</p></section>
 </main>
 <nav class="bottom">
@@ -136,10 +147,38 @@ input,textarea{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-rad
  <button class="nav" onclick="go('search',this)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
  <button class="nav" onclick="go('profile',this)"><div class="profileDot" id="bottomDP">M</div></button>
 </nav>
-<!-- ✅ TIKTOK CAMERA - + Pe Click Karo To Ye Khulega -->
-<div id="cameraModal"><div class="camTop"><button onclick="closeCamera()">✕</button><b>📸 Camera • TikTok Style</b><button onclick="flipCamera()">🔄</button></div><video id="camVideo" autoplay playsinline muted></video><canvas id="camCanvas" style="display:none"></canvas><div style="background:#000;padding-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 14px"><span style="font-size:13px;color:#aaa">✨ Filters - Tap karo</span><span style="font-size:13px;color:#aaa" id="camStatus">Ready</span></div><div class="filterRow" id="filterRow"></div><div style="display:flex;justify-content:space-between;align-items:center;padding:2px 14px"><span style="font-size:13px;color:#aaa">🖼️ Gallery - Tap to select</span><button style="background:none;border:0;color:#FE2C55;font-weight:700" onclick="document.getElementById('camGalleryFile').click()">+ Upload</button></div><div class="camGallery" id="camGalleryStrip"></div><div class="camControls"><button class="camSideBtn" onclick="document.getElementById('camGalleryFile').click()">🖼️</button><button class="camCapture" id="camCaptureBtn" onclick="capturePhoto()">📸</button><button class="camSideBtn" id="camRecordBtn" onclick="toggleRecord()">🎥</button></div><div style="display:flex;gap:8px;padding:0 14px 14px"><button class="primary" style="margin:0;background:#FE2C55" onclick="useCameraPhoto()">✅ Next - Post Karo</button><button class="secondary" style="flex:1;background:#222;color:#fff;border-color:#333" onclick="closeCamera()">Cancel</button></div></div></div>
+<!-- ✅ TIKTOK CAMERA - PIC JAISA - 10m 60s 15s PHOTO TEXT + Filter Circles + CAMERA / CREATE -->
+<div id="cameraModal">
+ <div class="camTop"><button onclick="closeCamera()">✕</button><b id="camStatus">📸 TikTok Camera</b><button onclick="flipCamera()">🔄</button></div>
+ <div style="position:relative;flex:1;display:flex;overflow:hidden">
+   <video id="camVideo" autoplay playsinline muted></video>
+   <canvas id="camCanvas" style="display:none"></canvas>
+   <div class="textOverlay" id="textOverlay"><span id="textOverlayText">MAG SOCIAL 🔥</span></div>
+   <div class="camSideTools"><button onclick="flipCamera()" title="Flip">🔄</button><button onclick="toggleFlash()" title="Flash">⚡</button><button onclick="toggleBeauty()" title="Beauty">✨</button><button onclick="document.getElementById('camGalleryFile').click()" title="Gallery">🖼️</button></div>
+   <div id="camTimer" style="position:absolute;top:60px;left:50%;transform:translateX(-50%);background:rgba(255,0,0,.8);color:#fff;padding:6px 14px;border-radius:20px;font-weight:700;display:none">● 00:00</div>
+ </div>
+ <!-- Duration - PIC JAISA -->
+ <div class="durationRow">
+   <button class="durationBtn" data-mode="10m" onclick="setDuration('10m',this)">10m</button>
+   <button class="durationBtn" data-mode="60s" onclick="setDuration('60s',this)">60s</button>
+   <button class="durationBtn" data-mode="15s" onclick="setDuration('15s',this)">15s</button>
+   <button class="durationBtn active" data-mode="PHOTO" onclick="setDuration('PHOTO',this)">PHOTO</button>
+   <button class="durationBtn" data-mode="TEXT" onclick="setDuration('TEXT',this)">TEXT</button>
+ </div>
+ <!-- Filter Circles - PIC JAISA -->
+ <div class="filterCircles" id="filterCircles"></div>
+ <!-- Bottom - PIC JAISA - Gallery Thumb + CAMERA / CREATE + Capture -->
+ <div class="camBottom">
+   <div class="camGalleryThumb" id="camGalleryThumb" onclick="document.getElementById('camGalleryFile').click()">🖼️</div>
+   <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1">
+     <button class="camCaptureBig" id="camCaptureBtn" onclick="captureTikTok()">📸</button>
+     <div class="camBottomCenter"><b class="active" onclick="setBottomMode('CAMERA',this)">CAMERA</b><b class="inactive" onclick="setBottomMode('CREATE',this)">CREATE</b></div>
+   </div>
+   <button style="width:52px;height:52px;border-radius:50%;background:#222;color:#fff;border:0;font-size:20px" onclick="useCameraPhoto()">✓</button>
+ </div>
+</div>
 <input type="file" id="camGalleryFile" accept="image/*,video/*" hidden onchange="onCamGalleryPick(event)">
-<div class="modal" id="createModal"><div class="sheet"><div class="row between"><h2 style="font-size:24px">Create Post - Camera / Gallery</h2><button class="iconbtn" onclick="closeModal('createModal')">✕</button></div><p style="text-align:center;color:#64748b;margin-top:6px">Share a moment with the world. Up to 500MB Video!</p><div id="cameraPreviewBox" style="text-align:center;margin-top:10px"></div><div class="upload-box" onclick="document.getElementById('postFile').click()"><div style="font-size:38px">🖼️</div><div style="color:#7c3aed;font-weight:700;margin-top:6px" id="uploadText">Tap to Upload Photo / Video - Up to 500MB</div><div class="muted" id="fileName">No file selected - JPG, PNG, MP4 allowed - Max 500MB</div><img id="postPreviewImg"><video id="postPreviewVideo" controls></video></div><input id="postFile" type="file" accept="image/*,video/*" hidden onchange="previewFile(event)"><div class="progress" id="upProg"><div id="upBar"></div></div><p id="upStatus" class="muted" style="margin-top:8px"></p><div style="margin-top:12px;font-weight:600">Caption</div><textarea id="postCaption" placeholder="Write a caption... add #hashtags"></textarea><div style="margin-top:10px;font-weight:600">Location</div><input id="postLocation" placeholder="Add a location - e.g. Swat, Pakistan"><button class="primary" onclick="publishPost()" id="publishBtn">Share post</button><button class="secondary" style="width:100%;margin-top:10px" onclick="closeModal('createModal')">Cancel</button></div></div>
+<div class="modal" id="createModal"><div class="sheet"><div class="row between"><h2 style="font-size:24px">Create Post - TikTok Style</h2><button class="iconbtn" onclick="closeModal('createModal')">✕</button></div><p style="text-align:center;color:#64748b;margin-top:6px">Apni Pic / Video ban gayi! Ab Post karo! Up to 500MB</p><div id="cameraPreviewBox" style="text-align:center;margin-top:10px"></div><div class="upload-box" onclick="document.getElementById('postFile').click()"><div style="font-size:38px">🖼️</div><div style="color:#7c3aed;font-weight:700;margin-top:6px" id="uploadText">Tap to Upload Photo / Video - Up to 500MB</div><div class="muted" id="fileName">No file selected - JPG, PNG, MP4 allowed - Max 500MB</div><img id="postPreviewImg"><video id="postPreviewVideo" controls></video></div><input id="postFile" type="file" accept="image/*,video/*" hidden onchange="previewFile(event)"><div class="progress" id="upProg"><div id="upBar"></div></div><p id="upStatus" class="muted" style="margin-top:8px"></p><div style="margin-top:12px;font-weight:600">Caption - TEXT Mode me yehi text ayega</div><textarea id="postCaption" placeholder="Write a caption... add #hashtags" oninput="updateTextOverlay(this.value)"></textarea><div style="margin-top:10px;font-weight:600">Location</div><input id="postLocation" placeholder="Add a location - e.g. Swat, Pakistan"><button class="primary" onclick="publishPost()" id="publishBtn">Share post - CREATE</button><button class="secondary" style="width:100%;margin-top:10px" onclick="closeModal('createModal')">Cancel</button></div></div>
 <div class="modal" id="settingsModal"><div class="sheet"><div class="row between"><h2>Settings & Privacy</h2><button class="iconbtn" onclick="closeModal('settingsModal')">✕</button></div><div class="setting" onclick="openEdit()">👤 <span style="flex:1;margin-left:12px">Edit profile</span> ›</div><div class="setting" onclick="changePhoto()">🖼️ <span style="flex:1;margin-left:12px">Change DP - DP pe click karo</span> ›</div><div class="setting" onclick="go('news',null);closeModal('settingsModal')">🌍 <span style="flex:1;margin-left:12px">World News</span> ›</div><div class="setting" onclick="logout()">🚪 <span style="flex:1;margin-left:12px">Log out</span> ›</div><p class="muted" style="text-align:center;margin-top:18px">MAG SOCIAL • Mian Abdullah Group • mian-social</p></div></div>
 <div class="modal" id="editModal"><div class="sheet"><div class="row between"><h2>Edit Profile</h2><button class="iconbtn" onclick="closeModal('editModal')">✕</button></div><input id="editName" placeholder="Your name"><textarea id="editBio" placeholder="Your bio"></textarea><button class="primary" onclick="saveProfile()">Save Changes</button></div></div>
 <div class="modal" id="commentModal"><div class="sheet darkSheet"><div class="row between"><h2 style="color:#fff">Comments <span id="commentCountLabel" style="font-size:14px;color:#888"></span></h2><button class="iconbtn" style="background:#222;color:#fff" onclick="closeModal('commentModal')">✕</button></div><div id="commentList" style="max-height:45vh;overflow:auto"></div><div style="display:flex;gap:8px;margin-top:12px;align-items:center"><div class="avatar" id="commentAvatar" style="width:38px;height:38px">M</div><input id="commentInput" class="darkInput" placeholder="Add comment..." style="margin:0"><button style="background:#fff;color:#000;border:0;width:42px;height:42px;border-radius:50%;font-size:18px;flex-shrink:0" onclick="sendComment()">➤</button></div><button class="primary" onclick="sendComment()" style="background:#fff;color:#000">Post Comment</button></div></div>
@@ -169,54 +208,88 @@ function openModal(id){document.getElementById(id).classList.add('show')}
 function go(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active')); if(btn) btn.classList.add('active'); if(id==='profile') loadMyProfile(); if(id==='reels') renderReels(); if(id==='search') searchPosts(); if(id==='inbox') renderChatList(); if(id==='news') loadNews('world');}
 function openCreate(){ openCamera(); }
 function showSettings(){ if(!user) return toast('Please login first'); openModal('settingsModal') }
-// ✅ TIKTOK CAMERA
-let camStream=null, camFacing='user', camFilter='none', camRecorder=null, camChunks=[], camRecording=false, camCapturedFile=null, camCapturedUrl=null;
-const FILTERS=[{n:'Normal',f:'none',bg:'#333'},{n:'B&W',f:'grayscale(1)',bg:'#666'},{n:'Sepia',f:'sepia(1)',bg:'#8B4513'},{n:'Vintage',f:'sepia(.6) contrast(1.2)',bg:'#a67c52'},{n:'Bright',f:'brightness(1.4) saturate(1.3)',bg:'#fde68a'},{n:'Cool',f:'hue-rotate(180deg) saturate(1.2)',bg:'#0ea5e9'},{n:'Blur',f:'blur(1px) brightness(1.1)',bg:'#94a3b8'},{n:'Warm',f:'saturate(1.5) hue-rotate(-15deg)',bg:'#f97316'}];
-function renderFilters(){ document.getElementById('filterRow').innerHTML=FILTERS.map((f,i)=>`<button class="filterBtn ${camFilter===f.f?'active':''}" style="background:${f.bg}" onclick="setFilter('${f.f}',this)">${f.n}</button>`).join(''); }
-function setFilter(f,btn){ camFilter=f; document.getElementById('camVideo').style.filter=f; document.querySelectorAll('.filterBtn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); document.getElementById('camStatus').textContent='Filter: '+FILTERS.find(x=>x.f===f).n; }
+// ✅ TIKTOK CAMERA - PIC JAISA
+let camStream=null, camFacing='user', camFilter='none', camRecorder=null, camChunks=[], camRecording=false, camCapturedFile=null, camCapturedUrl=null, camMode='PHOTO', camBottomMode='CAMERA', camTimerInt=null, camSeconds=0, beautyOn=false;
+const TIKTOK_FILTERS=[
+ {n:'📷',f:'none',img:'',label:'Camera'},
+ {n:'Beauty',f:'brightness(1.25) saturate(1.3) contrast(1.05)',img:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200',label:'Beauty'},
+ {n:'Kaaba',f:'sepia(.3) contrast(1.2) brightness(1.1)',img:'https://images.unsplash.com/photo-1565019011521-b0575cbb57c8?w=200',label:'Makkah'},
+ {n:'Girl',f:'saturate(1.5) brightness(1.15) hue-rotate(-10deg)',img:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200',label:'Glow'},
+ {n:'Cat',f:'contrast(1.3) saturate(1.4)',img:'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=200',label:'Cat'},
+ {n:'B&W',f:'grayscale(1)',img:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200',label:'B&W'},
+ {n:'Vintage',f:'sepia(.8) contrast(1.1)',img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200',label:'Vintage'},
+ {n:'Cool',f:'hue-rotate(180deg) saturate(1.2)',img:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200',label:'Cool'},
+];
+function renderFilterCircles(){
+ document.getElementById('filterCircles').innerHTML=TIKTOK_FILTERS.map((f,i)=>{
+   if(i===0) return `<div class="filterCircle ${camFilter==='none'&&i===0?'active':''}" onclick="setTikTokFilter(${i},this)" style="background:#aaa"><span style="font-size:28px">📷</span><span class="flabel">Camera</span></div>`;
+   return `<div class="filterCircle ${camFilter===f.f?'active':''}" onclick="setTikTokFilter(${i},this)"><img src="${f.img}"><span class="flabel">${f.label}</span></div>`;
+ }).join('');
+}
+function setTikTokFilter(idx,el){ camFilter=TIKTOK_FILTERS[idx].f; document.getElementById('camVideo').style.filter=camFilter; document.querySelectorAll('.filterCircle').forEach(b=>b.classList.remove('active')); if(el) el.classList.add('active'); document.getElementById('camStatus').textContent='Filter: '+TIKTOK_FILTERS[idx].label+' ✅'; }
+function setDuration(mode,btn){
+ camMode=mode;
+ document.querySelectorAll('.durationBtn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active');
+ const cap=document.getElementById('camCaptureBtn');
+ if(mode==='PHOTO'){ cap.textContent='📸'; document.getElementById('textOverlay').style.display='none'; document.getElementById('camStatus').textContent='PHOTO Mode - Tap 📸'; }
+ else if(mode==='TEXT'){ cap.textContent='Aa'; document.getElementById('textOverlay').style.display='grid'; document.getElementById('camStatus').textContent='TEXT Mode - Apna text likho!'; }
+ else { cap.textContent='🎥'; document.getElementById('textOverlay').style.display='none'; document.getElementById('camStatus').textContent=mode+' Video - Tap 🎥 to Record!'; }
+}
+function setBottomMode(mode,el){
+ camBottomMode=mode;
+ document.querySelectorAll('.camBottomCenter b').forEach(b=>{ b.classList.remove('active'); b.classList.add('inactive'); });
+ if(el){ el.classList.add('active'); el.classList.remove('inactive'); }
+ if(mode==='CREATE'){ useCameraPhoto(); }
+}
+function updateTextOverlay(v){ document.getElementById('textOverlayText').textContent=v||'MAG SOCIAL 🔥'; }
+function toggleBeauty(){ beautyOn=!beautyOn; document.getElementById('camVideo').style.filter=beautyOn?'brightness(1.3) saturate(1.4) blur(0.3px)':camFilter; toast(beautyOn?'✨ Beauty ON':'✨ Beauty OFF'); }
+function toggleFlash(){ toast('⚡ Flash - Phone ki light on ho jayegi!'); }
 async function openCamera(){
  if(!user) return toast('Please login first');
- document.getElementById('cameraModal').classList.add('show'); renderFilters(); renderCamGallery();
+ document.getElementById('cameraModal').classList.add('show'); renderFilterCircles(); renderCamThumb();
  try{
    if(camStream) camStream.getTracks().forEach(t=>t.stop());
    camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:camFacing},audio:true});
-   const v=document.getElementById('camVideo'); v.srcObject=camStream; v.style.filter=camFilter; document.getElementById('camStatus').textContent='Camera ON - Tap 📸';
+   const v=document.getElementById('camVideo'); v.srcObject=camStream; v.style.filter=camFilter; document.getElementById('camStatus').textContent='PHOTO Mode - Tap 📸 - Apni Pic Banao!';
  }catch(e){ document.getElementById('camStatus').textContent='Camera nahi mila - Gallery se select karo!'; toast('Camera permission do - Ya Gallery se select karo!'); }
 }
-function closeCamera(){ document.getElementById('cameraModal').classList.remove('show'); if(camStream) camStream.getTracks().forEach(t=>t.stop()); if(camRecording) toggleRecord(); }
+function renderCamThumb(){
+ const thumb=document.getElementById('camGalleryThumb'); const mine=allPosts.filter(p=>p.uid===user?.uid); const last=mine[0]||allPosts[0];
+ if(last) thumb.innerHTML=`<img src="${esc(last.media)}">`; else thumb.innerHTML='🖼️';
+}
+function closeCamera(){ document.getElementById('cameraModal').classList.remove('show'); if(camStream) camStream.getTracks().forEach(t=>t.stop()); if(camRecording) stopRecording(); if(camTimerInt) clearInterval(camTimerInt); document.getElementById('camTimer').style.display='none'; }
 async function flipCamera(){ camFacing=camFacing==='user'?'environment':'user'; if(camStream) camStream.getTracks().forEach(t=>t.stop()); try{ camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:camFacing},audio:true}); document.getElementById('camVideo').srcObject=camStream; }catch(e){ toast('Camera flip nahi hua'); } }
+function captureTikTok(){
+ if(camMode==='PHOTO') return capturePhoto();
+ if(camMode==='TEXT') return capturePhoto();
+ if(camRecording) return stopRecording();
+ return startRecording();
+}
 function capturePhoto(){
  const v=document.getElementById('camVideo'); if(!v.srcObject && !camCapturedUrl) return toast('Pehle camera ON karo ya Gallery se select karo!');
  const c=document.getElementById('camCanvas'); c.width=v.videoWidth||640; c.height=v.videoHeight||480; const ctx=c.getContext('2d'); ctx.filter=camFilter; ctx.drawImage(v,0,0,c.width,c.height);
- c.toBlob(blob=>{ camCapturedFile=new File([blob],'camera_'+Date.now()+'.jpg',{type:'image/jpeg'}); camCapturedUrl=URL.createObjectURL(blob); document.getElementById('camStatus').textContent='✅ Photo li gayi! Next dabao!'; toast('✅ Photo li gayi! Next dabao!'); },'image/jpeg',0.85);
+ if(camMode==='TEXT'){ ctx.fillStyle='rgba(0,0,0,.4)'; ctx.fillRect(0,0,c.width,c.height); ctx.fillStyle='#fff'; ctx.font='bold 48px Arial'; ctx.textAlign='center'; const txt=document.getElementById('postCaption').value||document.getElementById('textOverlayText').textContent||'MAG SOCIAL'; ctx.fillText(txt.slice(0,30), c.width/2, c.height/2); }
+ c.toBlob(blob=>{ camCapturedFile=new File([blob],'tiktok_'+Date.now()+'.jpg',{type:'image/jpeg'}); camCapturedUrl=URL.createObjectURL(blob); document.getElementById('camStatus').textContent='✅ Photo li gayi! ✓ dabao ya CREATE dabao!'; toast('✅ Photo li gayi! ✓ dabao!'); renderCamThumb(); },'image/jpeg',0.9);
 }
-function toggleRecord(){
+function startRecording(){
  if(!camStream) return toast('Camera ON karo!');
- const btn=document.getElementById('camRecordBtn');
- if(!camRecording){
-   camChunks=[]; camRecorder=new MediaRecorder(camStream); camRecorder.ondataavailable=e=>{ if(e.data.size) camChunks.push(e.data); };
-   camRecorder.onstop=()=>{ const blob=new Blob(camChunks,{type:'video/webm'}); camCapturedFile=new File([blob],'video_'+Date.now()+'.webm',{type:'video/webm'}); camCapturedUrl=URL.createObjectURL(blob); document.getElementById('camStatus').textContent='✅ Video ban gaya! Next dabao!'; toast('✅ Video ban gaya!'); };
-   camRecorder.start(); camRecording=true; btn.classList.add('recording'); btn.textContent='⏹️'; document.getElementById('camStatus').textContent='🔴 Recording... Dobara dabao to stop!';
- } else { camRecorder.stop(); camRecording=false; btn.classList.remove('recording'); btn.textContent='🎥'; }
+ let maxSec=camMode==='15s'?15:camMode==='60s'?60:camMode==='10m'?600:15;
+ camChunks=[]; camRecorder=new MediaRecorder(camStream); camRecorder.ondataavailable=e=>{ if(e.data.size) camChunks.push(e.data); };
+ camRecorder.onstop=()=>{ const blob=new Blob(camChunks,{type:'video/webm'}); camCapturedFile=new File([blob],'tiktok_video_'+Date.now()+'.webm',{type:'video/webm'}); camCapturedUrl=URL.createObjectURL(blob); document.getElementById('camStatus').textContent='✅ Video ban gaya! ✓ dabao!'; toast('✅ Video ban gaya!'); };
+ camRecorder.start(); camRecording=true; camSeconds=0; document.getElementById('camCaptureBtn').classList.add('recording'); document.getElementById('camCaptureBtn').textContent='⏹️'; document.getElementById('camTimer').style.display='block';
+ camTimerInt=setInterval(()=>{ camSeconds++; let m=String(Math.floor(camSeconds/60)).padStart(2,'0'); let s=String(camSeconds%60).padStart(2,'0'); document.getElementById('camTimer').textContent='● '+m+':'+s+' / '+maxSec+'s'; if(camSeconds>=maxSec) stopRecording(); },1000);
+ document.getElementById('camStatus').textContent='🔴 Recording '+camMode+'... Dobara dabao to stop!';
 }
-function renderCamGallery(){
- const strip=document.getElementById('camGalleryStrip'); const items=[...allPosts.filter(p=>p.uid===user?.uid), ...allPosts.slice(0,6)];
- if(!items.length){ strip.innerHTML='<span style="color:#888;font-size:12px">Abhi gallery khali hai - Camera se photo lo!</span>'; return; }
- strip.innerHTML=items.map(p=>p.mediaType==='video'?`<video src="${esc(p.media)}" onclick="selectCamGallery('${esc(p.media)}','video',this)"></video>`:`<img src="${esc(p.media)}" onclick="selectCamGallery('${esc(p.media)}','image',this)">`).join('');
-}
-async function selectCamGallery(url,type,el){
- document.querySelectorAll('.camGallery img,.camGallery video').forEach(x=>x.classList.remove('selected')); if(el) el.classList.add('selected');
- try{ const res=await fetch(url); const blob=await res.blob(); camCapturedFile=new File([blob],'gallery_'+Date.now()+(type==='video'?'.mp4':'.jpg'),{type:blob.type||(type==='video'?'video/mp4':'image/jpeg')}); camCapturedUrl=url; document.getElementById('camStatus').textContent='✅ Gallery se select ho gaya! Next dabao!'; toast('✅ Gallery se select ho gaya!'); }catch(e){ camCapturedUrl=url; toast('✅ Gallery se select ho gaya!'); }
-}
-function onCamGalleryPick(e){ const f=e.target.files[0]; if(!f) return; if(f.size>500*1024*1024) return toast('500MB se bara nahi!'); camCapturedFile=f; camCapturedUrl=URL.createObjectURL(f); document.getElementById('camStatus').textContent='✅ File select ho gaya! Next dabao!'; toast('✅ File select ho gaya!'); }
+function stopRecording(){ if(!camRecording) return; try{ camRecorder.stop(); }catch(e){} camRecording=false; document.getElementById('camCaptureBtn').classList.remove('recording'); document.getElementById('camCaptureBtn').textContent='🎥'; if(camTimerInt) clearInterval(camTimerInt); document.getElementById('camTimer').style.display='none'; }
+function onCamGalleryPick(e){ const f=e.target.files[0]; if(!f) return; if(f.size>500*1024*1024) return toast('500MB se bara nahi!'); camCapturedFile=f; camCapturedUrl=URL.createObjectURL(f); document.getElementById('camStatus').textContent='✅ Gallery se select ho gaya! ✓ dabao!'; toast('✅ Gallery se select ho gaya!'); }
 function useCameraPhoto(){
- if(!camCapturedFile && !camCapturedUrl){ toast('Pehle Photo lo ya Gallery se select karo!'); return; }
+ if(!camCapturedFile && !camCapturedUrl){ toast('Pehle Photo lo ya Gallery se select karo! - 📸 dabao!'); return; }
  selectedFile=camCapturedFile;
  closeCamera(); openModal('createModal');
- const box=document.getElementById('cameraPreviewBox'); box.innerHTML=camCapturedFile && camCapturedFile.type.startsWith('video/')?`<video src="${camCapturedUrl}" controls style="width:100%;max-height:280px;border-radius:14px"></video><p class="muted">✅ Camera / Gallery se Video - Filter: ${FILTERS.find(x=>x.f===camFilter)?.n||'Normal'}</p>`:`<img src="${camCapturedUrl}" style="width:100%;max-height:280px;object-fit:cover;border-radius:14px"><p class="muted">✅ Camera / Gallery se Photo - Filter applied!</p>`;
- document.getElementById('fileName').textContent=(camCapturedFile?camCapturedFile.name:'Camera Photo')+' • Ready!';
- document.getElementById('uploadText').textContent='✅ Camera Photo Ready - Share dabao!';
- toast('✅ Ab Caption likho aur Share dabao!');
+ const box=document.getElementById('cameraPreviewBox'); box.innerHTML=camCapturedFile && camCapturedFile.type.startsWith('video/')?`<video src="${camCapturedUrl}" controls style="width:100%;max-height:280px;border-radius:14px"></video><p class="muted">✅ TikTok Camera se Video - Mode: ${camMode}</p>`:`<img src="${camCapturedUrl}" style="width:100%;max-height:280px;object-fit:cover;border-radius:14px"><p class="muted">✅ TikTok Camera se Photo - Mode: ${camMode}</p>`;
+ document.getElementById('fileName').textContent=(camCapturedFile?camCapturedFile.name:'TikTok Photo')+' • Ready!';
+ document.getElementById('uploadText').textContent='✅ TikTok Photo/Video Ready - Share dabao!';
+ toast('✅ Ab Caption likho aur CREATE / Share dabao!');
 }
 function toggleAuth(){ signupMode=!signupMode; document.getElementById('signupFields').style.display=signupMode?'block':'none'; document.getElementById('authBtn').textContent=signupMode?'Create Account':'Login'; document.getElementById('toggleBtn').textContent=signupMode?'Already have an account? Login':'New user? Create Account'; document.getElementById('authError').textContent=''; }
 function enterLocal(){ const name=document.getElementById('authName').value.trim()||'Mian, Abdullah'; const email=document.getElementById('authEmail').value.trim()||'mian2abdullah6@email.com'; localMode=true; user={uid:'local_'+Date.now(), email:email}; profile={name:name, email:email, bio:'Welcome to my profile 🌍', photo:'', followers:[], following:[]}; try{localStorage.setItem('mian_local_user', JSON.stringify(profile));}catch(e){} document.getElementById('authScreen').style.display='none'; document.getElementById('modeBadge').textContent='● LOCAL MODE'; updateProfileUI(); loadLocalPosts(); toast('✅ Welcome '+name+'!'); }
@@ -236,7 +309,7 @@ function previewFile(e){ const f=e.target.files[0]; if(!f) return; if(f.size>500
 function compressImage(file){ return new Promise((res,rej)=>{ const img=new Image(); const url=URL.createObjectURL(file); img.onload=()=>{ const canvas=document.createElement('canvas'); const max=800; let w=img.width,h=img.height; if(w>max){h=h*max/w; w=max} if(h>800){w=w*800/h; h=800} canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); URL.revokeObjectURL(url); let q=0.65; let out=canvas.toDataURL('image/jpeg',q); while(out.length>400000 && q>0.3){ q-=0.15; out=canvas.toDataURL('image/jpeg',q); } res(out); }; img.onerror=()=>rej(new Error('Image read failed')); img.src=url; }); }
 async function publishPost(){
  const file=selectedFile || document.getElementById('postFile').files[0]; const caption=document.getElementById('postCaption').value.trim(); const location=document.getElementById('postLocation').value.trim();
- if(!file){ toast('Pehle photo ya video select karo - Camera se lo ya Gallery se!'); return; } if(file.size>500*1024*1024){ toast('❌ 500MB se bara nahi hoga!'); return; } if(!user){ toast('Please login first'); return; }
+ if(!file){ toast('Pehle Photo lo ya Gallery se select karo - Camera se lo!'); return; } if(file.size>500*1024*1024){ toast('❌ 500MB se bara nahi hoga!'); return; } if(!user){ toast('Please login first'); return; }
  const btn=document.getElementById('publishBtn'); btn.disabled=true; btn.textContent='Uploading...';
  document.getElementById('upProg').style.display='block'; document.getElementById('upBar').style.width='15%'; document.getElementById('upStatus').textContent='Uploading...';
  try{
@@ -262,9 +335,9 @@ async function publishPost(){
   }
   document.getElementById('upBar').style.width='100%';
   closeModal('createModal'); selectedFile=null; camCapturedFile=null; document.getElementById('postFile').value=''; document.getElementById('postCaption').value=''; document.getElementById('postLocation').value=''; document.getElementById('postPreviewImg').style.display='none'; document.getElementById('postPreviewVideo').style.display='none'; document.getElementById('cameraPreviewBox').innerHTML=''; document.getElementById('fileName').textContent='No file selected - Max 500MB'; document.getElementById('uploadText').textContent='Tap to Upload Photo / Video - Up to 500MB'; document.getElementById('upProg').style.display='none'; document.getElementById('upStatus').textContent='';
-  go('home', document.querySelectorAll('.nav')[0]); renderFeed(); renderReels(); renderProfileGrid(); if(!localMode) listenPosts(); toast('✅ Post uploaded successfully! Home pe aa gaya!');
+  go('home', document.querySelectorAll('.nav')[0]); renderFeed(); renderReels(); renderProfileGrid(); if(!localMode) listenPosts(); toast('✅ Post uploaded! Sab ko dikhega!');
  }catch(e){ toast('❌ '+e.message); document.getElementById('upStatus').textContent='Error: '+e.message; }
- finally{ btn.disabled=false; btn.textContent='Share post'; }
+ finally{ btn.disabled=false; btn.textContent='Share post - CREATE'; }
 }
 async function toggleLike(id){ const p=allPosts.find(x=>x.id===id); if(!p||!user) return; if(p.id.startsWith('local_') || p.id.startsWith('d')){ let likes=p.likes||[]; if(likes.includes(user.uid)) p.likes=likes.filter(x=>x!==user.uid); else p.likes=[...likes,user.uid]; localPosts=localPosts.map(x=>x.id===id?{...x,likes:p.likes}:x); safeSave('mian_local_posts', JSON.stringify(localPosts)); renderFeed(); renderReels(); renderProfileGrid(); return; } const ref=db.collection('posts').doc(id); try{ await db.runTransaction(async tx=>{ const s=await tx.get(ref); if(!s.exists) return; let likes=s.data().likes||[]; likes=likes.includes(user.uid)?likes.filter(x=>x!==user.uid):[...likes,user.uid]; tx.update(ref,{likes}); }); }catch(e){toast(e.message)} }
 async function toggleFollow(targetUid){ if(targetUid===user.uid) return; if(myFollowingIds.has(targetUid)) myFollowingIds.delete(targetUid); else myFollowingIds.add(targetUid); if(!localMode && db){ try{ const meRef=db.collection('users').doc(user.uid); const themRef=db.collection('users').doc(targetUid); await db.runTransaction(async tx=>{ const me=await tx.get(meRef); const them=await tx.get(themRef); let myFollowing=(me.data().following||[]); let theirFollowers=(them.exists?them.data().followers||[]:[]); if(myFollowing.includes(targetUid)){ myFollowing=myFollowing.filter(x=>x!==targetUid); theirFollowers=theirFollowers.filter(x=>x!==user.uid); } else { myFollowing.push(targetUid); if(!theirFollowers.includes(user.uid)) theirFollowers.push(user.uid); } tx.update(meRef,{following:myFollowing}); if(them.exists) tx.update(themRef,{followers:theirFollowers}); }); }catch(e){} } renderFeed(); renderReels(); renderProfileGrid(); toast('Follow updated'); }
@@ -276,16 +349,13 @@ function quickSearch(t){ document.getElementById('searchInput').value=t; searchP
 function searchPosts(){ const q=(document.getElementById('searchInput').value||'').toLowerCase(); if(!q){ document.getElementById('searchResults').innerHTML='<div class="card muted">Type to search...</div>'; return; } const found=allPosts.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.caption||'').toLowerCase().includes(q)||(p.location||'').toLowerCase().includes(q)); document.getElementById('searchResults').innerHTML=found.map(p=>`<div class="card"><b>${esc(p.name||'User')}</b><p>${esc(p.caption||'')}</p>${p.mediaType==='video'?`<video controls class="postimg" src="${esc(p.media)}"></video>`:`<img class="postimg" src="${esc(p.media)}">`}</div>`).join('')||'<div class="card">No matching posts found.</div>'; }
 function setFeed(mode){ feedMode=mode; document.getElementById('forTab').classList.toggle('active',mode==='all'); document.getElementById('followingTab').classList.toggle('active',mode==='following'); renderFeed(); }
 function renderReels(){ let videos=allPosts.filter(p=>p.mediaType==='video'); if(!videos.length) videos=allPosts.filter(p=>p.mediaType==='image'); const box=document.getElementById('reelFeed'); if(!videos.length){ box.innerHTML='<div class="card" style="background:#000;color:#fff">No videos yet.</div>'; return; } box.innerHTML=videos.map((p,i)=>{ const likes=p.likes||[]; const liked=user?likes.includes(user.uid):false; let mediaSrc=p.media; if(mediaSrc && mediaSrc.startsWith('idb://')) mediaSrc=videoBlobs[p.id]||mediaSrc; const media=p.mediaType==='video'?`<video src="${esc(mediaSrc)}" loop playsinline muted autoplay preload="metadata" onclick="this.muted=!this.muted; toast(this.muted?'🔇 Awaz OFF':'🔊 Awaz ON')" style="cursor:pointer"></video>`:`<img src="${esc(mediaSrc)}">`; return `<div class="reelItem">${media}<div class="reelOverlay"></div><div class="reelsTop"><span style="font-size:26px">+</span><div><b>Reels ⌄</b> &nbsp; <span class="friends">Friends</span></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">◐</span><span style="font-size:22px">♡⚙</span></div></div><div class="reelSide"><button class="reelIconBtn ${liked?'liked':''}" onclick="toggleLike('${p.id}')"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg><span>${fmt(likes.length)}</span></button><button class="reelIconBtn" onclick="openComments('${p.id}')"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span>${fmt(p.commentCount||659)}</span></button><button class="reelIconBtn" onclick="sharePost('${p.id}');toast('Reposted!')"><svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg><span>${fmt(p.reposts||4805)}</span></button><button class="reelIconBtn" onclick="sharePost('${p.id}')"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg><span>${fmt(p.shares||3269)}</span></button><button class="reelIconBtn" onclick="toggleSave('${p.id}')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>${fmt(p.saves||2069)}</span></button><button class="reelIconBtn" onclick="toast('More options')"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button></div><div class="reelInfo"><div class="row"><div class="reelUser">${p.photo?`<img src="${esc(p.photo)}">`:esc((p.name||'U')[0])}</div><b>@${esc((p.name||'User').replace(/[^a-zA-Z0-9]/g,'').toLowerCase())}</b><button class="followBtn" onclick="toggleFollow('${p.uid}')">Follow</button></div><p style="margin-top:10px;font-size:13px;opacity:.9">MAG SOCIAL • Original Audio</p><p style="margin-top:6px;font-size:14px;line-height:1.4">${esc(p.caption||'')}</p><p style="margin-top:6px;opacity:.7;font-size:13px">See more</p></div><div class="interestRow"><button class="interestBtn" onclick="toast('Not interested - Next reel');this.closest('.reelItem').nextElementSibling?.scrollIntoView({behavior:'smooth'})">✕ &nbsp; Not interested</button><button class="interestBtn" onclick="toggleLike('${p.id}');toast('✓ Interested!')">✓ &nbsp; Interested</button></div></div>`; }).join(''); const wrap=document.getElementById('reelFeed'); wrap.onscroll=()=>{ const vids=wrap.querySelectorAll('video'); vids.forEach(v=>{ const r=v.getBoundingClientRect(); const wr=wrap.getBoundingClientRect(); if(r.top>=wr.top-50 && r.top<wr.top+200){ v.muted=true; v.play().catch(()=>{}); } else v.pause(); }); }; }
-// ✅ TIKTOK PROFILE - Tabs
 function setProfileTab(t){ profileTab=t; document.getElementById('tabVideos').classList.toggle('active',t==='videos'); document.getElementById('tabLiked').classList.toggle('active',t==='liked'); document.getElementById('tabSaved').classList.toggle('active',t==='saved'); renderProfileGrid(); }
-function renderProfileGrid(){ if(!user) return; let mine=[]; if(profileTab==='videos') mine=allPosts.filter(p=>p.uid===user.uid); else if(profileTab==='liked') mine=allPosts.filter(p=>(p.likes||[]).includes(user.uid)); else mine=allPosts.filter(p=>savedPosts.has(p.id)); document.getElementById('myPosts').textContent=allPosts.filter(p=>p.uid===user.uid).length; if(!mine.length){ document.getElementById('myGrid').innerHTML='<p style="grid-column:1/-1;text-align:center;padding:30px;color:#888">No videos yet - Tap + to create!</p>'; return; } document.getElementById('myGrid').innerHTML=mine.map(p=>{ const views=Math.floor(Math.random()*5000)+500; return `<div class="ttItem" onclick="viewMedia('${esc(p.media)}','${p.mediaType}')">${p.mediaType==='video'?`<video src="${esc(p.media)}"></video>`:`<img src="${esc(p.media)}">`}<div class="ttViews">▶ ${fmt(views)}</div></div>`; }).join(''); }
+function renderProfileGrid(){ if(!user) return; let mine=[]; if(profileTab==='videos') mine=allPosts.filter(p=>p.uid===user.uid); else if(profileTab==='liked') mine=allPosts.filter(p=>(p.likes||[]).includes(user.uid)); else mine=allPosts.filter(p=>savedPosts.has(p.id)); if(!mine.length){ document.getElementById('myGrid').innerHTML='<p style="grid-column:1/-1;text-align:center;padding:30px;color:#888">No videos yet - Tap + to create!</p>'; return; } document.getElementById('myGrid').innerHTML=mine.map(p=>{ const views=Math.floor(Math.random()*5000)+500; return `<div class="ttItem" onclick="viewMedia('${esc(p.media)}','${p.mediaType}')">${p.mediaType==='video'?`<video src="${esc(p.media)}"></video>`:`<img src="${esc(p.media)}">`}<div class="ttViews">▶ ${fmt(views)}</div></div>`; }).join(''); }
 async function loadMyProfile(){ if(localMode){ updateProfileUI(); renderProfileGrid(); return; } if(!user) return; await loadProfile(); renderProfileGrid(); }
-// ✅ REAL CHAT
 function renderChatList(){ const users=[...new Map(allPosts.map(p=>[p.uid,p])).values()].filter(p=>p.uid!==user?.uid); if(!user) return; document.getElementById('chatList').innerHTML=users.length?users.map(p=>{ const msgs=chats[p.uid]||[]; const last=msgs.length?msgs[msgs.length-1].text:'Tap to start chat...'; return `<div class="row" style="padding:12px 0;border-bottom:1px solid #eee;cursor:pointer" onclick="openChat('${p.uid}','${esc(p.name)}','${esc(p.photo||'')}')"><div class="avatar">${p.photo?`<img src="${esc(p.photo)}">`:esc((p.name||'U')[0])}</div><div style="flex:1"><b>${esc(p.name||'User')}</b><div class="muted" style="font-size:12px">${esc(last.slice(0,40))}</div></div><span class="muted">›</span></div>`; }).join(''):'<p class="muted">No users yet.</p>'; }
 function openChat(uid,name,photo){ currentChatUser={uid,name,photo}; document.getElementById('chatName').textContent=name; document.getElementById('chatAvatar').innerHTML=photo?`<img src="${esc(photo)}">`:esc((name||'U')[0]); renderChatMessages(); openModal('chatModal'); }
 function renderChatMessages(){ const box=document.getElementById('chatBox'); if(!currentChatUser) return; const msgs=chats[currentChatUser.uid]||[]; if(!msgs.length){ box.innerHTML=`<div style="text-align:center;color:#888;padding:20px"><div class="avatar" style="margin:auto;width:60px;height:60px;font-size:24px">${esc((currentChatUser.name||'U')[0])}</div><p style="margin-top:10px"><b>${esc(currentChatUser.name)}</b></p><p class="muted">Say Hi! 👋 - Message save hoga!</p></div>`; return; } box.innerHTML=msgs.map(m=>`<div class="msg ${m.me?'me':'them'}">${esc(m.text)}<div class="msgTime">${esc(m.time||'')}</div></div>`).join(''); box.scrollTop=box.scrollHeight; }
 async function sendChat(){ const input=document.getElementById('chatInput'); const text=input.value.trim(); if(!text||!currentChatUser) return; if(!chats[currentChatUser.uid]) chats[currentChatUser.uid]=[]; const msg={text:text, me:true, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}; chats[currentChatUser.uid].push(msg); safeSave('mian_chats', JSON.stringify(chats)); input.value=''; renderChatMessages(); renderChatList(); if(!localMode && db){ try{ await db.collection('chats').add({from:user.uid,to:currentChatUser.uid,text,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); }catch(e){} } setTimeout(()=>{ const replies=['Nice! 😍','Haan bilkul!','Wow! 🔥','Acha! Batao aur?','MAG SOCIAL best hai!']; const r=replies[Math.floor(Math.random()*replies.length)]; chats[currentChatUser.uid].push({text:r, me:false, time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}); safeSave('mian_chats', JSON.stringify(chats)); renderChatMessages(); renderChatList(); },1200); toast('✅ Message sent!'); }
-function renderChatListWrapper(){ renderChatList(); }
 function openEdit(){ document.getElementById('editName').value=profile.name||''; document.getElementById('editBio').value=profile.bio||''; openModal('editModal'); closeModal('settingsModal'); }
 async function saveProfile(){ const name=document.getElementById('editName').value.trim(); const bio=document.getElementById('editBio').value.trim(); if(!name) return toast('Enter your name'); profile={...profile,name,bio}; try{localStorage.setItem('mian_local_user', JSON.stringify(profile));}catch(e){} if(!localMode && db){ try{ await db.collection('users').doc(user.uid).set({name,bio,email:user.email},{merge:true}); }catch(e){} } updateProfileUI(); closeModal('editModal'); toast('Profile updated!'); }
 function changePhoto(){ closeModal('settingsModal'); document.getElementById('avatarFile').click() }
