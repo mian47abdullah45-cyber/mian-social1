@@ -3,147 +3,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Mian Social - MAG</title>
+<title>MAG SOCIAL - Mian Social</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-body{background:#fafafa;color:#262626;padding-bottom:70px}
-.topbar{position:sticky;top:0;background:#fff;border-bottom:1px solid #dbdbdb;padding:10px 14px;display:flex;align-items:center;gap:10px;z-index:100}
-.logo{font-weight:800;font-size:22px}
-.logo span{color:#0095f6}
-#modeBadge{font-size:11px;padding:4px 8px;border-radius:20px;background:#fef3c7;color:#92400e;font-weight:700}
-#modeBadge.online{background:#dcfce7!important;color:#166534!important}
-.iconBtn{width:38px;height:38px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;position:relative;border:0}
-.badge{position:absolute;top:-4px;right:-4px;background:#ff3040;color:#fff;font-size:10px;min-width:18px;height:18px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:700}
-.feed{max-width:500px;margin:0 auto}
-.post{background:#fff;border:1px solid #dbdbdb;margin:12px 0;border-radius:4px;overflow:hidden}
-.postHead{display:flex;align-items:center;gap:10px;padding:10px}
-.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(45deg,#f09433,#dc2743,#bc1888);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;overflow:hidden;flex-shrink:0}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.postImg{width:100%;max-height:500px;object-fit:cover;background:#eee;display:block}
-.postActions{display:flex;gap:14px;padding:10px 12px;font-size:22px}
-.postActions span{cursor:pointer}
-.postLikes{padding:0 12px;font-weight:600;font-size:14px}
-.postCap{padding:4px 12px 10px;font-size:14px;line-height:1.4}
+body{background:#f8f7ff;color:#111;padding-bottom:82px}
+.hidden{display:none!important}
+.topbar{position:sticky;top:0;background:#fff;padding:10px 12px;display:flex;align-items:center;gap:8px;z-index:100;border-bottom:1px solid #eef0ff}
+.logoWrap{display:flex;align-items:center;gap:8px}
+.logoIcon{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:22px;position:relative;flex-shrink:0}
+.logoIcon:after{content:'';position:absolute;right:4px;bottom:4px;width:10px;height:10px;background:#22c55e;border:2px solid #fff;border-radius:50%}
+.logoText{font-weight:900;font-size:22px;letter-spacing:-.5px;line-height:1}
+.logoText span{color:#7c3aed}
+#modeBadge{font-size:11px;font-weight:800;background:#dcfce7;color:#166534;padding:6px 10px;border-radius:20px}
+#modeBadge.offline{background:#fef3c7;color:#92400e}
+.iconBtn{width:38px;height:38px;border-radius:50%;background:#f1f0ff;display:flex;align-items:center;justify-content:center;cursor:pointer;border:0;position:relative;flex-shrink:0}
+.authBg{min-height:100vh;background:linear-gradient(180deg,#007bff 0%,#7c3aed 100%);padding:22px 16px;display:flex;align-items:center;justify-content:center}
+.authCard{background:#fff;width:100%;max-width:400px;border-radius:28px;padding:28px 22px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.authCard h1{font-size:36px;font-weight:900;letter-spacing:-1px}
+.authCard h1 span{color:#0084ff}
+.authSub{color:#6b7280;margin:6px 0 18px;font-size:15px}
+.authCard input{width:100%;padding:15px 16px;border:0;background:#eef6ff;border-radius:14px;outline:none;font-size:15px;margin-bottom:12px}
+.btnGrad{border:0;width:100%;padding:15px;border-radius:30px;background:linear-gradient(90deg,#0095ff,#7c3aed);color:#fff;font-weight:800;font-size:17px;cursor:pointer}
+.btnGrey{border:0;width:100%;padding:13px;border-radius:30px;background:#eef2f7;color:#111;font-weight:700;font-size:15px;cursor:pointer;margin-top:10px}
+.btn{border:0;background:#0095f6;color:#fff;padding:11px 16px;border-radius:20px;font-weight:700;cursor:pointer}
+.btn2{background:#eef2f7;color:#111}
 .muted{color:#8e8e8e;font-size:13px}
 .small{font-size:12px}
-.btn{border:0;background:#0095f6;color:#fff;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;width:100%;font-size:14px}
-.btn2{background:#efefef;color:#262626}
-.btnDanger{background:#ff3040}
 .row{display:flex;align-items:center;gap:10px}
-input,textarea{width:100%;padding:12px;border:1px solid #dbdbdb;border-radius:8px;outline:none;font-size:14px;background:#fafafa}
+input,textarea{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;outline:none;font-size:14px;background:#fafafa}
 textarea{resize:vertical;min-height:70px}
-.authWrap{max-width:380px;margin:30px auto;padding:20px}
-.authCard{background:#fff;border:1px solid #dbdbdb;padding:24px;border-radius:8px;text-align:center}
-.authCard h1{font-size:34px;margin-bottom:6px}
-.authCard h1 span{color:#0095f6}
-.tabs{display:flex;background:#f1f5f9;border-radius:10px;padding:4px;margin:14px 0}
-.tabs button{flex:1;border:0;padding:9px;border-radius:8px;font-weight:700;cursor:pointer;background:transparent}
-.tabs button.active{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.bottomNav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #dbdbdb;display:flex;justify-content:space-around;padding:8px 0;z-index:200}
-.bottomNav button{border:0;background:none;font-size:24px;cursor:pointer;position:relative;padding:4px 12px}
-.bottomNav button.active{color:#0095f6}
+.feed{max-width:500px;margin:0 auto;padding:0 10px}
+.tabsFeed{display:flex;background:#dbeafe;padding:4px;border-radius:30px;margin:12px 0}
+.tabsFeed button{flex:1;border:0;padding:10px;border-radius:24px;font-weight:800;font-size:16px;cursor:pointer;background:transparent;color:#2563eb}
+.tabsFeed button.active{background:#fff;color:#2563eb;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.post{background:#fff;border-radius:20px;overflow:hidden;margin:12px 0;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.postHead{display:flex;align-items:center;gap:10px;padding:12px}
+.avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(45deg,#f09433,#dc2743,#bc1888);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;overflow:hidden;flex-shrink:0}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.postImg{width:100%;max-height:520px;object-fit:cover;display:block;border-radius:18px}
+.postActions{display:flex;gap:16px;padding:10px 12px;font-size:22px}
+.postActions span{cursor:pointer}
+.postLikes{padding:0 12px;font-weight:600;font-size:14px}
+.postCap{padding:4px 12px 12px;font-size:14px;line-height:1.4}
+.profileTop{text-align:center;padding:18px 12px;background:#fff}
+.profileTop .avatar{width:110px;height:110px;font-size:36px;margin:0 auto 10px}
+.profileTop h2{font-size:26px;font-weight:800}
+.profileTop .email{color:#6b7280;font-size:15px}
+.magBox{border:1.5px dashed #a78bfa;background:#f5f3ff;padding:14px;border-radius:16px;margin:14px 6px;display:flex;align-items:center;gap:10px;text-align:left}
+.magBox b{color:#7c3aed;font-size:20px;letter-spacing:1px;display:block}
+.magBox .copyBtn{background:#f1f0ff;border:0;padding:10px 14px;border-radius:20px;font-weight:700;cursor:pointer;white-space:nowrap}
+.stats{display:flex;justify-content:center;gap:42px;margin:14px 0}
+.stats b{display:block;font-size:19px}
+.stats span{font-size:14px;color:#6b7280}
+.btnEdit{background:linear-gradient(90deg,#1e1b4b,#7c3aed,#0095ff);color:#fff;border:0;padding:13px 22px;border-radius:30px;font-weight:800;font-size:16px;cursor:pointer;flex:1}
+.btnReq{background:#f1f0ff;border:0;padding:12px 18px;border-radius:30px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px}
+.btnShare{background:#f1f0ff;border:0;padding:10px 18px;border-radius:30px;font-weight:700;cursor:pointer}
+.profileTabs{display:flex;border-bottom:1px solid #eee;margin-top:16px}
+.profileTabs div{flex:1;text-align:center;padding:12px;font-weight:800;font-size:16px;color:#9ca3af;cursor:pointer}
+.profileTabs div.active{color:#111;border-bottom:3px solid #111}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#fff}
+.grid img,.grid video{width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer}
+/* BOTTOM NAV - PIC JESA ICONS */
+.bottomNav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;padding:7px 0 5px;z-index:200}
+.bottomNav button{border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:700;color:#111;padding:2px 4px;line-height:1}
+.bottomNav button svg{display:block}
+.bottomNav .dot{width:5px;height:5px;background:#111;border-radius:50%}
+.bottomNav .newsBox{width:42px;height:42px;background:#111;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.bottomNav .createBox{width:38px;height:38px;background:#f1f0ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:400;color:#111}
+.bottomNav .navAvatar{width:28px;height:28px;border-radius:50%;overflow:hidden;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.bottomNav .navAvatar img{width:100%;height:100%;object-fit:cover}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:300}
 .modal.open{display:flex}
 .sheet{background:#fff;width:100%;max-width:500px;max-height:85vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px;padding-bottom:30px}
 .closeBar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .closeBar button{border:0;background:#f1f5f9;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer}
-.instaFollowBtn{background:#0095f6;color:#fff;border:0;padding:7px 14px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px}
+.instaFollowBtn{background:#0095f6;color:#fff;border:0;padding:7px 14px;border-radius:20px;font-weight:700;cursor:pointer;font-size:13px}
 .instaFollowBtn.friend{background:#efefef;color:#262626}
 .instaFollowBtn.sent{background:#fef3c7;color:#92400e}
 .instaFollowBtn.incoming{background:#dcfce7;color:#166534}
-.profileTop{text-align:center;padding:20px 12px;background:#fff}
-.profileTop .avatar{width:90px;height:90px;font-size:34px;margin:0 auto 10px}
-.stats{display:flex;justify-content:center;gap:26px;margin:12px 0}
-.stats b{display:block;font-size:17px}
-.stats span{font-size:12px;color:#8e8e8e}
-.magBox{background:#000;color:#fff;padding:12px;border-radius:12px;margin:10px auto;max-width:320px;text-align:center}
-.magBox b{font-size:19px;letter-spacing:1px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#fff}
-.grid img,.grid video{width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer}
-.hidden{display:none!important}
-.postBtn{position:fixed;bottom:76px;right:16px;width:54px;height:54px;border-radius:50%;background:#0095f6;color:#fff;font-size:28px;border:0;box-shadow:0 4px 14px rgba(0,149,246,.4);z-index:150;cursor:pointer}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#262626;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:500;display:none;max-width:90%;text-align:center}
 .commentRow{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #f8fafc}
+.commentRow .avatar{width:32px;height:32px;font-size:13px}
 </style>
 </head>
 <body>
+
 <div id="authScreen">
-<div class="authWrap">
-<div class="authCard">
-<h1>MIAN <span>SOCIAL</span></h1>
-<p class="muted">Connect with friends - Share moments</p>
-<div class="tabs"><button id="tabLogin" class="active" onclick="switchAuth('login')">Login</button><button id="tabSignup" onclick="switchAuth('signup')">Create Account</button></div>
-<div id="signupNameBox" class="hidden" style="margin-bottom:10px"><input id="authName" placeholder="Full Name"></div>
-<div style="margin-bottom:10px"><input id="authEmail" type="email" placeholder="Email - Example: mian@gmail.com"></div>
-<div style="margin-bottom:14px"><input id="authPassword" type="password" placeholder="Password - Min 6 characters"></div>
-<button class="btn" onclick="handleAuth()" id="authBtn">Log In</button>
-<p class="muted small" style="margin:12px 0">OR</p>
-<button class="btn btn2" onclick="enterLocal()">Continue without Login - Direct Enter</button>
-<p class="muted small" style="margin-top:12px">Direct Enter = Local Mode - Friend Request & Video will NOT go to other phone!<br>For full features, use Gmail + Password Login!</p>
+<div class="authBg"><div class="authCard">
+<h1>✦ MIAN <span>SOCIAL</span></h1>
+<p class="authSub">Connect with the world 🌍</p>
+<div style="display:flex;gap:8px;margin-bottom:12px"><button id="tabSignup" class="btnGrad" style="padding:10px" onclick="switchAuth('signup')">Create Account</button><button id="tabLogin" class="btnGrey" style="margin:0" onclick="switchAuth('login')">Login</button></div>
+<div id="signupNameBox"><input id="authName" placeholder="Mian, Abdullah"></div>
+<input id="authEmail" type="email" placeholder="mian2abdullah6@email.com">
+<input id="authPassword" type="password" placeholder="........">
+<button class="btnGrad" onclick="handleAuth()" id="authBtn">Create Account</button>
+<button class="btnGrey" onclick="enterLocal()">Continue without Login - Direct Enter</button>
+<p class="muted small" style="margin-top:10px">Direct Enter = Local Mode</p>
 <p id="authError" class="small" style="color:#ff3040;margin-top:10px"></p>
+</div></div>
 </div>
-</div>
-</div>
+
 <div id="mainApp" class="hidden">
 <div class="topbar">
-<div class="logo">MIAN <span>SOCIAL</span></div>
-<div id="modeBadge">● LOCAL MODE</div>
+<div class="logoWrap"><div class="logoIcon">M</div><div class="logoText">MAG <span>SOCIA</span></div>
+<button class="iconBtn" onclick="openFriendRequests()"><svg width="22" height="22" viewBox="0 0 24 24" fill="#2563eb"><path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></button>
+</div>
 <div style="flex:1"></div>
-<button class="iconBtn" onclick="openFriendRequests()">👥<span id="reqBadge" class="badge hidden">0</span></button>
-<button class="iconBtn" onclick="openNotifications()">🔔<span id="notifBadge" class="badge hidden">0</span></button>
-<button class="iconBtn" onclick="openSettings()">⚙️</button>
+<div id="modeBadge">● LOCAL MODE</div>
+<button class="iconBtn" onclick="openSettings()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 </div>
+
 <div class="feed">
-<div style="background:#fff;padding:12px;border:1px solid #dbdbdb;margin:12px 0;border-radius:4px" class="row">
-<div class="avatar" id="composerAvatar">M</div>
-<input id="quickCaption" placeholder="What's on your mind?" onclick="openCreatePost()" readonly style="cursor:pointer">
-<button class="btn" style="width:auto;padding:8px 14px" onclick="openCreatePost()">Post</button>
-</div>
+<div id="homeFeed">
+<div class="tabsFeed"><button id="tabForYou" class="active" onclick="switchFeedTab('foryou')">For You</button><button id="tabFollowing" onclick="switchFeedTab('following')">Following</button></div>
 <div id="feedList"></div>
-<div id="feedEmpty" style="text-align:center;padding:40px 20px;display:none">
-<p style="font-size:40px">📸</p><h3>No posts yet</h3><p class="muted">Be the first to post!</p>
-<button class="btn" style="max-width:200px;margin-top:14px" onclick="openCreatePost()">Create Post</button>
+<div id="feedEmpty" style="text-align:center;padding:40px 20px;display:none"><p style="font-size:40px">📸</p><h3>No posts yet</h3><p class="muted">Be the first to post!</p><button class="btn" style="margin-top:14px" onclick="openCreatePost()">Create Post</button></div>
 </div>
-</div>
-</div>
-<button class="postBtn" onclick="openCreatePost()">+</button>
-<div class="bottomNav">
-<button onclick="showTab('home',this)" class="active">🏠</button>
-<button onclick="showTab('search',this)">🔍</button>
-<button onclick="openCreatePost()">➕</button>
-<button onclick="openFriendRequests()">👥<span id="reqBadge2" class="badge hidden">0</span></button>
-<button onclick="showTab('profile',this)">👤</button>
-</div>
-<div id="searchTab" class="hidden" style="max-width:500px;margin:0 auto;padding:14px">
-<p style="background:#dcfce7;padding:10px;border-radius:10px;font-size:13px;text-align:center">✅ <b>Neeche Sab Accounts Hain</b><br>Jo bhi naya account banayega uska ID yahan khud aa jayega - Direct Request karo!</p>
+<div id="searchTab" class="hidden" style="padding:14px 4px">
+<p style="background:#dcfce7;padding:10px;border-radius:12px;font-size:13px;text-align:center">✅ <b>Neeche Sab Accounts Hain</b></p>
 <h3 style="margin-top:12px">Search Friends by MAG ID</h3>
-<p class="muted small">Ya ID likh ke dhoondo - Example: MAG-123456</p>
 <div class="row" style="margin:12px 0"><input id="friendSearchInput" placeholder="MAG ID or Name"><button class="btn" style="width:auto" onclick="searchFriendByIdOrName()">Search</button></div>
 <button class="btn btn2" onclick="showAllUsersAuto()">🔄 Refresh All Users</button>
 <div id="friendSearchResults" style="margin-top:14px"></div>
 </div>
-<div id="profileTab" class="hidden" style="max-width:500px;margin:0 auto">
+<div id="profileTab" class="hidden">
 <div class="profileTop">
 <div class="avatar" id="profileAvatar">M</div>
-<h2 id="profileName">Mian Abdullah</h2>
-<p class="muted" id="profileEmail">mian@email.com</p>
-<div class="magBox"><div style="font-size:11px;opacity:.7">YOUR MAG ID - Share this with friends</div><b id="myMagIdText">MAG-000000</b><br><button onclick="copyMyMagId()" style="background:#0095f6;color:#fff;border:0;padding:6px 14px;border-radius:8px;margin-top:8px;font-weight:700">Copy MAG ID</button></div>
-<p id="profileBio" class="small" style="margin:8px 0">Welcome to my profile</p>
-<div class="stats"><div><b id="statPosts">0</b><span>Posts</span></div><div><b id="statFollowers">0</b><span>Followers</span></div><div><b id="statFollowing">0</b><span>Following</span></div><div><b id="statFriends">0</b><span>Friends</span></div></div>
-<div class="row"><button class="btn btn2" onclick="openEditProfile()">Edit Profile</button><button class="btn btn2" onclick="openFriendRequests()">My Friends</button></div>
+<h2 id="profileName">Mian, Abdullah</h2>
+<p class="email" id="profileEmail">@mian2abdullah6@email.com</p>
+<p class="small" id="profileBio" style="margin:8px 0">Welcome to my profile 🌍</p>
+<div class="magBox"><div style="flex:1"><div style="font-size:12px;color:#6b7280">YOUR MAG ID - Share this ID with friends</div><b id="myMagIdText">MAG-697563</b><div class="small" style="color:#6b7280">Friends can send you a request with this ID</div></div><button class="copyBtn" onclick="copyMyMagId()">Copy ID</button></div>
+<div class="stats"><div><b id="statFollowing">0</b><span>Following</span></div><div><b id="statFollowers">0</b><span>Followers</span></div><div><b id="statFriends">0</b><span>Likes</span></div></div>
+<div class="row"><button class="btnEdit" onclick="openEditProfile()">Edit Profile</button><button class="btnReq" onclick="openFriendRequests()">👥 Requests</button><button class="iconBtn" onclick="openSettings()">⚙️</button></div>
+<div style="margin-top:12px"><button class="btnShare" onclick="copyMyMagId()">Share</button></div>
+<div class="profileTabs"><div class="active">Videos</div><div>Liked</div><div>Saved</div></div>
 </div>
 <div class="grid" id="profileGrid"></div>
 </div>
+</div>
+</div>
+
+<!-- BOTTOM NAV - PIC WALA ICONS -->
+<div class="bottomNav">
+<button onclick="showTab('home',this)" class="active">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+<span>Home</span><span class="dot"></span>
+</button>
+<button onclick="showTab('search',this)">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><polygon points="10 8 16 12 10 16 10 8" fill="#111" stroke="none"/></svg>
+<span>Reels</span>
+</button>
+<button onclick="showTab('home',this)">
+<span class="newsBox">🌍</span>
+<span>News</span>
+</button>
+<button onclick="openCreatePost()">
+<span class="createBox">+</span>
+<span>Create</span>
+</button>
+<button onclick="openFriendRequests()">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+<span>Messages</span>
+</button>
+<button onclick="showTab('search',this)">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span>Search</span>
+</button>
+<button onclick="showTab('profile',this)">
+<span class="navAvatar" id="navAvatar">M</span>
+<span>Profile</span><span class="dot"></span>
+</button>
+</div>
+
 <div id="createModal" class="modal"><div class="sheet"><div class="closeBar"><h3>Create Post</h3><button onclick="closeModal('createModal')">✕</button></div>
 <textarea id="postCaption" placeholder="Write a caption..."></textarea>
-<div style="margin:12px 0"><input type="file" id="postImage" accept="image/*,video/*" onchange="previewPostImage(event)"><img id="postPreview" style="width:100%;border-radius:10px;margin-top:10px;display:none"><video id="postVideoPreview" controls style="width:100%;border-radius:10px;margin-top:10px;display:none"></video><p id="uploadStatus" class="small muted" style="text-align:center;margin-top:6px"></p><div id="uploadProgress" style="height:6px;background:#eee;border-radius:10px;display:none;margin-top:8px;overflow:hidden"><div id="uploadBar" style="height:100%;width:0%;background:#0095f6"></div></div></div>
-<button class="btn" onclick="submitPost()" id="shareBtn">Share Post</button></div></div>
+<div style="margin:12px 0"><input type="file" id="postImage" accept="image/*,video/*" onchange="previewPostImage(event)"><img id="postPreview" style="width:100%;border-radius:14px;margin-top:10px;display:none"><video id="postVideoPreview" controls style="width:100%;border-radius:14px;margin-top:10px;display:none"></video><p id="uploadStatus" class="small muted" style="text-align:center;margin-top:6px"></p><div id="uploadProgress" style="height:6px;background:#eee;border-radius:10px;display:none;margin-top:8px;overflow:hidden"><div id="uploadBar" style="height:100%;width:0%;background:#0095f6"></div></div></div>
+<button class="btnGrad" onclick="submitPost()" id="shareBtn">Share Post</button></div></div>
 <div id="friendReqModal" class="modal"><div class="sheet"><div class="closeBar"><h3>👥 Friend Requests</h3><button onclick="closeModal('friendReqModal')">✕</button></div>
-<div style="background:#000;color:#fff;padding:12px;border-radius:12px;margin-bottom:12px;text-align:center"><div style="font-size:11px;opacity:.7">YOUR MAG ID</div><b id="myMagIdInRequest" style="font-size:18px;letter-spacing:1px">MAG-000000</b><br><button onclick="copyMyMagId()" style="background:#0095f6;color:#fff;border:0;padding:6px 12px;border-radius:8px;margin-top:6px">Copy</button></div>
+<div style="background:#000;color:#fff;padding:12px;border-radius:12px;margin-bottom:12px;text-align:center"><div style="font-size:11px;opacity:.7">YOUR MAG ID</div><b id="myMagIdInRequest" style="font-size:18px">MAG-000000</b><br><button onclick="copyMyMagId()" style="background:#0095f6;color:#fff;border:0;padding:6px 12px;border-radius:8px;margin-top:6px">Copy</button></div>
 <div class="row"><input id="friendSearchInput2" placeholder="Enter Friend MAG ID - MAG-123456"><button class="btn" style="width:auto" onclick="searchFromModal()">Search</button></div>
 <div style="display:flex;gap:8px;margin:10px 0"><button class="btn btn2" onclick="showAllUsersModal()">Show All Users</button><button class="btn btn2" onclick="renderFriendRequests()">My Requests</button></div>
 <div id="friendSearchResultsModal"></div>
@@ -151,324 +192,165 @@ textarea{resize:vertical;min-height:70px}
 </div></div>
 <div id="notifModal" class="modal"><div class="sheet"><div class="closeBar"><h3>Notifications</h3><button onclick="closeModal('notifModal')">✕</button></div><div id="notifList"></div></div></div>
 <div id="settingsModal" class="modal"><div class="sheet"><div class="closeBar"><h3>Settings</h3><button onclick="closeModal('settingsModal')">✕</button></div>
-<div style="background:#fff3cd;padding:12px;border-radius:10px;margin-bottom:12px"><b>Friend Request / Upload Not Working?</b><br><span class="small">1. Both must Login with Gmail + Password - NOT Direct Enter<br>2. Both must be ONLINE MODE<br>3. Firebase Firestore Rules must be Published</span></div>
 <button class="btn btn2" onclick="copyMyMagId()">Copy My MAG ID</button><br><br>
-<button class="btn btnDanger" onclick="doLogout()">Log Out</button></div></div>
+<button class="btn" style="background:#ff3040" onclick="doLogout()">Log Out</button></div></div>
 <div id="editProfileModal" class="modal"><div class="sheet"><div class="closeBar"><h3>Edit Profile</h3><button onclick="closeModal('editProfileModal')">✕</button></div>
-<input id="editName" placeholder="Name"><br><br><textarea id="editBio" placeholder="Bio"></textarea><br><br><input id="editPhoto" placeholder="Photo URL (optional)"><br><br><button class="btn" onclick="saveEditProfile()">Save</button></div></div>
+<input id="editName" placeholder="Name"><br><br><textarea id="editBio" placeholder="Bio"></textarea><br><br><input id="editPhoto" placeholder="Photo URL (optional)"><br><br><button class="btnGrad" onclick="saveEditProfile()">Save</button></div></div>
 <div id="commentsModal" class="modal"><div class="sheet"><div class="closeBar"><h3>Comments</h3><button onclick="closeModal('commentsModal')">✕</button></div><div id="commentsList"></div><div class="row" style="margin-top:12px"><input id="commentInput" placeholder="Add a comment..."><button class="btn" style="width:auto" onclick="submitComment()">Send</button></div></div></div>
 <div id="toast" class="toast"></div>
+
 <script>
-// ===== CLOUDINARY - FIXED =====
 const CLOUD_NAME = "eajxklb8";
 const UPLOAD_PRESET = "video_upload";
 async function uploadToCloudinary(file){
-  const fd = new FormData();
-  fd.append("file", file);
-  fd.append("upload_preset", UPLOAD_PRESET);
+  const fd = new FormData(); fd.append("file", file); fd.append("upload_preset", UPLOAD_PRESET);
   const res = await fetch("https://api.cloudinary.com/v1_1/" + CLOUD_NAME + "/auto/upload", { method: "POST", body: fd });
   const data = await res.json();
   if(!res.ok || !data.secure_url) throw new Error((data.error && data.error.message) || "Cloudinary upload failed");
   return data;
 }
-// ===== FIREBASE - TUMHARA ASLI CONFIG =====
-const firebaseConfig = {
-  apiKey: "AIzaSyChcj_mCCgVBs6D8m3E2D8pXT-5yJOfakQ",
-  authDomain: "mian-social.firebaseapp.com",
-  projectId: "mian-social",
-  storageBucket: "mian-social.firebasestorage.app",
-  messagingSenderId: "897111768153",
-  appId: "1:897111768153:web:413bb377bc70eb2dc0c548",
-  measurementId: "G-DFCMZ1CD4M"
-};
-try{firebase.initializeApp(firebaseConfig)}catch(e){ console.log(e); }
+const firebaseConfig = { apiKey: "AIzaSyChcj_mCCgVBs6D8m3E2D8pXT-5yJOfakQ", authDomain: "mian-social.firebaseapp.com", projectId: "mian-social", storageBucket: "mian-social.firebasestorage.app", messagingSenderId: "897111768153", appId: "1:897111768153:web:413bb377bc70eb2dc0c548", measurementId: "G-DFCMZ1CD4M" };
+try{firebase.initializeApp(firebaseConfig)}catch(e){}
 let auth=null,db=null,storage=null;
-try{auth=firebase.auth();db=firebase.firestore();storage=firebase.storage()}catch(e){ console.log(e); }
-let user=null,profile={name:'Mian Abdullah',email:'',bio:'Welcome',photo:'',followers:[],following:[]};
-let localMode=false,currentTab='home',authMode='login';
-let allPosts=[],friends=[],friendRequests=[],notifications=[],currentPostId=null,selectedFile=null;
+try{auth=firebase.auth();db=firebase.firestore();storage=firebase.storage()}catch(e){}
+let user=null,profile={name:'Mian, Abdullah',email:'mian2abdullah6@email.com',bio:'Welcome to my profile 🌍',photo:'',followers:[],following:[]};
+let localMode=false,authMode='signup',allPosts=[],friends=[],friendRequests=[],notifications=[],currentPostId=null,selectedFile=null,feedFilter='foryou';
 function magIdFor(uid){ if(!uid) return 'MAG-000000'; let h=0; for(let i=0;i<uid.length;i++){h=((h<<5)-h)+uid.charCodeAt(i);h=h&h} let n=Math.abs(h)%900000+100000; return 'MAG-'+n; }
 function getMyMagId(){ return profile.magId || magIdFor(user && user.uid) || 'MAG-000000'; }
 function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function toast(m){ let t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>{t.style.display='none'},3500); }
+function toast(m){ let t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; setTimeout(function(){t.style.display='none'},3500); }
 function copyMyMagId(){ let id=getMyMagId(); if(navigator.clipboard) navigator.clipboard.writeText(id); else{let ta=document.createElement('textarea');ta.value=id;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()} toast('Copied: '+id); }
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-function switchAuth(m){ authMode=m; document.getElementById('tabLogin').className=m==='login'?'active':''; document.getElementById('tabSignup').className=m==='signup'?'active':''; document.getElementById('signupNameBox').classList.toggle('hidden',m!=='signup'); document.getElementById('authBtn').textContent=m==='signup'?'Create Account':'Log In'; }
+function switchAuth(m){ authMode=m; document.getElementById('tabLogin').style.opacity=m==='login'?'1':'0.6'; document.getElementById('tabSignup').style.opacity=m==='signup'?'1':'0.6'; document.getElementById('signupNameBox').style.display=m==='signup'?'block':'none'; document.getElementById('authBtn').textContent=m==='signup'?'Create Account':'Log In'; }
+function switchFeedTab(t){ feedFilter=t; document.getElementById('tabForYou').className=t==='foryou'?'active':''; document.getElementById('tabFollowing').className=t==='following'?'active':''; renderFeed(); }
 async function handleAuth(){
-  let email=document.getElementById('authEmail').value.trim();
-  let pass=document.getElementById('authPassword').value;
-  let name=document.getElementById('authName').value.trim()||email.split('@')[0];
+  let email=document.getElementById('authEmail').value.trim(); let pass=document.getElementById('authPassword').value; let name=document.getElementById('authName').value.trim()||email.split('@')[0];
   if(!email||!pass){ document.getElementById('authError').textContent='Enter Email + Password'; return; }
   if(pass.length<6){ document.getElementById('authError').textContent='Password must be 6+ characters'; return; }
   if(!auth){ enterLocal(); return; }
   try{
-    if(authMode==='signup'){ let c=await auth.createUserWithEmailAndPassword(email,pass); user=c.user; await db.collection('users').doc(user.uid).set({name:name,email:email,photo:'',bio:'Welcome to my profile',magId:magIdFor(user.uid),createdAt:new Date()}); }
+    if(authMode==='signup'){ let c=await auth.createUserWithEmailAndPassword(email,pass); user=c.user; await db.collection('users').doc(user.uid).set({name:name,email:email,photo:'',bio:'Welcome to my profile 🌍',magId:magIdFor(user.uid),createdAt:new Date()}); }
     else{ let c=await auth.signInWithEmailAndPassword(email,pass); user=c.user; }
-    localMode=false;
-    document.getElementById('modeBadge').textContent='● ONLINE MODE'; document.getElementById('modeBadge').classList.add('online');
+    localMode=false; document.getElementById('modeBadge').textContent='● ONLINE MODE'; document.getElementById('modeBadge').classList.remove('offline');
     document.getElementById('authScreen').style.display='none'; document.getElementById('mainApp').classList.remove('hidden');
-    await loadProfile(); loadFeed(); listenFriendRequests(); loadFriendsFromDB();
-    toast('Welcome! Your MAG ID: '+getMyMagId());
+    await loadProfile(); loadFeed(); listenFriendRequests(); loadFriendsFromDB(); toast('Welcome! Your MAG ID: '+getMyMagId());
   }catch(e){ document.getElementById('authError').textContent=e.message; }
 }
 function enterLocal(){
-  const name=document.getElementById('authName').value.trim()||'Mian Abdullah';
-  const email=document.getElementById('authEmail').value.trim()||'mian@email.com';
-  localMode=true;
-  let myUid='local_'+Date.now()+'_'+Math.floor(Math.random()*9999);
-  user={uid:myUid,email:email};
-  let magId=magIdFor(myUid);
-  profile={name:name,email:email,bio:'Welcome to my profile',photo:'',followers:[],following:[],magId:magId,localUid:myUid};
+  const name=document.getElementById('authName').value.trim()||'Mian, Abdullah'; const email=document.getElementById('authEmail').value.trim()||'mian2abdullah6@email.com';
+  localMode=true; let myUid='local_'+Date.now()+'_'+Math.floor(Math.random()*9999); user={uid:myUid,email:email}; let magId=magIdFor(myUid);
+  profile={name:name,email:email,bio:'Welcome to my profile 🌍',photo:'',followers:[],following:[],magId:magId,localUid:myUid};
   try{localStorage.setItem('mian_local_user',JSON.stringify(profile))}catch(e){}
   document.getElementById('authScreen').style.display='none'; document.getElementById('mainApp').classList.remove('hidden');
-  document.getElementById('modeBadge').textContent='● LOCAL MODE'; document.getElementById('modeBadge').classList.remove('online');
-  updateProfileUI(); loadLocalPosts(); listenFriendRequests();
-  toast('LOCAL MODE - Your MAG ID: '+magId);
+  document.getElementById('modeBadge').textContent='● LOCAL MODE'; document.getElementById('modeBadge').classList.add('offline');
+  updateProfileUI(); loadLocalPosts(); listenFriendRequests(); toast('LOCAL MODE - Your MAG ID: '+magId);
 }
 function doLogout(){ if(auth) auth.signOut(); localStorage.removeItem('mian_local_user'); localMode=false; location.reload(); }
-async function loadProfile(){
-  if(localMode) return;
-  try{ let d=await db.collection('users').doc(user.uid).get(); if(d.exists){ profile=d.data(); } profile.magId=magIdFor(user.uid); }catch(e){ console.log(e); }
-  updateProfileUI();
-}
+async function loadProfile(){ if(localMode) return; try{ let d=await db.collection('users').doc(user.uid).get(); if(d.exists){ profile=d.data(); } profile.magId=magIdFor(user.uid); }catch(e){} updateProfileUI(); }
 function updateProfileUI(){
-  document.getElementById('profileName').textContent=profile.name||'User';
-  document.getElementById('profileEmail').textContent=profile.email||(user && user.email)||'';
-  document.getElementById('profileBio').textContent=profile.bio||'';
-  document.getElementById('myMagIdText').textContent=getMyMagId();
-  let mEl=document.getElementById('myMagIdInRequest'); if(mEl) mEl.textContent=getMyMagId();
+  document.getElementById('profileName').textContent=profile.name||'User'; document.getElementById('profileEmail').textContent='@'+(profile.email||(user && user.email)||''); document.getElementById('profileBio').textContent=profile.bio||'';
+  document.getElementById('myMagIdText').textContent=getMyMagId(); let mEl=document.getElementById('myMagIdInRequest'); if(mEl) mEl.textContent=getMyMagId();
   let av=document.getElementById('profileAvatar'); av.innerHTML=profile.photo?'<img src="'+profile.photo+'">':esc((profile.name||'U')[0]);
-  let cAv=document.getElementById('composerAvatar'); cAv.innerHTML=profile.photo?'<img src="'+profile.photo+'">':esc((profile.name||'U')[0]);
-  document.getElementById('statFriends').textContent=friends.length;
-  document.getElementById('statFollowers').textContent=(profile.followers||[]).length;
-  document.getElementById('statFollowing').textContent=(profile.following||[]).length;
+  let navAv=document.getElementById('navAvatar'); if(navAv) navAv.innerHTML=profile.photo?'<img src="'+profile.photo+'">':esc((profile.name||'U')[0]);
+  document.getElementById('statFriends').textContent=friends.length; document.getElementById('statFollowers').textContent=(profile.followers||[]).length; document.getElementById('statFollowing').textContent=(profile.following||[]).length;
 }
 function showTab(tab,btn){
   document.querySelectorAll('.bottomNav button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active');
-  document.querySelector('.feed').style.display=tab==='home'?'block':'none';
+  document.getElementById('homeFeed').style.display=tab==='home'?'block':'none';
   document.getElementById('searchTab').classList.toggle('hidden',tab!=='search');
   document.getElementById('profileTab').classList.toggle('hidden',tab!=='profile');
-  if(tab==='profile') renderProfileGrid();
-  if(tab==='search'){ showAllUsersAuto(); }
+  if(tab==='profile') renderProfileGrid(); if(tab==='search') showAllUsersAuto();
 }
 function openCreatePost(){ document.getElementById('createModal').classList.add('open'); }
 function previewPostImage(e){
-  let f=e.target.files[0]; if(!f) return;
-  selectedFile=f;
-  let img=document.getElementById('postPreview');
-  let vid=document.getElementById('postVideoPreview');
-  let status=document.getElementById('uploadStatus');
-  if(f.type.startsWith('video/')){
-    if(f.size>100*1024*1024){ status.textContent='Video too big! Max 100MB (Cloudinary)'; selectedFile=null; e.target.value=''; return; }
-    img.style.display='none'; vid.style.display='block'; vid.src=URL.createObjectURL(f);
-    status.textContent='Video selected: '+f.name+' - '+(f.size/1024/1024).toFixed(1)+' MB';
-  } else {
-    if(f.size>10*1024*1024){ status.textContent='Photo too big! Max 10MB'; }
-    vid.style.display='none'; img.style.display='block';
-    let r=new FileReader(); r.onload=function(){ img.src=r.result; img.dataset.base64=r.result; }; r.readAsDataURL(f);
-    status.textContent='Photo selected: '+f.name+' - '+(f.size/1024/1024).toFixed(1)+' MB';
-  }
+  let f=e.target.files[0]; if(!f) return; selectedFile=f; let img=document.getElementById('postPreview'); let vid=document.getElementById('postVideoPreview'); let status=document.getElementById('uploadStatus');
+  if(f.type.startsWith('video/')){ if(f.size>100*1024*1024){ status.textContent='Video too big! Max 100MB'; selectedFile=null; e.target.value=''; return; } img.style.display='none'; vid.style.display='block'; vid.src=URL.createObjectURL(f); status.textContent='Video selected: '+f.name+' - '+(f.size/1024/1024).toFixed(1)+' MB'; }
+  else { vid.style.display='none'; img.style.display='block'; let r=new FileReader(); r.onload=function(){ img.src=r.result; img.dataset.base64=r.result; }; r.readAsDataURL(f); status.textContent='Photo selected: '+f.name; }
 }
 async function submitPost(){
-  let cap=document.getElementById('postCaption').value.trim();
-  let status=document.getElementById('uploadStatus');
-  let btn=document.getElementById('shareBtn');
-  let barWrap=document.getElementById('uploadProgress');
-  let bar=document.getElementById('uploadBar');
+  let cap=document.getElementById('postCaption').value.trim(); let status=document.getElementById('uploadStatus'); let btn=document.getElementById('shareBtn'); let barWrap=document.getElementById('uploadProgress'); let bar=document.getElementById('uploadBar');
   if(!cap && !selectedFile){ toast('Write something or add photo/video'); return; }
-  if(status) status.textContent='Uploading to Cloudinary... Please wait...';
-  if(btn){ btn.textContent='Uploading...'; btn.disabled=true; }
-  if(barWrap) barWrap.style.display='block'; if(bar) bar.style.width='30%';
+  if(status) status.textContent='Uploading to Cloudinary... Please wait...'; if(btn){ btn.textContent='Uploading...'; btn.disabled=true; } if(barWrap) barWrap.style.display='block'; if(bar) bar.style.width='30%';
   let imageUrl=''; let isVideo=false;
   try{
-    if(selectedFile){
-      isVideo=selectedFile.type.startsWith('video/');
-      let up=await uploadToCloudinary(selectedFile);
-      imageUrl=up.secure_url; isVideo=up.resource_type==='video';
-      if(bar) bar.style.width='80%';
-    } else {
-      let img=document.getElementById('postPreview');
-      if(img && img.src && img.src.startsWith('data:')) imageUrl=img.dataset.base64||'';
-    }
-    let post={id:'p_'+Date.now(),uid:user.uid,name:profile.name,photo:profile.photo||'',caption:cap,image:imageUrl,isVideo:isVideo,likes:[],comments:[],time:Date.now(),magId:getMyMagId()};
-    if(localMode){
-      let arr=JSON.parse(localStorage.getItem('mian_local_posts')||'[]');
-      arr.unshift(post); localStorage.setItem('mian_local_posts',JSON.stringify(arr)); loadLocalPosts();
-    } else {
-      await db.collection('posts').add({uid:user.uid,name:profile.name,photo:profile.photo||'',caption:cap,image:imageUrl,isVideo:isVideo,likes:[],time:firebase.firestore.FieldValue.serverTimestamp(),magId:getMyMagId()});
-    }
-    closeModal('createModal');
-    document.getElementById('postCaption').value='';
-    document.getElementById('postPreview').style.display='none'; document.getElementById('postPreview').src='';
-    document.getElementById('postVideoPreview').style.display='none'; document.getElementById('postVideoPreview').src='';
-    document.getElementById('postImage').value=''; selectedFile=null;
-    if(status) status.textContent=''; if(btn){ btn.textContent='Share Post'; btn.disabled=false; }
-    if(barWrap) barWrap.style.display='none';
-    toast('Post shared! ✅'); loadFeed();
-  }catch(e){
-    console.log(e);
-    if(status) status.textContent='Error: '+e.message;
-    if(btn){ btn.textContent='Share Post'; btn.disabled=false; }
-    if(barWrap) barWrap.style.display='none';
-    toast('Upload failed: '+e.message);
-  }
+    if(selectedFile){ let up=await uploadToCloudinary(selectedFile); imageUrl=up.secure_url; isVideo=up.resource_type==='video'; if(bar) bar.style.width='80%'; }
+    else { let img=document.getElementById('postPreview'); if(img && img.src && img.src.startsWith('data:')) imageUrl=img.dataset.base64||''; }
+    if(localMode){ let arr=JSON.parse(localStorage.getItem('mian_local_posts')||'[]'); arr.unshift({id:'p_'+Date.now(),uid:user.uid,name:profile.name,photo:profile.photo||'',caption:cap,image:imageUrl,isVideo:isVideo,likes:[],comments:[],time:Date.now(),magId:getMyMagId()}); localStorage.setItem('mian_local_posts',JSON.stringify(arr)); loadLocalPosts(); }
+    else { await db.collection('posts').add({uid:user.uid,name:profile.name,photo:profile.photo||'',caption:cap,image:imageUrl,isVideo:isVideo,likes:[],time:firebase.firestore.FieldValue.serverTimestamp(),magId:getMyMagId()}); }
+    closeModal('createModal'); document.getElementById('postCaption').value=''; document.getElementById('postPreview').style.display='none'; document.getElementById('postPreview').src=''; document.getElementById('postVideoPreview').style.display='none'; document.getElementById('postVideoPreview').src=''; document.getElementById('postImage').value=''; selectedFile=null;
+    if(status) status.textContent=''; if(btn){ btn.textContent='Share Post'; btn.disabled=false; } if(barWrap) barWrap.style.display='none'; toast('Post shared! ✅'); loadFeed();
+  }catch(e){ console.log(e); if(status) status.textContent='Error: '+e.message; if(btn){ btn.textContent='Share Post'; btn.disabled=false; } if(barWrap) barWrap.style.display='none'; toast('Upload failed: '+e.message); }
 }
 function loadLocalPosts(){ allPosts=JSON.parse(localStorage.getItem('mian_local_posts')||'[]'); renderFeed(); }
-async function loadFeed(){
-  if(localMode){ loadLocalPosts(); return; }
-  try{ let s=await db.collection('posts').orderBy('time','desc').limit(50).get(); allPosts=[]; s.forEach(d=>{ let p=d.data(); p.id=d.id; allPosts.push(p); }); }catch(e){ console.log(e); allPosts=JSON.parse(localStorage.getItem('mian_local_posts')||'[]'); }
-  renderFeed();
-}
+async function loadFeed(){ if(localMode){ loadLocalPosts(); return; } try{ let s=await db.collection('posts').orderBy('time','desc').limit(50).get(); allPosts=[]; s.forEach(d=>{ let p=d.data(); p.id=d.id; allPosts.push(p); }); }catch(e){ allPosts=JSON.parse(localStorage.getItem('mian_local_posts')||'[]'); } renderFeed(); }
 function renderFeed(){
-  let list=document.getElementById('feedList'); document.getElementById('feedEmpty').style.display=allPosts.length?'none':'block';
-  if(!allPosts.length){ list.innerHTML=''; document.getElementById('statPosts').textContent='0'; return; }
-  document.getElementById('statPosts').textContent=allPosts.filter(p=>p.uid===(user && user.uid)).length;
-  list.innerHTML=allPosts.map(p=>{
-    let liked=(p.likes||[]).includes(user && user.uid);
-    let media='';
+  let list=document.getElementById('feedList'); let showPosts=allPosts;
+  if(feedFilter==='following' && friends.length){ let ids=friends.map(f=>f.uid||f.friendUid); showPosts=allPosts.filter(p=>ids.includes(p.uid)); }
+  document.getElementById('feedEmpty').style.display=showPosts.length?'none':'block';
+  if(!showPosts.length){ list.innerHTML=''; return; }
+  list.innerHTML=showPosts.map(p=>{
+    let liked=(p.likes||[]).includes(user && user.uid); let media='';
     if(p.image){ if(p.isVideo){ media='<video class="postImg" src="'+p.image+'" controls playsinline preload="metadata"></video>'; } else { media='<img class="postImg" src="'+p.image+'">'; } }
-    return '<div class="post"><div class="postHead"><div class="avatar">'+(p.photo?'<img src="'+p.photo+'">':esc((p.name||'U')[0]))+'</div><div style="flex:1"><b>'+esc(p.name||'User')+'</b><div class="muted small">'+esc(p.magId||'')+'</div></div></div>'+media+'<div class="postActions"><span onclick="toggleLike(\''+p.id+'\')">'+(liked?'❤️':'🤍')+'</span><span onclick="openComments(\''+p.id+'\')">💬</span><span>📤</span></div><div class="postLikes">'+(p.likes||[]).length+' likes</div><div class="postCap"><b>'+esc(p.name||'User')+'</b> '+esc(p.caption||'')+'</div></div>';
-  }).join('');
-  renderProfileGrid();
+    let st=getFriendStatus(p.uid); let reqBtn=p.uid===(user && user.uid)?'':'<button class="instaFollowBtn '+(st==='friend'?'friend':st==='sent'?'sent':'')+'" '+(st==='none'?'onclick="sendFriendRequest(\''+p.uid+'\',\''+esc(p.name)+'\',\''+esc(p.photo||'')+'\')"':'')+'>'+(st==='friend'?'✓ Friend':st==='sent'?'Request Sent':st==='incoming'?'Accept':'+ Request')+'</button>';
+    return '<div class="post"><div class="postHead"><div class="avatar">'+(p.photo?'<img src="'+p.photo+'">':esc((p.name||'U')[0]))+'</div><div style="flex:1"><b>'+esc(p.name||'User')+'</b><div class="muted small">Worldwide - '+esc(p.magId||'')+' - 2 Views - Real</div></div>'+reqBtn+'</div>'+media+'<div class="postActions"><span onclick="toggleLike(\''+p.id+'\')">'+(liked?'❤️':'🤍')+'</span><span onclick="openComments(\''+p.id+'\')">💬</span><span>📤</span></div><div class="postLikes">'+(p.likes||[]).length+' likes</div><div class="postCap"><b>'+esc(p.name||'User')+'</b> '+esc(p.caption||'')+'</div></div>';
+  }).join(''); renderProfileGrid();
 }
 function renderProfileGrid(){ let g=document.getElementById('profileGrid'); if(!g) return; let mine=allPosts.filter(p=>p.uid===(user && user.uid)); g.innerHTML=mine.map(p=>{ if(p.image){ if(p.isVideo) return '<video src="'+p.image+'"></video>'; return '<img src="'+p.image+'">'; } return '<div style="background:#eee;aspect-ratio:1;display:flex;align-items:center;justify-content:center;padding:10px;font-size:13px">'+esc(p.caption||'')+'</div>'; }).join(''); }
-async function toggleLike(pid){
-  let p=allPosts.find(x=>x.id===pid); if(!p) return;
-  if(localMode){ p.likes=p.likes||[]; let i=p.likes.indexOf(user.uid); if(i>=0) p.likes.splice(i,1); else p.likes.push(user.uid); localStorage.setItem('mian_local_posts',JSON.stringify(allPosts)); renderFeed(); return; }
-  try{ let ref=db.collection('posts').doc(pid); let d=await ref.get(); let likes=d.data().likes||[]; if(likes.includes(user.uid)) likes=likes.filter(x=>x!==user.uid); else likes.push(user.uid); await ref.update({likes:likes}); loadFeed(); }catch(e){ console.log(e); }
-}
+async function toggleLike(pid){ let p=allPosts.find(x=>x.id===pid); if(!p) return; if(localMode){ p.likes=p.likes||[]; let i=p.likes.indexOf(user.uid); if(i>=0) p.likes.splice(i,1); else p.likes.push(user.uid); localStorage.setItem('mian_local_posts',JSON.stringify(allPosts)); renderFeed(); return; } try{ let ref=db.collection('posts').doc(pid); let d=await ref.get(); let likes=d.data().likes||[]; if(likes.includes(user.uid)) likes=likes.filter(x=>x!==user.uid); else likes.push(user.uid); await ref.update({likes:likes}); loadFeed(); }catch(e){} }
 function openComments(pid){ currentPostId=pid; openModal('commentsModal'); renderComments(); }
 function renderComments(){ let p=allPosts.find(x=>x.id===currentPostId); if(!p) return; document.getElementById('commentsList').innerHTML=(p.comments||[]).map(c=>'<div class="commentRow"><div class="avatar">'+esc((c.name||'U')[0])+'</div><div><b>'+esc(c.name)+'</b> '+esc(c.text)+'</div></div>').join('')||'<p class="muted">No comments yet</p>'; }
-async function submitComment(){ let t=document.getElementById('commentInput').value.trim(); if(!t) return; let p=allPosts.find(x=>x.id===currentPostId); if(!p) return; let c={name:profile.name,text:t,time:Date.now()}; if(localMode){ p.comments=p.comments||[]; p.comments.push(c); localStorage.setItem('mian_local_posts',JSON.stringify(allPosts)); } else { try{ await db.collection('posts').doc(currentPostId).collection('comments').add(c); }catch(e){ console.log(e); } } document.getElementById('commentInput').value=''; renderComments(); loadFeed(); }
-function openNotifications(){ openModal('notifModal'); document.getElementById('notifList').innerHTML=notifications.length?notifications.map(n=>'<div style="padding:10px;border-bottom:1px solid #eee"><b>'+esc(n.title)+'</b><div class="muted">'+esc(n.text)+'</div></div>').join(''):'<p class="muted">No notifications</p>'; document.getElementById('notifBadge').classList.add('hidden'); }
+async function submitComment(){ let t=document.getElementById('commentInput').value.trim(); if(!t) return; let p=allPosts.find(x=>x.id===currentPostId); if(!p) return; let c={name:profile.name,text:t,time:Date.now()}; if(localMode){ p.comments=p.comments||[]; p.comments.push(c); localStorage.setItem('mian_local_posts',JSON.stringify(allPosts)); } else { try{ await db.collection('posts').doc(currentPostId).collection('comments').add(c); }catch(e){} } document.getElementById('commentInput').value=''; renderComments(); loadFeed(); }
+function openNotifications(){ openModal('notifModal'); document.getElementById('notifList').innerHTML=notifications.length?notifications.map(n=>'<div style="padding:10px;border-bottom:1px solid #eee"><b>'+esc(n.title)+'</b><div class="muted">'+esc(n.text)+'</div></div>').join(''):'<p class="muted">No notifications</p>'; }
 function openSettings(){ openModal('settingsModal'); }
 function openEditProfile(){ document.getElementById('editName').value=profile.name||''; document.getElementById('editBio').value=profile.bio||''; document.getElementById('editPhoto').value=profile.photo||''; openModal('editProfileModal'); }
-async function saveEditProfile(){
-  profile.name=document.getElementById('editName').value.trim()||profile.name; profile.bio=document.getElementById('editBio').value; profile.photo=document.getElementById('editPhoto').value;
-  if(localMode) localStorage.setItem('mian_local_user',JSON.stringify(profile)); else try{ await db.collection('users').doc(user.uid).update({name:profile.name,bio:profile.bio,photo:profile.photo}); }catch(e){ console.log(e); }
-  closeModal('editProfileModal'); updateProfileUI(); toast('Profile saved');
-}
+async function saveEditProfile(){ profile.name=document.getElementById('editName').value.trim()||profile.name; profile.bio=document.getElementById('editBio').value; profile.photo=document.getElementById('editPhoto').value; if(localMode) localStorage.setItem('mian_local_user',JSON.stringify(profile)); else try{ await db.collection('users').doc(user.uid).update({name:profile.name,bio:profile.bio,photo:profile.photo}); }catch(e){} closeModal('editProfileModal'); updateProfileUI(); toast('Profile saved'); }
 function getFriendStatus(uid){ if(friends.find(f=>f.uid===uid || f.friendUid===uid)) return 'friend'; if(friendRequests.find(r=>r.fromUid===(user && user.uid) && r.toUid===uid)) return 'sent'; if(friendRequests.find(r=>r.fromUid===uid && r.toUid===(user && user.uid))) return 'incoming'; return 'none'; }
-function findUsersByQuery(q){
-  let out=[]; let seen=new Set();
-  allPosts.forEach(p=>{ if(p.uid!==(user && user.uid) && !seen.has(p.uid)){ seen.add(p.uid); out.push({uid:p.uid,name:p.name,photo:p.photo||'',magId:p.magId||magIdFor(p.uid)}); } });
-  friends.forEach(f=>{ let fid=f.uid||f.friendUid; if(fid && !seen.has(fid)){ seen.add(fid); out.push({uid:fid,name:f.name,photo:f.photo||'',magId:f.magId||magIdFor(fid)}); } });
-  if(!q) return out;
-  let lq=q.toLowerCase();
-  return out.filter(u=> (u.name||'').toLowerCase().includes(lq) || (u.magId||'').toLowerCase()===lq || (u.magId||'').toLowerCase().replace('-','')===lq.replace('-',''));
-}
 async function searchFriendByIdOrName(){
-  let input=document.getElementById('friendSearchInput');
-  let q=input.value.trim();
-  let box=document.getElementById('friendSearchResults');
-  if(!q){ box.innerHTML='<p class="muted">Please enter a MAG ID or Name.</p>'; return; }
-  box.innerHTML='<p class="muted">Searching... Please wait...</p>';
-  let cleanQ=q.toUpperCase().replace(/[^A-Z0-9]/g,'');
-  let results=[];
-  let localRes=findUsersByQuery(q);
-  localRes.forEach(u=>{ if(!results.find(r=>r.uid===u.uid)) results.push(u); });
-  if(!localMode && db){
-    try{
-      let snap1=await db.collection('users').where('magId','==',q.toUpperCase()).get();
-      snap1.forEach(d=>{ let u=d.data(); if(!results.find(r=>r.uid===d.id)) results.push({uid:d.id,name:u.name||'User',photo:u.photo||'',magId:u.magId||magIdFor(d.id)}); });
-      if(results.length===0){
-        let snap2=await db.collection('users').get();
-        snap2.forEach(d=>{ let u=d.data(); let nl=(u.name||'').toLowerCase(); let ml=(u.magId||'').toLowerCase();
-          if(nl.includes(q.toLowerCase())||ml.replace('-','')===cleanQ.toLowerCase()||ml===q.toLowerCase()){ if(!results.find(r=>r.uid===d.id)) results.push({uid:d.id,name:u.name||'User',photo:u.photo||'',magId:u.magId||magIdFor(d.id)}); }
-        });
-      }
-    }catch(e){ console.log(e); }
-  }
-  if(!results.length){ box.innerHTML='<p class="muted">No user found for "'+esc(q)+'"</p>'; return; }
-  box.innerHTML=results.map(u=>{
-    let st=getFriendStatus(u.uid);
-    let btn=u.uid===(user && user.uid)?'<span class="muted">This is you</span>':st==='friend'?'<button class="instaFollowBtn friend">Friend</button>':st==='sent'?'<button class="instaFollowBtn sent">Request Sent</button>':st==='incoming'?'<button class="instaFollowBtn incoming" onclick="openFriendRequests()">Accept Request</button>':'<button class="instaFollowBtn" onclick="sendFriendRequest(\''+u.uid+'\',\''+esc(u.name)+'\',\''+esc(u.photo||'')+'\')">+ Send Request</button>';
-    return '<div class="row" style="padding:10px 0;border-bottom:1px solid #f1f5f9"><div class="avatar">'+(u.photo?'<img src="'+u.photo+'">':esc((u.name||'U')[0]))+'</div><div style="flex:1"><b>'+esc(u.name)+'</b><div class="muted">ID: '+u.magId+'</div></div>'+btn+'</div>';
-  }).join('');
-}
-function searchFromModal(){ let v=document.getElementById('friendSearchInput2').value; document.getElementById('friendSearchInput').value=v; searchFriendByIdOrName(); let box=document.getElementById('friendSearchResults'); if(box) document.getElementById('friendSearchResultsModal').innerHTML=box.innerHTML; }
-async function showAllUsersAuto(){
-  let box=document.getElementById('friendSearchResults'); if(!box) return;
-  box.innerHTML='<p class="muted">Loading all accounts... Please wait...</p>';
-  let results=[]; let seen=new Set();
+  let q=document.getElementById('friendSearchInput').value.trim(); let box=document.getElementById('friendSearchResults');
+  if(!q){ box.innerHTML='<p class="muted">Please enter MAG ID or Name</p>'; return; } box.innerHTML='<p class="muted">Searching...</p>'; let results=[]; let seen=new Set();
   allPosts.forEach(p=>{ if(p.uid!==(user && user.uid) && !seen.has(p.uid)){ seen.add(p.uid); results.push({uid:p.uid,name:p.name,photo:p.photo||'',magId:p.magId||magIdFor(p.uid)}); } });
-  if(!localMode && db){
-    try{
-      let snap=await db.collection('users').limit(100).get();
-      snap.forEach(d=>{ let u=d.data(); if(d.id!==(user && user.uid) && !seen.has(d.id)){ seen.add(d.id); results.push({uid:d.id,name:u.name||'User',photo:u.photo||'',magId:u.magId||magIdFor(d.id)}); } });
-    }catch(e){ console.log(e); }
-  }
-  friends.forEach(f=>{ let fid=f.uid||f.friendUid; if(fid && !seen.has(fid)){ seen.add(fid); results.push({uid:fid,name:f.name,photo:f.photo||'',magId:f.magId||magIdFor(fid)}); } });
-  if(!results.length){ box.innerHTML='<div style="text-align:center;padding:20px"><p style="font-size:30px">👥</p><p><b>Abhi koi user nahi hai</b></p><p class="muted">Jab koi naya banda account banayega to uska ID yahan khud aa jayega!</p></div>'; return; }
-  box.innerHTML='<h4 style="margin-bottom:8px">All Users ('+results.length+') - Direct Request Karo 👇</h4>'+results.map(u=>{
-    let st=getFriendStatus(u.uid);
-    let btn=st==='friend'?'<button class="instaFollowBtn friend">✓ Friend</button>':st==='sent'?'<button class="instaFollowBtn sent">Request Sent</button>':st==='incoming'?'<button class="instaFollowBtn incoming" onclick="openFriendRequests()">Accept</button>':'<button class="instaFollowBtn" onclick="sendFriendRequest(\''+u.uid+'\',\''+esc(u.name)+'\',\''+esc(u.photo||'')+'\')">+ Send Request</button>';
-    return '<div class="row" style="padding:12px 0;border-bottom:1px solid #f1f5f9"><div class="avatar">'+(u.photo?'<img src="'+u.photo+'">':esc((u.name||'U')[0]))+'</div><div style="flex:1"><b>'+esc(u.name)+'</b><div class="muted" style="font-size:12px">ID: '+u.magId+'</div></div>'+btn+'</div>';
-  }).join('');
+  if(!localMode && db){ try{ let s1=await db.collection('users').where('magId','==',q.toUpperCase()).get(); s1.forEach(d=>{ if(!seen.has(d.id)){ seen.add(d.id); let u=d.data(); results.push({uid:d.id,name:u.name,photo:u.photo||'',magId:u.magId}); } }); if(!results.length){ let s2=await db.collection('users').get(); s2.forEach(d=>{ let u=d.data(); if((u.name||'').toLowerCase().includes(q.toLowerCase())){ if(!seen.has(d.id)){ seen.add(d.id); results.push({uid:d.id,name:u.name,photo:u.photo||'',magId:u.magId}); } } }); } }catch(e){} }
+  if(!results.length){ box.innerHTML='<p class="muted">No user found</p>'; return; }
+  box.innerHTML=results.map(u=>{ let st=getFriendStatus(u.uid); let btn=u.uid===(user && user.uid)?'This is you':st==='friend'?'<button class="instaFollowBtn friend">Friend</button>':st==='sent'?'<button class="instaFollowBtn sent">Request Sent</button>':st==='incoming'?'<button class="instaFollowBtn incoming" onclick="openFriendRequests()">Accept</button>':'<button class="instaFollowBtn" onclick="sendFriendRequest(\''+u.uid+'\',\''+esc(u.name)+'\',\''+esc(u.photo||'')+'\')">+ Send Request</button>'; return '<div class="row" style="padding:10px 0;border-bottom:1px solid #f1f5f9"><div class="avatar">'+(u.photo?'<img src="'+u.photo+'">':esc((u.name||'U')[0]))+'</div><div style="flex:1"><b>'+esc(u.name)+'</b><div class="muted">ID: '+u.magId+'</div></div>'+btn+'</div>'; }).join('');
 }
-async function showAllUsers(){ await showAllUsersAuto(); }
-function showAllUsersModal(){ showAllUsersAuto(); let box=document.getElementById('friendSearchResults'); if(box) setTimeout(function(){ document.getElementById('friendSearchResultsModal').innerHTML=box.innerHTML; },800); }
+function searchFromModal(){ document.getElementById('friendSearchInput').value=document.getElementById('friendSearchInput2').value; searchFriendByIdOrName(); setTimeout(function(){ document.getElementById('friendSearchResultsModal').innerHTML=document.getElementById('friendSearchResults').innerHTML; },800); }
+async function showAllUsersAuto(){
+  let box=document.getElementById('friendSearchResults'); if(!box) return; box.innerHTML='<p class="muted">Loading all accounts...</p>'; let results=[]; let seen=new Set();
+  allPosts.forEach(p=>{ if(p.uid!==(user && user.uid) && !seen.has(p.uid)){ seen.add(p.uid); results.push({uid:p.uid,name:p.name,photo:p.photo||'',magId:p.magId||magIdFor(p.uid)}); } });
+  if(!localMode && db){ try{ let snap=await db.collection('users').limit(100).get(); snap.forEach(d=>{ if(d.id!==(user && user.uid) && !seen.has(d.id)){ seen.add(d.id); let u=d.data(); results.push({uid:d.id,name:u.name||'User',photo:u.photo||'',magId:u.magId||magIdFor(d.id)}); } }); }catch(e){} }
+  friends.forEach(f=>{ let fid=f.uid||f.friendUid; if(fid && !seen.has(fid)){ seen.add(fid); results.push({uid:fid,name:f.name,photo:f.photo||'',magId:f.magId||magIdFor(fid)}); } });
+  if(!results.length){ box.innerHTML='<div style="text-align:center;padding:20px"><p>👥</p><p><b>Abhi koi user nahi hai</b></p></div>'; return; }
+  box.innerHTML='<h4>All Users ('+results.length+')</h4>'+results.map(u=>{ let st=getFriendStatus(u.uid); let btn=st==='friend'?'<button class="instaFollowBtn friend">✓ Friend</button>':st==='sent'?'<button class="instaFollowBtn sent">Request Sent</button>':st==='incoming'?'<button class="instaFollowBtn incoming" onclick="openFriendRequests()">Accept</button>':'<button class="instaFollowBtn" onclick="sendFriendRequest(\''+u.uid+'\',\''+esc(u.name)+'\',\''+esc(u.photo||'')+'\')">+ Send Request</button>'; return '<div class="row" style="padding:12px 0;border-bottom:1px solid #f1f5f9"><div class="avatar">'+(u.photo?'<img src="'+u.photo+'">':esc((u.name||'U')[0]))+'</div><div style="flex:1"><b>'+esc(u.name)+'</b><div class="muted">ID: '+u.magId+'</div></div>'+btn+'</div>'; }).join('');
+}
+function showAllUsersModal(){ showAllUsersAuto(); setTimeout(function(){ document.getElementById('friendSearchResultsModal').innerHTML=document.getElementById('friendSearchResults').innerHTML; },800); }
 async function sendFriendRequest(toUid,toName,toPhoto){
-  if(toUid===(user && user.uid)){ toast('This is you!'); return; }
-  if(getFriendStatus(toUid)==='friend'){ toast('Already Friend'); return; }
-  if(getFriendStatus(toUid)==='sent'){ toast('Request already sent'); return; }
-  if(!localMode && db){
-    try{
-      let chk=await db.collection('friend_requests').where('fromUid','==',user.uid).where('toUid','==',toUid).where('status','==','pending').get();
-      if(!chk.empty){ toast('Request already sent'); return; }
-    }catch(e){ console.log(e); }
-  }
+  if(toUid===(user && user.uid)){ toast('This is you!'); return; } if(getFriendStatus(toUid)==='friend'){ toast('Already Friend'); return; } if(getFriendStatus(toUid)==='sent'){ toast('Request already sent'); return; }
+  if(!localMode && db){ try{ let chk=await db.collection('friend_requests').where('fromUid','==',user.uid).where('toUid','==',toUid).where('status','==','pending').get(); if(!chk.empty){ toast('Request already sent'); return; } }catch(e){} }
   let req={fromUid:user.uid,fromName:profile.name,fromPhoto:profile.photo||'',toUid:toUid,toName:toName,fromMagId:getMyMagId(),toMagId:'',time:Date.now(),status:'pending'};
-  if(localMode){ friendRequests.push(req); localStorage.setItem('mian_friend_req',JSON.stringify(friendRequests)); toast('Request Sent (Local Mode - Will NOT reach other phone!)'); }
+  if(localMode){ friendRequests.push(req); localStorage.setItem('mian_friend_req',JSON.stringify(friendRequests)); toast('Request Sent (Local Mode)'); }
   else{ try{ await db.collection('friend_requests').add(req); toast('Request Sent to '+toName); }catch(e){ toast('Failed: '+e.message); return; } }
   renderFriendRequests(); showAllUsersAuto();
 }
-async function loadFriendsFromDB(){
-  if(localMode || !db || !user) return;
-  try{
-    let s1=await db.collection('friends').where('ownerUid','==',user.uid).get();
-    friends=[];
-    s1.forEach(d=>{ let f=d.data(); f.id=d.id; friends.push(f); });
-    updateProfileUI(); renderFriendRequests();
-  }catch(e){ console.log(e); }
-}
+async function loadFriendsFromDB(){ if(localMode||!db||!user) return; try{ let s1=await db.collection('friends').where('ownerUid','==',user.uid).get(); friends=[]; s1.forEach(d=>{ let f=d.data(); f.id=d.id; friends.push(f); }); updateProfileUI(); renderFriendRequests(); }catch(e){} }
 async function renderFriendRequests(){
-  let list=document.getElementById('friendReqList');
-  let incoming=friendRequests.filter(r=>r.toUid===(user && user.uid) && r.status==='pending');
-  let outgoing=friendRequests.filter(r=>r.fromUid===(user && user.uid) && r.status==='pending');
-  let badge=document.getElementById('reqBadge'); let badge2=document.getElementById('reqBadge2');
-  if(incoming.length){ badge.textContent=incoming.length; badge.classList.remove('hidden'); badge2.textContent=incoming.length; badge2.classList.remove('hidden'); } else { badge.classList.add('hidden'); badge2.classList.add('hidden'); }
+  let list=document.getElementById('friendReqList'); let incoming=friendRequests.filter(r=>r.toUid===(user && user.uid) && r.status==='pending'); let outgoing=friendRequests.filter(r=>r.fromUid===(user && user.uid) && r.status==='pending');
   let html='';
   if(incoming.length){ html+='<h4>Incoming Requests</h4>'; html+=incoming.map(r=>'<div class="row" style="padding:10px 0;border-bottom:1px solid #eee"><div class="avatar">'+(r.fromPhoto?'<img src="'+r.fromPhoto+'">':esc((r.fromName||'U')[0]))+'</div><div style="flex:1"><b>'+esc(r.fromName)+'</b><div class="muted small">'+esc(r.fromMagId||'')+'</div></div><button class="instaFollowBtn" onclick="acceptRequest(\''+(r.id||r.fromUid)+'\')">Accept</button><button class="instaFollowBtn friend" onclick="rejectRequest(\''+(r.id||r.fromUid)+'\')">Reject</button></div>').join(''); }
   if(outgoing.length){ html+='<h4 style="margin-top:14px">Sent Requests</h4>'; html+=outgoing.map(r=>'<div class="row" style="padding:10px 0;border-bottom:1px solid #eee"><div class="avatar">'+esc((r.toName||'U')[0])+'</div><div style="flex:1"><b>'+esc(r.toName)+'</b><div class="muted small">Waiting...</div></div><span class="muted small">Pending</span></div>').join(''); }
-  if(!incoming.length && !outgoing.length) html+='<p class="muted">No pending requests. Search by MAG ID above to send request.</p>';
-  if(friends.length){ html+='<h4 style="margin-top:14px">My Friends ('+friends.length+')</h4>'; html+=friends.map(f=>{ let fname=f.name||f.friendName||'Friend'; let fphoto=f.photo||f.friendPhoto||''; let fmag=f.magId||f.friendMagId||''; return '<div class="row" style="padding:8px 0"><div class="avatar">'+(fphoto?'<img src="'+fphoto+'">':esc((fname||'U')[0]))+'</div><div style="flex:1"><b>'+esc(fname)+'</b><div class="muted small">'+esc(fmag)+'</div></div><span style="color:#22c55e">● Friend</span></div>'; }).join(''); }
+  if(!incoming.length && !outgoing.length) html+='<p class="muted">No pending requests.</p>';
+  if(friends.length){ html+='<h4 style="margin-top:14px">My Friends ('+friends.length+')</h4>'; html+=friends.map(f=>{ let fname=f.name||f.friendName||'Friend'; let fphoto=f.photo||f.friendPhoto||''; return '<div class="row" style="padding:8px 0"><div class="avatar">'+(fphoto?'<img src="'+fphoto+'">':esc((fname||'U')[0]))+'</div><div style="flex:1"><b>'+esc(fname)+'</b></div><span style="color:#22c55e">● Friend</span></div>'; }).join(''); }
   list.innerHTML=html; updateProfileUI();
 }
 function openFriendRequests(){ openModal('friendReqModal'); renderFriendRequests(); let mEl=document.getElementById('myMagIdInRequest'); if(mEl) mEl.textContent=getMyMagId(); }
 async function acceptRequest(id){
-  let r=friendRequests.find(x=>(x.id===id||x.fromUid===id)&&x.toUid===(user && user.uid)); if(!r) return;
-  let newFriend={uid:r.fromUid,friendUid:r.fromUid,name:r.fromName,friendName:r.fromName,photo:r.fromPhoto||'',friendPhoto:r.fromPhoto||'',magId:r.fromMagId||magIdFor(r.fromUid),friendMagId:r.fromMagId||magIdFor(r.fromUid)};
-  friends.push(newFriend);
+  let r=friendRequests.find(x=>(x.id===id||x.fromUid===id)&&x.toUid===(user && user.uid)); if(!r) return; friends.push({uid:r.fromUid,friendUid:r.fromUid,name:r.fromName,photo:r.fromPhoto||'',magId:r.fromMagId});
   friendRequests=friendRequests.filter(x=>x!==r);
   if(localMode){ localStorage.setItem('mian_friend_req',JSON.stringify(friendRequests)); localStorage.setItem('mian_friends',JSON.stringify(friends)); }
-  else{
-    try{
-      await db.collection('friends').add({ownerUid:user.uid,friendUid:r.fromUid,name:r.fromName,friendName:r.fromName,photo:r.fromPhoto||'',friendPhoto:r.fromPhoto||'',magId:r.fromMagId||magIdFor(r.fromUid),friendMagId:r.fromMagId||magIdFor(r.fromUid),time:Date.now()});
-      await db.collection('friends').add({ownerUid:r.fromUid,friendUid:user.uid,name:profile.name,friendName:profile.name,photo:profile.photo||'',friendPhoto:profile.photo||'',magId:getMyMagId(),friendMagId:getMyMagId(),time:Date.now()});
-      if(r.id) await db.collection('friend_requests').doc(r.id).delete();
-    }catch(e){ console.log(e); toast('Accept failed: '+e.message); }
-  }
+  else{ try{ await db.collection('friends').add({ownerUid:user.uid,friendUid:r.fromUid,name:r.fromName,photo:r.fromPhoto||'',magId:r.fromMagId||magIdFor(r.fromUid),time:Date.now()}); await db.collection('friends').add({ownerUid:r.fromUid,friendUid:user.uid,name:profile.name,photo:profile.photo||'',magId:getMyMagId(),time:Date.now()}); if(r.id) await db.collection('friend_requests').doc(r.id).delete(); }catch(e){ toast('Accept failed: '+e.message); } }
   toast('You are now friends with '+r.fromName); renderFriendRequests();
 }
-async function rejectRequest(id){
-  let r=friendRequests.find(x=>(x.id===id||x.fromUid===id)&&x.toUid===(user && user.uid)); if(!r) return;
-  friendRequests=friendRequests.filter(x=>x!==r);
-  if(localMode) localStorage.setItem('mian_friend_req',JSON.stringify(friendRequests));
-  else try{ if(r.id) await db.collection('friend_requests').doc(r.id).delete(); }catch(e){ console.log(e); }
-  renderFriendRequests();
-}
+async function rejectRequest(id){ let r=friendRequests.find(x=>(x.id===id||x.fromUid===id)&&x.toUid===(user && user.uid)); if(!r) return; friendRequests=friendRequests.filter(x=>x!==r); if(localMode) localStorage.setItem('mian_friend_req',JSON.stringify(friendRequests)); else try{ if(r.id) await db.collection('friend_requests').doc(r.id).delete(); }catch(e){} renderFriendRequests(); }
 function listenFriendRequests(){
   if(localMode){ friendRequests=JSON.parse(localStorage.getItem('mian_friend_req')||'[]'); friends=JSON.parse(localStorage.getItem('mian_friends')||'[]'); renderFriendRequests(); return; }
   if(!db||!user) return;
@@ -476,19 +358,8 @@ function listenFriendRequests(){
   db.collection('friend_requests').where('fromUid','==',user.uid).onSnapshot(s=>{ s.docChanges().forEach(ch=>{ if(ch.type==='added'){ let r=ch.doc.data(); r.id=ch.doc.id; if(!friendRequests.find(x=>x.id===r.id)) friendRequests.push(r); } if(ch.type==='removed'){ friendRequests=friendRequests.filter(x=>x.id!==ch.doc.id); } }); renderFriendRequests(); });
   db.collection('friends').where('ownerUid','==',user.uid).onSnapshot(s=>{ friends=[]; s.forEach(d=>{ let f=d.data(); f.id=d.id; friends.push(f); }); renderFriendRequests(); });
 }
-if(auth){
-  auth.onAuthStateChanged(async u=>{
-    if(!u) return; if(localMode) return;
-    user=u; localMode=false;
-    document.getElementById('modeBadge').textContent='● ONLINE MODE'; document.getElementById('modeBadge').classList.add('online');
-    document.getElementById('authScreen').style.display='none'; document.getElementById('mainApp').classList.remove('hidden');
-    await loadProfile(); loadFeed(); listenFriendRequests(); loadFriendsFromDB();
-  });
-}
-(function(){
-  const s=localStorage.getItem('mian_local_user');
-  if(s){ try{ profile=JSON.parse(s); let savedUid=profile.localUid||'local_saved'; if(savedUid==='local_saved'){ savedUid='local_'+Date.now()+'_'+Math.floor(Math.random()*9999); profile.localUid=savedUid; profile.magId=magIdFor(savedUid); localStorage.setItem('mian_local_user',JSON.stringify(profile)); } user={uid:savedUid,email:profile.email}; localMode=true; setTimeout(function(){ document.getElementById('authScreen').style.display='none'; document.getElementById('mainApp').classList.remove('hidden'); document.getElementById('modeBadge').textContent='● LOCAL MODE'; updateProfileUI(); loadLocalPosts(); listenFriendRequests(); },300); }catch(e){} }
-})();
+if(auth){ auth.onAuthStateChanged(async u=>{ if(!u) return; if(localMode) return; user=u; localMode=false; document.getElementById('modeBadge').textContent='● ONLINE MODE'; document.getElementById('authScreen').style.display='none'; document.getElementById('mainApp').classList.remove('hidden'); await loadProfile(); loadFeed(); listenFriendRequests(); loadFriendsFromDB(); }); }
+(function(){ const s=localStorage.getItem('mian_local_user'); if(s){ try{ profile=JSON.parse(s); let savedUid=profile.localUid||'local_saved'; if(savedUid==='local_saved'){ savedUid='local_'+Date.now()+'_'+Math.floor(Math.random()*9999); profile.localUid=savedUid; profile.magId=magIdFor(savedUid); localStorage.setItem('mian_local_user',JSON.stringify(profile)); } user={uid:savedUid,email:profile.email}; localMode=true; setTimeout(function(){ document.getElementById('authScreen').style.display='none'; document.getElementById('mainApp').classList.remove('hidden'); document.getElementById('modeBadge').textContent='● LOCAL MODE'; updateProfileUI(); loadLocalPosts(); listenFriendRequests(); },300); }catch(e){} } })();
 document.addEventListener('click',e=>{ if(e.target.classList.contains('modal')) e.target.classList.remove('open'); });
 </script>
 </body>
